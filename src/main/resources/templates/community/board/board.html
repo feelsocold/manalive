@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>MAN ALIVE!</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <link href="/custom/css/community/board/board.css" rel="stylesheet">
+
+
+    <th:block th:include="layout/header"></th:block>
+
+    <main id="main">
+        <div class="main-container">
+            <div class="board-wrap" style="border: 1px solid">
+                <h1>게시판</h1>
+                <table id="board-table">
+                    <colgroup>
+                        <col width="10%"><col width="54%"><col width="16%"><col width="12%"><col width="8%">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>날짜</th>
+                        <th>추천</th>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div>
+                    <input type="button" id="write-btn" value="글쓰기" onclick="location.href='/board/write'">
+                </div>
+            </div>
+        </div>
+    </main>

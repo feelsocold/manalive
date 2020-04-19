@@ -1,0 +1,156 @@
+
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<link id="contextPathHolder" th:data-contextPath="${#httpServletRequest.getContextPath()}"/>
+
+<!-- Favicons -->
+<link href="/assets/img/favicon.png" rel="icon">
+<link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Baloo+Da+2&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Londrina+Solid&family=Roboto+Condensed:wght@700&family=Schoolbell&display=swap" rel="stylesheet">
+
+<!-- Vendor CSS Files -->
+<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+<link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="/assets/vendor/venobox/venobox.css" rel="stylesheet">
+<link href="/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="/assets/css/style.css" rel="stylesheet">
+
+<!-- CUSTOM CSS File -->
+<link href="/custom/css/common/index.css" rel="stylesheet">
+
+<!--<meta name="_csrf" th:content="${_csrf.token}">-->
+<!--<meta name="_csrf_header" th:content="${_csrf.headerName}">-->
+
+
+</head>
+
+<body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+        <div id="custom-nav">
+            <ul>
+
+
+                <li th:if="${user}"><a href="/logout" th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}" class='nav-small-word' style="font-size: 12px">LOGOUT</a></li>
+
+                <li>고객센터</li>
+                <li>장바구니</li>
+                <li th:unless="${user}">
+                    <a href="/register">회원가입</a>
+                    &#47;
+                    <a href="#" id="Login-Btn">로그인</a>
+                </li>
+                <li th:if="${user}">
+                    <a th:if="${user.getRole().getKey().equals('ROLE_GUEST')}" href="/register">회원가입</a>
+                    <span th:if="${user.getRole().getKey().equals('ROLE_GUEST')}">&#47;</span>
+                    <a th:if="${user.getRole().getKey().equals('ROLE_GUEST')}" href="#" id="Login-Btn">로그인</a>
+                </li>
+                <li th:if="${user}"><span th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}">마이페이지</span></li>
+
+                <li th:if="${user}">
+                    <span th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}" th:text="${user.name}"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="container-fluid d-flex" style="height:90px; padding-top: 15px; border-top: 1px solid #D5D5D5">
+            <!--        style="border-top: solid 1px #D5D5D5; height:180px; margin-top: 40px;"-->
+
+            <div class="logo mr-auto">
+                <h1 class="text-light"><a href="/"><span style="font-family: 'Shadows Into Light Two', cursive;">MAN ALIVE!</span></a></h1>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="/assets/img/logo.png" alt="" class="img-fluid"></a>-->
+            </div>
+
+            <nav class="nav-menu d-none d-lg-block" id="nav-menu">
+                <ul style="float:left;">
+                    <!--                <li class="active"><a href="#header">Home</a></li>-->
+                    <li class="drop-down"><a href="#">스토어</a>
+                        <ul>
+                            <li><a href="#">CD</a></li>
+                            <li><a href="#">VINYL</a></li>
+                            <!--                        <li class="drop-down"><a href="#">Drop Down 2</a>-->
+                            <!--                            <ul>-->
+                            <!--                                <li><a href="#">Deep Drop Down 1</a></li>-->
+                            <!--                                <li><a href="#">Deep Drop Down 2</a></li>-->
+                            <!--                                <li><a href="#">Deep Drop Down 3</a></li>-->
+                            <!--                                <li><a href="#">Deep Drop Down 4</a></li>-->
+                            <!--                                <li><a href="#">Deep Drop Down 5</a></li>-->
+                            <!--                            </ul>-->
+                            <!--                        </li>-->
+                        </ul>
+                    </li>
+<!--                    <li><a href="#portfolio">NEWS</a></li>-->
+                    <li><a href="#portfolio">티켓예매</a></li>
+                    <li><a href="#portfolio">리뷰</a></li>
+                    <li><a href="#team">비디오</a></li>
+                    <li><a href="#team">BEST NEW MUSIC</a></li>
+                    <li class="drop-down"><a href="#">커뮤니티</a>
+                        <ul>
+                            <li><a href="/board">자유게시판</a></li>
+                            <li><a href="#">중고거래</a></li>
+                            <li><a href="#">이주의 뮤직</a></li>
+                            <li><a href="#">채팅방</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <span id="search-span">
+                    <i><img class="search-icon-img" src="/custom/img/icon/icon-search.png"></i>
+                    <input type="text" placeholder="Search" id="search-keyword">
+                </span>
+            </nav><!-- .nav-menu -->
+
+        </div>
+
+
+        <!-- LOGIN Modal -->
+        <div id="Login-Modal" class="login-modal">
+            <!-- Modal content -->
+            <div class="login-modal-content">
+                <span class="close">&times;</span>
+                <div style="margin-top: 45px; text-align: center;">
+                    <h4 style="font-family: 'Shadows Into Light Two', cursive;">MAN ALIVE!</h4>
+                    <h5>log-in</h5>
+                </div><br>
+
+                <form method="post" id="login-form" action="${#httpServletRequest.getContextPath()}/user/login">
+                    <input type="text" name="login_email" id="Login-Email" class="login-textfield" placeholder="이메일"> <br>
+                    <input type="password" name="login_password" id="Login-Password" class="login-textfield" placeholder="비밀번호">
+                    <span class="remember-me"><input type="checkbox">&nbsp;로그인 유지하기</span>
+                    <!--                <span style="text-align: right"><a href="#">Lost your password?</a></span>-->
+                    <br><br>
+                    <input type="submit" class="login-btn" value="로그인">
+                </form>
+
+                <div class="social-login">
+                    <a class="btn-google" href="/oauth2/authorization/google">
+                        <i class="social-icon"><img class="social-icon-img" src="/custom/img/icon/icon-google.webp"></i>
+                        <span>Google 계정 로그인</span></a>
+                    <a class="btn-naver" href="/oauth2/authorization/naver">
+                        <i class="social-icon"><img class="social-icon-img" src="/custom/img/icon/icon-naver.png"></i>
+                        <span style="color:white">네이버 계정 로그인</span></a><br>
+<!--                    <a class="btn-kakao" href="#">-->
+<!--                        <i class="social-icon"><img class="social-icon-img" src="/custom/img/icon/icon-kakao.png"></i>-->
+<!--                        <span>카카오계정 로그인</span></a><br>-->
+                </div>
+                <div class="or-div">
+                    <hr style="float: left">
+                    <label>or</label>
+                    <hr style="float: right">
+                </div>
+                <input type="button" class="user-register-btn" value="회원가입" onclick = "location.href = '/register'">
+
+            </div>
+        </div> <!--End Login-Model-->
+    </header><!-- End Header -->

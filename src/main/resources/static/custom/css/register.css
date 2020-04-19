@@ -1,0 +1,191 @@
+
+.register-wrap{
+  margin-top: 38px;
+  margin-bottom: 30px;
+  font-size: 50px;
+  display: inline-block;
+  width:380px;
+  height: auto;
+}
+
+.register-wrap h2{
+  font-size: 24px;
+}
+
+.social-login-register a{
+  margin-bottom: -80px;
+}
+.social-login-register .btn-google {
+  color:black;
+  display:inline-block;
+  width: 100%;
+  height:40px;
+  text-align: center;
+  padding-top: 1.8%;
+  margin-bottom: -30px;
+  font-size: 14px;
+  border: 1px solid #bbc5d8;
+  border-radius: 3px;
+}
+.social-login-register .btn-naver {
+  color:white;
+  display:inline-block;
+  background-color: #00c73c;
+  border-color: #00c73c;
+  width: 100%;
+  height:40px;
+  text-align: center;
+  padding-top: 2%;
+  margin-bottom: -90px;
+  font-size: 14px;
+  border-radius: 3px;
+  position: relative;
+  top:-25px;
+}
+
+.social-login-register .social-icon {
+  position: relative;
+  left:-20%;
+}
+.social-login-register div .or-div {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  text-align: center;
+  font-size: 12px;
+}
+.social-login div .or-div label{
+  font-size: 25px;
+  color: #8D8D8D;
+}
+.register-wrap-input-div{
+  line-height:80%;
+}
+.register-wrap-input-div input{
+  font-size: 14px;
+  width: 380px;
+  height: 40px;
+  border-radius: 3px;
+  border: 1px solid #e5e5e5;
+  padding-left: 11px;
+
+}
+.register-wrap-input-div input::placeholder{
+  color: #999999;
+}
+
+#Register-Btn {
+  border-radius: 4px;
+  font-size: 15px;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  margin-bottom: 30px;
+  margin-top: 38px;
+  width: 100%;
+  height:48px;
+  text-align: center;
+  background-color: black;
+  color:white;
+  border-radius: 3px;
+}
+
+#Social-Register-Btn {
+  border-radius: 4px;
+  font-size: 15px;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  margin-bottom: 30px;
+  margin-top: 38px;
+  width: 100%;
+  height:58px;
+  text-align: center;
+  background-color: black;
+  color:white;
+  border-radius: 3px;
+}
+
+.social-email {
+  color:#8D8D8D;
+}
+
+.caution-email { /*span*/
+  color: #FE0000;
+  font-size: 10px;
+  line-height:1%;
+  float: left;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.caution-pwd { /*span*/
+  color: #FE0000;
+  font-size: 10px;
+  line-height:1%;
+  float: left;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.caution-pwd2 { /*span*/
+  color: #FE0000;
+  font-size: 10px;
+  line-height:1%;
+  float: left;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.email-authentication {
+  width: 100%;
+  color: #18d26e;
+  font-size: 11px;
+  line-height:1%;
+
+  margin-top: 15px;
+  margin-bottom: 19px;
+  padding-left: -10px;
+  padding-right: -10px;
+}
+
+#Email-SendBtn{
+  font-size: 11px;
+  position:relative;
+  height: 35px;
+  width: 150px;
+  top: -1.3px;
+  border-radius: 3px;
+  background: white;
+  border: 1px solid #bbc5d8;
+
+}
+
+#Authentic-Number {
+  text-align: center;
+  width: 150px;
+  height: 35px;
+  margin-left: 10px;
+}
+
+#Authentic-ConfirmBtn{
+  font-size: 11px;
+  position:relative;
+  top: -1.3px;
+  width: 50px;
+  height: 35px;
+  margin-left: 10px;
+  border: 1px solid #bbc5d8;
+}
+#profileImg-btn {
+  font-size: 13px;
+  border: 1px solid rgba(var(--ca6,219,219,219),1);
+  height: 30px;
+  width: 35%;
+  padding-top:-20px;
+}
+
+#profile-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+}
+#profileimg-div {
+  line-height: 10px;
+}

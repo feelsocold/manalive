@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>MAN ALIVE!</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <link href="/custom/css/community/board/board.css" rel="stylesheet">
+
+
+    <th:block th:include="layout/header"></th:block>
+
+    <main id="main" style="height:40%">
+        <div class="main-container">
+            <div class="write-wrap">
+                <div>
+                    <h2><b>글쓰기</b></h2>
+                </div>
+                <div id="write-div">
+                    <div id="text-div">
+                        <input id="title" type="text" placeholder="제목을 입력해주세요."> <br>
+                        <textarea id="content" placeholder="내용을 입력해주세요."></textarea>
+                    </div>
+                    <div id="fileupload-div">
+                        <div id="uploadbtn-div">
+                            <input type="file" id="hdn-uploadBtn" name="uploadFile" multiple style="display: none;" onchange="asyncUpload(this)">
+<!--                            <input type=file name='file1' style='display: none;'>-->
+<!--                            <input type='text' name='file2' id='file2'>-->
+<!--                            <img src='이미지경로' border='0' onclick='document.all.file1.click(); document.all.file2.value=document.all.file1.value'>-->
+
+                            <button id="upload-btn" >
+                                <span>
+                                    <i>
+                                        <img id="icon-camera" src="/custom/img/icon/icon-camera.png">
+                                    </i> <br>
+                                        사진올리기<br>(최대 6장까지)
+                                </span>
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script src="/custom/js/community/board/board_write.js"></script>
