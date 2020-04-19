@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    include: oauth, real-db, real
+    include: oauth, real-db, real, aws
 
   h2:
     console:
@@ -36,7 +36,14 @@ spring:
         enable: true
       auth: true
 
-
+cloud:
+  aws:
+    s3:
+      bucket: manalive-attach
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 
 

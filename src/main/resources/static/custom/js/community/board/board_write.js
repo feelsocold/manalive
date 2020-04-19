@@ -23,6 +23,22 @@ function asyncUpload(obj){
     var files = inputFile[0].files;
     console.log(files);
 
+    // //add filedate to formdata
+    // for(var i = 0; i < files.length; i++) {
+    //     formData.append("uploadFile", files[i]);
+    // }
+    //
+    // $.ajax({
+    //     url: '/profilePhotoUpload',
+    //     proccessData : false,
+    //     contentType : false,
+    //     data: formData,
+    //     type: 'POST',
+    //     success: function(result){
+    //         alert("UPLOAD!");
+    //     }
+    // });
+
 
 
 }

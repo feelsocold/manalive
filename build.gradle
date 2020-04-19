@@ -25,6 +25,7 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     jcenter()
+    maven { url 'https://repo.spring.io/libs-milestone'}
 }
 
 dependencies {
@@ -49,12 +50,20 @@ dependencies {
     compile('org.mariadb.jdbc:mariadb-java-client')
 
     compile('org.springframework.boot:spring-boot-starter-security')
-
     compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4', version: '1.16'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws'
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
     //추가
     testCompile("org.projectlombok:lombok")
     testCompile("org.springframework.security:spring-security-test")
     annotationProcessor('org.projectlombok:lombok')
     testAnnotationProcessor('org.projectlombok:lombok')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-aws:2.2.1.RELEASE'
+    }
 }

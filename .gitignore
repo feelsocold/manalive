@@ -2,7 +2,7 @@
 .idea
 application-oauth.yml
 application-real-db.yml
-
+application-aws.yml
 EmailConfig
 # Project exclude paths
 /build/

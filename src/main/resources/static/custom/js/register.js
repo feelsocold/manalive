@@ -12,7 +12,7 @@ $(document).ready(function() {
 
     })
 
-    // 이메일 중복 체크
+// 이메일 중복 체크
     var bool = false;
     function duplicate_check() {
         $.ajax({
@@ -31,7 +31,7 @@ $(document).ready(function() {
         return bool;
     }
 
-    // 이메일주소 정규화 체크
+// 이메일주소 정규화 체크
     var emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;//이메일 정규식
     var email = $("#Email-Input");
     var caution_email = $(".caution-email");
@@ -90,7 +90,7 @@ $(document).ready(function() {
         }
     });
 
-    // 이메일 인증번호 전송
+// 이메일 인증번호 전송
     var numberSix;
     $(document).on("click", "#Email-SendBtn", function(){
 
@@ -131,7 +131,7 @@ $(document).ready(function() {
 
     });
 
-    // 비밀번호 정규화 체크
+// 비밀번호 정규화 체크
     var pwdRule = /^.*(?=^.{6,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
     var password = $("#Password-Input");
     var caution_pwd = $(".caution-pwd");
@@ -158,7 +158,7 @@ $(document).ready(function() {
         }
     });
 
-    // 비밀번호 화인 체크
+// 비밀번호 화인 체크
     var password2 = $("input[name=password2]");
     password2.blur(function(){
         if(password2.val().length > 0) {
@@ -172,4 +172,38 @@ $(document).ready(function() {
         }
     });
 
+// 프로필 사진 업로드
+    // 버튼 클릭시 파일업로드 클릭
+    $(function () {
+        $('#profileImg-btn').click(function (e) {
+            e.preventDefault();
+            $('#hdn-uploadBtn').click();
+        });
+    });
+
+
 });
+// ajax 파일업로드
+function asyncUpload(value){
+    var file = $('#hdn-uploadBtn')[0].files[0];
+    var formData = new FormData();
+
+    formData.append('data', file);
+
+    $.ajax({
+        url: '/profilePhotoUpload',
+        processData: false,
+        contentType : false,
+        data: formData,
+        type: 'POST',
+        enctype: 'multipart/form-data'
+     }).done(function (data) {
+        if(value.files && value.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#profile-img').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(value.files[0]);
+        }
+    });
+}; // -- end asyncUpload function
