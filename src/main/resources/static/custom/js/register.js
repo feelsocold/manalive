@@ -185,10 +185,15 @@ $(document).ready(function() {
 });
 // ajax 파일업로드
 function asyncUpload(value){
-    var file = $('#hdn-uploadBtn')[0].files[0];
+    //var file = $('#hdn-uploadBtn')[0].files[0];
+    var file = $("input[name='uploadFile']");
     var formData = new FormData();
+    var files = file[0].files;
 
-    formData.append('data', file);
+    //formData.append('data', file);
+    for(var i = 0; i < files.length; i++) {
+        formData.append("multipartFile", files[i]);
+    }
 
     $.ajax({
         url: '/profilePhotoUpload',
@@ -204,6 +209,10 @@ function asyncUpload(value){
                 $('#profile-img').attr('src', e.target.result);
             }
             reader.readAsDataURL(value.files[0]);
-        }
+        };
+        $("#profileImg-btn").val("프로필사진 바꾸기");
+        //$("#profileImg-btn").css({'color': '#999999'});
+
+
     });
 }; // -- end asyncUpload function

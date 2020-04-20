@@ -36,6 +36,10 @@ spring:
         enable: true
       auth: true
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
 cloud:
   aws:
     s3:
