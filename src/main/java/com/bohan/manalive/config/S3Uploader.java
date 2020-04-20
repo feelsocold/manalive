@@ -1,14 +1,15 @@
 package com.bohan.manalive.config;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
+import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,10 +22,33 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 public class S3Uploader {
+    private final HttpSession httpSession;
     private final AmazonS3Client amazonS3Client;
+
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+
+    private void deleteFile(String dirName, String fileName) {
+        String key = dirName + "/" + fileName;
+        //amazonS3Client.deleteObject(bucket, key);
+        amazonS3Client.deleteObject(bucket, "profilePhoto/2020/04/20/0ab2f76f-3873-4793-b6e1-654fce7ff191_nongnongnong.png");
+    }
+
+    private void getFileList(String folderName) {
+        ListObjectsRequest listObject = new ListObjectsRequest();
+        listObject.setBucketName(bucket);
+        listObject.setPrefix(folderName);
+        ObjectListing objects = amazonS3Client.listObjects(listObject);
+
+        do {
+            objects = amazonS3Client.listObjects(listObject);
+            for (S3ObjectSummary objectSummary : objects.getObjectSummaries()) {
+                //log.info(objectSummary.getKey());
+                System.out.println(objectSummary.toString());
+            }
+        } while (objects.isTruncated());
+    }
 
     private String getTodayFolder() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -39,12 +63,32 @@ public class S3Uploader {
         return upload(uploadFile, dirName);
     }
 
+    private void setSessionAttach(String filename, String extension, String uuid, String category) {
+        AttachSaveRequestDto attach = new AttachSaveRequestDto(filename, extension, uuid, category);
+        httpSession.setAttribute("attachDto", attach);
+    }
+
     private String upload(File uploadFile, String dirName) {
+    // 파일명 중복방지용 UUID
         UUID uuid = UUID.randomUUID();
+        int pos = uploadFile.getName().lastIndexOf( "." );
+        String extenstion= uploadFile.getName().substring( pos + 1 );
+        String onlyFilename = uploadFile.getName().substring(0, pos);
+        setSessionAttach(onlyFilename, extenstion, uuid.toString(), dirName);
+
+    // 구분폴더이름 + 현재 날짜
         dirName = dirName + "/" + getTodayFolder();
-        String fileName = dirName + "/" + uuid.toString() + "_"+ uploadFile.getName();
+
+        // getFileList(dirName);
+        // deleteFile("not", "hthi");
+
+        String fileName = uuid.toString() + "_"+ uploadFile.getName();
+        fileName = dirName + "/" + fileName;
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
+
+
+
         return uploadImageUrl;
     }
 

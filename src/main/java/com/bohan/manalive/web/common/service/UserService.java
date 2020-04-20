@@ -2,10 +2,14 @@ package com.bohan.manalive.web.common.service;
 
 import com.bohan.manalive.config.oauth.dto.RegisterUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
+import com.bohan.manalive.domain.attach.Attach;
+import com.bohan.manalive.domain.attach.AttachRepository;
 import com.bohan.manalive.domain.user.Role;
 import com.bohan.manalive.domain.user.User;
 import com.bohan.manalive.domain.user.UserRepository;
+import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -22,28 +27,63 @@ public class UserService {
 
     private final HttpSession httpSession;
     private final UserRepository userRepository;
+    private final AttachRepository attachRepository;
 
-    public Long standardRegister(RegisterUser registerUser) {
-        return userRepository.save(User.builder()
-                                    .email(registerUser.getEmail())
-                                    .name(registerUser.getName())
-                                    .password(encoder.encode(registerUser.getPassword()))
-                                    .nickname(registerUser.getNickname())
-                                    .phone(registerUser.getPhone())
-                                    .enable("1")
-                                    .role(Role.USER)
-                                    .build()).getSeq();
+
+    public void saveAttach(Long superKey) {
+        AttachSaveRequestDto requestDto = (AttachSaveRequestDto)httpSession.getAttribute("attachDto");
+        attachRepository.save(requestDto.toEntity().builder()
+                                    .category(requestDto.getCategory())
+                                    .superKey(superKey)
+                                    .filename(requestDto.getFilename())
+                                    .extension(requestDto.getExtension())
+                                    .uuid((requestDto.getUuid()))
+                                        .build());
+    }
+
+    @Transactional
+    public void standardRegister(RegisterUser registerUser) {
+        /*
+        userRepository.save(User.builder()
+                                .email(registerUser.getEmail())
+                                .name(registerUser.getName())
+                                .password(encoder.encode(registerUser.getPassword()))
+                                .nickname(registerUser.getNickname())
+                                .phone(registerUser.getPhone())
+                                .enable("1")
+                                .role(Role.USER)
+                                //.picture(String.valueOf(att_no))
+                                    .build()).getSeq(); */
+        Long seq = userRepository.save(User.builder()
+                                        .email(registerUser.getEmail())
+                                        .name(registerUser.getName())
+                                        .password(encoder.encode(registerUser.getPassword()))
+                                        .nickname(registerUser.getNickname())
+                                        .phone(registerUser.getPhone())
+                                        .enable("1")
+                                        .role(Role.USER)
+                                        //.picture(String.valueOf(att_no))
+                                             .build()).getSeq();
+
+        if (httpSession.getAttribute("attachDto") != null) {
+            saveAttach(seq);
+        }
+
+        User user = userRepository.findByEmail(registerUser.getEmail()).get().toEntity();
+        httpSession.setAttribute("user", new SessionUser(user));
     }
 
     @Transactional
     public void socialRegister(RegisterUser registerUser) {
         User user = userRepository.findByEmail(registerUser.getEmail())
                 .map(entity -> entity.update(registerUser.getName(),
-                                             registerUser.getNickname(),
-                                             registerUser.getPhone(),
-                                             "1",
-                                             Role.USER )).orElse(registerUser.toEntity());
-
+                        registerUser.getNickname(),
+                        registerUser.getPhone(),
+                        "1",
+                        Role.USER )).orElse(registerUser.toEntity());
+        if (httpSession.getAttribute("attachDto") != null) {
+            saveAttach(user.getSeq());
+        }
         httpSession.setAttribute("user", new SessionUser(user));
     }
 

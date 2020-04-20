@@ -194,24 +194,26 @@ function asyncUpload(value){
     for(var i = 0; i < files.length; i++) {
         formData.append("multipartFile", files[i]);
     }
+    formData.append("category", "profilePhoto");
+    console.log(files);
 
-    $.ajax({
-        url: '/profilePhotoUpload',
-        processData: false,
-        contentType : false,
-        data: formData,
-        type: 'POST',
-        enctype: 'multipart/form-data'
-     }).done(function (data) {
-        if(value.files && value.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#profile-img').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(value.files[0]);
-        };
-        $("#profileImg-btn").val("프로필사진 바꾸기");
-        //$("#profileImg-btn").css({'color': '#999999'});
+        $.ajax({
+            url: '/s3Upload',
+            processData: false,
+            contentType : false,
+            data: formData,
+            type: 'POST',
+            enctype: 'multipart/form-data'
+         }).done(function (data) {
+            if(value.files && value.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#profile-img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(value.files[0]);
+            };
+            $("#profileImg-btn").val("프로필사진 바꾸기");
+            //$("#profileImg-btn").css({'color': '#999999'});
 
 
     });

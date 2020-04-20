@@ -4,6 +4,7 @@ import com.bohan.manalive.config.oauth.dto.OAuthAttributes;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
 import com.bohan.manalive.domain.user.User;
 import com.bohan.manalive.domain.user.UserRepository;
+import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -52,22 +54,29 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 attributes.getNameAttributeKey() );
     }
 
-
     private User saveOrUpdate(OAuthAttributes attributes) throws NoSuchElementException {
         //User user2 = userRepository.findByEmail(attributes.getEmail()).get();
         //logger.info("!!!!!!!!!!!!!! => => =>" +  user2.getEmail() );
-
         if(userRepository.findByEmail(attributes.getEmail()).isPresent()){
             logger.info("아이디 존재!");
         }else {
             logger.info("아이디 XXXXXXXXXXXXXXX");
         }
         User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
+                //.map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
+                .map(entity -> entity.update(attributes.getName()))
                 .orElse(attributes.toEntity());
+
+        setSessionAttach(attributes.getPicture());
+
         return userRepository.save(user);
     }
 
+    private void setSessionAttach(String filename) {
+        UUID uuid = UUID.randomUUID();
+        AttachSaveRequestDto attach = new AttachSaveRequestDto(filename, null, uuid.toString(), "profilePhoto");
+        httpSession.setAttribute("attachDto", attach);
+    }
 
 
 

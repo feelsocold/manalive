@@ -14,7 +14,7 @@ public class RegisterUser {
     private String email;
     private String name;
     private String password;
-    private String picture;
+    //private String picture;
     private String nickname;
     private String phone;
     private String enable;
@@ -24,7 +24,7 @@ public class RegisterUser {
         return User.builder()
                 .name(name)
                 .email(email)
-                .picture(picture)
+          //      .picture(picture)
                 .phone(phone)
                 .role(Role.USER)
                 .enable("1")

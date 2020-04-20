@@ -34,18 +34,22 @@
 
                 <form method="post" action="/user_register">
                     <div class="register-wrap-input-div">
+                        <div  id="profileimg-div" >
+                            <input type="file" id="hdn-uploadBtn" name="uploadFile" style="display: none;" onchange="asyncUpload(this)">
+<!--                            <img th:unless="${session.attachDto}" id="profile-img" src="/custom/img/icon/icon-profile.jpg"><br>-->
+<!--                            <img th:if="${session.attachDto}" id="profile-img" th:src="${session.attachDto.filename}"><br>-->
+                            <img th:unless="${user}" id="profile-img" src="/custom/img/icon/icon-profile.jpg"><br>
+                            <img th:if="${user}" id="profile-img" th:src="${session.attachDto.filename}"><br>
+
+                            <input th:unless="${user}" type="button" id="profileImg-btn" value="프로필 사진 등록하기">
+                            <input th:if="${user}" type="button" id="profileImg-btn" value="프로필 사진 바꾸기">
+                        </div>
+
                         <div th:if="${user}">
                             <input name="email" type="text" class="social-email" th:value="${user.email}" readonly><br>
                             <input name="name"  type="text" th:value="${user.name}" placeholder="이름을 입력해주세요."><br>
                         </div>
                         <div th:unless="${user}">
-                            <div id="profileimg-div">
-                                <input type="file" id="hdn-uploadBtn" name="uploadFile" style="display: none;" onchange="asyncUpload(this)">
-
-                                <img id="profile-img" src="/custom/img/icon/icon-profile.jpg"><br>
-                                <img src="" id="result-image">
-                                <input type="button" id="profileImg-btn" value="프로필 사진 등록하기">
-                            </div>
                             <input name="email" id="Email-Input" type="text" placeholder="사용하실 ID를 입력해주세요. (수신 가능 E-mail)"><br>
                             <input name="password" id="Password-Input" type="password" placeholder="영문+숫자+특수문자 6~15자리(특수문자 괄호()는 사용 불가)"><br>
                             <input name="password2" type="password" placeholder="패스워드를 다시 입력해주세요."><br>

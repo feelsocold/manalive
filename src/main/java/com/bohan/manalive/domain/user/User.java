@@ -9,7 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
-@Setter
+
 @Getter
 @NoArgsConstructor
 @Entity
@@ -31,9 +31,6 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable=true)
-    private String picture;
-
     @Column(nullable = true)
     private String nickname;
 
@@ -48,11 +45,13 @@ public class User extends BaseTimeEntity {
     @ColumnDefault("1")
     String enable;
 
+//    @Column(nullable=true)
+//    private String picture;
+
     @Builder
     public User(String name, String email, String picture, Role role, String social, String enable, String nickname, String phone, String password) {
         this.name = name;
         this.email = email;
-        this.picture = picture;
         this.role = role;
         this.social = social;
         this.enable = enable;
@@ -61,9 +60,8 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
-    public User update(String name, String picture){
+    public User update(String name){
         this.name = name;
-        this.picture = picture;
 
         return this;
     }

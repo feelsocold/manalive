@@ -6,38 +6,25 @@ $(function () {
     });
 });
 
-// ajax 파일업로드
-$(document).ready(function(){
-    $("#write-finish").on("click", function(e){
-       var formData = new FormData();
-       var inputFile = $("input[name='uploadFile']");
-       var files = inputFile[0].files;
-       console.log(files);
-    });
-});
-
 function asyncUpload(obj){
-
+    var file = $("input[name='uploadFile']");
     var formData = new FormData();
-    var inputFile = $("input[name='uploadFile']");
-    var files = inputFile[0].files;
+    var files = file[0].files;
+
+    for(var i = 0; i < files.length; i++) {
+        formData.append("multipartFile", files[i]);
+    }
+    formData.append("category", "boardPhoto");
     console.log(files);
 
-    // //add filedate to formdata
-    // for(var i = 0; i < files.length; i++) {
-    //     formData.append("uploadFile", files[i]);
-    // }
-    //
-    // $.ajax({
-    //     url: '/profilePhotoUpload',
-    //     proccessData : false,
-    //     contentType : false,
-    //     data: formData,
-    //     type: 'POST',
-    //     success: function(result){
-    //         alert("UPLOAD!");
-    //     }
-    // });
+    $.ajax({
+        url: '/s3Upload',
+        processData: false,
+        contentType : false,
+        data: formData,
+        type: 'POST',
+        enctype: 'multipart/form-data'
+    });
 
 
 

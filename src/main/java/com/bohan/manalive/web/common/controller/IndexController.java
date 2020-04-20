@@ -4,6 +4,7 @@ import com.bohan.manalive.config.oauth.dto.RegisterUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
 import com.bohan.manalive.web.common.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
@@ -51,13 +52,13 @@ public class IndexController {
     // 회원가입 창으로 이동
     @GetMapping("/register")
     public void register(Model model, @LoginUser SessionUser user) {
+        log.info("register()");
 
         if(user != null) {
-
+            model.addAttribute("user", user);
             if(user.getRole().getKey().equals("ROLE_GUEST")){
                 httpSession.removeAttribute("user");
             }
-            model.addAttribute("user", user );
         }
     }
 

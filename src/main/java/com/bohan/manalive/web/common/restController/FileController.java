@@ -4,30 +4,26 @@ import com.bohan.manalive.config.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class FileController {
+public class FileController implements Serializable {
 
     private final S3Uploader s3Uploader;
-
-    @PostMapping("/profilePhotoUpload")
-    public void profilePhotoUpload(MultipartFile[] multipartFile) throws IOException{
-
+    @PostMapping("/s3Upload")
+    public void s3Upload(MultipartFile[] multipartFile,
+                @RequestParam("category") String category) throws IOException{
         for(MultipartFile file : multipartFile){
-            log.info(file.getOriginalFilename());
-            s3Uploader.upload(file, "profilePhoto");
+            s3Uploader.upload(file, category);
         }
     }
-    @PostMapping("/boardPhotoUpload")
-    public void boardPhotoUpload(MultipartFile[] uploadFile) throws IOException {
-        log.info("boardPhotoUpload()");
-//        s3Uploader.upload(uploadFile, "static");
 
-    }
+
 }

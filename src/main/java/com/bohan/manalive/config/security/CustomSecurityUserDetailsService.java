@@ -33,8 +33,8 @@ public class CustomSecurityUserDetailsService implements org.springframework.sec
 
             httpSession.setAttribute("user", new SessionUser(user));
 
-            SessionUser user2 = (SessionUser)httpSession.getAttribute("user");
-            System.out.println(user.getEmail());
+//            SessionUser user2 = (SessionUser)httpSession.getAttribute("user");
+//            System.out.println(user.getEmail());
 
 
             return new SecurityUser(user);

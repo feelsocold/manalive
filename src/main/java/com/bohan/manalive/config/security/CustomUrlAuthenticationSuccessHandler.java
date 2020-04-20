@@ -20,7 +20,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
-public class CustomUrlAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class  CustomUrlAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     protected final Log logger = LogFactory.getLog(this.getClass());
 
