@@ -20,6 +20,7 @@
                 <div>
                     <h2><b>글쓰기</b></h2>
                 </div>
+                <div>
                 <div id="write-div">
                     <div id="text-div">
                         <input id="title" type="text" placeholder="제목을 입력해주세요."> <br>
@@ -31,24 +32,43 @@
 <!--                            <input type=file name='file1' style='display: none;'>-->
 <!--                            <input type='text' name='file2' id='file2'>-->
 <!--                            <img src='이미지경로' border='0' onclick='document.all.file1.click(); document.all.file2.value=document.all.file1.value'>-->
-
+                            <div>
                             <button id="upload-btn" >
                                 <span>
                                     <i>
                                         <img id="icon-camera" src="/custom/img/icon/icon-camera.png">
-                                    </i> <br>
-                                        사진올리기<br>(최대 6장까지)
+                                    </i><br>
+                                    <span id="uploadBtn-text">사진올리기<br>*3MB이하, 최대 6장까지</span>
                                 </span>
                             </button>
+                            </div>
 
+                            <div id="thumbnail-wrap">
+                                <ul>
+
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
                 </div>
-
+                </div>
             </div>
 
         </div>
+
+        <!-- LOGIN Modal -->
+        <div id="img-Modal" class="img-modal">
+            <!-- Modal content -->
+            <div class="imgModal-content">
+                <span class="imgModal-close">&times;</span>
+                <div id="showImage-area">
+
+                </div>
+
+            </div>
+        </div> <!--End Login-Model-->
+
     </main>
 
     <script src="/custom/js/community/board/board_write.js"></script>

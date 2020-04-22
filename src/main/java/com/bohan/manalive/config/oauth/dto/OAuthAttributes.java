@@ -73,7 +73,7 @@ public class OAuthAttributes {
         return User.builder()
                 .name(name)
                 .email(email)
-                .picture(picture)
+                .photo(picture)
                 .role(Role.GUEST)
                 .social(social)
                 .enable("0")

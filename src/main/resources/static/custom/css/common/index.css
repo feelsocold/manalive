@@ -1,14 +1,28 @@
 
+#custom-nav{
+  height: 20%;
+}
 
 #nav-menu{
   position: relative;
   left:-23%;
-  top:3px;
+  top:1px;
+  height: auto;
 }
 #custom-nav ul {
   position: relative;
-  margin-right:50px;
-  top:-8px;
+  margin-right: 50px;
+  top:-4px;
+  height: auto;
+}
+#custom-nav ul li{
+  list-style-type: none;
+  /*float: left;*/
+  float: right;
+  margin-left: 20px;
+  color: #8D8D8D;
+  font-size: 11px;
+  height:auto;
 }
 #custom-nav ul li{
   list-style-type: none;
@@ -226,6 +240,21 @@ div .or-div hr {
 .search-icon-img {
   width:15px;
   height: 15px;
+}
+
+#user-photo {
+  width:24px;
+  height:24px;
+  border-radius: 50%;
+}
+
+#user-name {
+  color: black;
+}
+
+#user-info {
+  position: relative;
+  top: -3px;
 }
 
 

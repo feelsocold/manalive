@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,15 +22,17 @@ import java.util.UUID;
 public class S3Uploader {
     private final HttpSession httpSession;
     private final AmazonS3Client amazonS3Client;
-
+    List<AttachSaveRequestDto> attachList = new ArrayList<>();
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private void deleteFile(String dirName, String fileName) {
-        String key = dirName + "/" + fileName;
-        //amazonS3Client.deleteObject(bucket, key);
-        amazonS3Client.deleteObject(bucket, "profilePhoto/2020/04/20/0ab2f76f-3873-4793-b6e1-654fce7ff191_nongnongnong.png");
+    public void deleteFile(String dirName, String fileName) {
+        log.info(dirName +  " * " + fileName);
+
+        String key = dirName + "/" + getTodayFolder() + "/" + fileName;
+        amazonS3Client.deleteObject(bucket, key);
+        //amazonS3Client.deleteObject(bucket, "profilePhoto/2020/04/20/0ab2f76f-3873-4793-b6e1-654fce7ff191_nongnongnong.png");
     }
 
     private void getFileList(String folderName) {
@@ -57,39 +57,48 @@ public class S3Uploader {
         return str;
     }
 
-    public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+    private void setSessionAttach(String filename, String extension, String uuid, String category) {
+        AttachSaveRequestDto attach = new AttachSaveRequestDto(filename, extension, uuid, category);
+        attachList.add(attach);
+        httpSession.setAttribute("attachList", attachList);
+    }
+
+    public List<String> upload(MultipartFile[] multipartFile, String dirName) throws IOException {
+        File[] uploadFile = new File[multipartFile.length];
+
+        for(int i = 0; i < multipartFile.length; i++) {
+            uploadFile[i] = convert(multipartFile[i])
+                    .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+        }
         return upload(uploadFile, dirName);
     }
 
-    private void setSessionAttach(String filename, String extension, String uuid, String category) {
-        AttachSaveRequestDto attach = new AttachSaveRequestDto(filename, extension, uuid, category);
-        httpSession.setAttribute("attachDto", attach);
-    }
-
-    private String upload(File uploadFile, String dirName) {
-    // 파일명 중복방지용 UUID
-        UUID uuid = UUID.randomUUID();
-        int pos = uploadFile.getName().lastIndexOf( "." );
-        String extenstion= uploadFile.getName().substring( pos + 1 );
-        String onlyFilename = uploadFile.getName().substring(0, pos);
-        setSessionAttach(onlyFilename, extenstion, uuid.toString(), dirName);
-
-    // 구분폴더이름 + 현재 날짜
+    private List<String> upload(File[] uploadFiles, String dirName) {
+        List<String> uploadImageUrls = new ArrayList<>();
+        // 구분폴더 이름 + 현재 날짜
         dirName = dirName + "/" + getTodayFolder();
 
-        // getFileList(dirName);
-        // deleteFile("not", "hthi");
+        for(File uploadFile : uploadFiles) {
+            // 파일명 중복방지용 UUID
+            UUID uuid = UUID.randomUUID();
+            int pos = uploadFile.getName().lastIndexOf(".");
+            String extenstion = uploadFile.getName().substring(pos + 1);
+            String onlyFilename = uploadFile.getName().substring(0, pos);
 
-        String fileName = uuid.toString() + "_"+ uploadFile.getName();
-        fileName = dirName + "/" + fileName;
-        String uploadImageUrl = putS3(uploadFile, fileName);
-        removeNewFile(uploadFile);
+            if(httpSession.getAttribute("attachList") == null){
+                attachList.clear();
+            }
+            setSessionAttach(onlyFilename, extenstion, uuid.toString(), dirName);
 
+            // getFileList(dirName);
 
-
-        return uploadImageUrl;
+            String fileName = uuid.toString() + "_" + uploadFile.getName();
+            fileName = dirName + "/" + fileName;
+            //String uploadImageUrl = putS3(uploadFile, fileName);
+            uploadImageUrls.add(putS3(uploadFile, fileName));
+            removeNewFile(uploadFile);
+        }
+        return uploadImageUrls;
     }
 
     private String putS3(File uploadFile, String fileName) {

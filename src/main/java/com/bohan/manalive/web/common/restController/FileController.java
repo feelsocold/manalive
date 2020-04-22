@@ -1,6 +1,8 @@
 package com.bohan.manalive.web.common.restController;
 
 import com.bohan.manalive.config.S3Uploader;
+import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
+import com.bohan.manalive.web.community.service.AttachSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,12 +21,29 @@ import java.io.Serializable;
 public class FileController implements Serializable {
 
     private final S3Uploader s3Uploader;
+    private final AttachSessionService attachSessionService;
+    private final HttpSession httpSession;
+
     @PostMapping("/s3Upload")
-    public void s3Upload(MultipartFile[] multipartFile,
-                @RequestParam("category") String category) throws IOException{
-        for(MultipartFile file : multipartFile){
-            s3Uploader.upload(file, category);
-        }
+    public List<String> s3Upload(MultipartFile[] multipartFile,
+                                 @RequestParam("category") String category) throws IOException{
+        log.info(multipartFile[0].getOriginalFilename());
+        List<String> attachList = s3Uploader.upload(multipartFile, category);
+
+        return attachList;
+
+    }
+
+
+    @PostMapping("/s3Delete")
+    public void s3Delete(@RequestParam("oper") String oper,
+                            @RequestParam("category") String category) throws IOException{
+
+        log.info("s3Delete");
+        attachSessionService.deleteS3Attach(oper, category);
+
+
+        List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
     }
 
 

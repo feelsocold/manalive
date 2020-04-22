@@ -66,6 +66,9 @@
                                    type="submit" value="회원가입하기" id="Social-Register-Btn" data-oper="social" class="reg-btn">
                         </div>
                     </div>
+                    <input th:unless="${user}" type="hidden" value="" name="photo">
+                    <input th:if="${user}" type="hidden" th:value="${session.attachDto.filename}" name="photo">
+
                     <input type="hidden" value="standard" id="oper" name="oper">
                 </form>
             </div>

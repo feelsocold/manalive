@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -31,7 +32,8 @@ public class UserService {
 
 
     public void saveAttach(Long superKey) {
-        AttachSaveRequestDto requestDto = (AttachSaveRequestDto)httpSession.getAttribute("attachDto");
+        List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
+        AttachSaveRequestDto requestDto = attachList.get(0);
         attachRepository.save(requestDto.toEntity().builder()
                                     .category(requestDto.getCategory())
                                     .superKey(superKey)
@@ -62,10 +64,10 @@ public class UserService {
                                         .phone(registerUser.getPhone())
                                         .enable("1")
                                         .role(Role.USER)
-                                        //.picture(String.valueOf(att_no))
+                                        .photo(registerUser.getPhoto())
                                              .build()).getSeq();
 
-        if (httpSession.getAttribute("attachDto") != null) {
+        if (httpSession.getAttribute("attachList") != null) {
             saveAttach(seq);
         }
 
@@ -80,8 +82,12 @@ public class UserService {
                         registerUser.getNickname(),
                         registerUser.getPhone(),
                         "1",
-                        Role.USER )).orElse(registerUser.toEntity());
-        if (httpSession.getAttribute("attachDto") != null) {
+                        Role.USER,
+                        registerUser.getPhoto()
+
+                        )).orElse(registerUser.toEntity());
+
+        if (httpSession.getAttribute("attachList") != null) {
             saveAttach(user.getSeq());
         }
         httpSession.setAttribute("user", new SessionUser(user));

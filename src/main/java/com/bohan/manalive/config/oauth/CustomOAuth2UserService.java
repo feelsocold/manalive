@@ -55,16 +55,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) throws NoSuchElementException {
-        //User user2 = userRepository.findByEmail(attributes.getEmail()).get();
-        //logger.info("!!!!!!!!!!!!!! => => =>" +  user2.getEmail() );
         if(userRepository.findByEmail(attributes.getEmail()).isPresent()){
             logger.info("아이디 존재!");
         }else {
             logger.info("아이디 XXXXXXXXXXXXXXX");
         }
         User user = userRepository.findByEmail(attributes.getEmail())
-                //.map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
                 .map(entity -> entity.update(attributes.getName()))
+                //.map(entity -> entity.update(attributes.getName()))
                 .orElse(attributes.toEntity());
 
         setSessionAttach(attributes.getPicture());

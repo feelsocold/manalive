@@ -24,7 +24,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
 
   mail:
     host=smtp: gmail.com

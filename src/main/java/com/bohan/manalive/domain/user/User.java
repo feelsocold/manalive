@@ -45,25 +45,20 @@ public class User extends BaseTimeEntity {
     @ColumnDefault("1")
     String enable;
 
-//    @Column(nullable=true)
-//    private String picture;
+    @Column(nullable=true)
+    private String photo;
 
     @Builder
-    public User(String name, String email, String picture, Role role, String social, String enable, String nickname, String phone, String password) {
-        this.name = name;
+    public User(String email,String name, String photo, Role role, String social, String enable, String nickname, String phone, String password) {
         this.email = email;
+        this.name = name;
+        this.photo = photo;
         this.role = role;
         this.social = social;
         this.enable = enable;
         this.nickname = nickname;
         this.phone = phone;
         this.password = password;
-    }
-
-    public User update(String name){
-        this.name = name;
-
-        return this;
     }
 
     public String getRoleKey(){
@@ -74,6 +69,7 @@ public class User extends BaseTimeEntity {
         return User.builder()
                 .email(email)
                 .name(name)
+                .photo(photo)
                 .social(social)
                 .nickname(nickname)
                 .role(Role.USER)
@@ -81,12 +77,19 @@ public class User extends BaseTimeEntity {
                 .build();
     }
 
-    public User update(String name, String nickname, String phone, String enable, Role role) {
+    public User update(String name){
+        this.name = name;
+        //this.photo = photo;
+        return this;
+    }
+
+    public User update(String name, String nickname, String phone, String enable, Role role, String photo) {
         this.name = name;
         this.nickname = nickname;
         this.phone = phone;
         this.enable = enable;
         this.role = role;
+        this.photo = photo;
 
         return this;
     }

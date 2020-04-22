@@ -76,7 +76,7 @@ h1, h2, h3, h4, h5, h6, .font-primary {
 # Header
 --------------------------------------------------------------*/
 #header {
-  height: 108px;
+  height: 115px;
   transition: all 0.5s;
   z-index: 997;
   transition: all 0.5s;
@@ -1277,3 +1277,4 @@ input:hover { outline: none; }
 
 a:visited { color: inherit;}
 a:link { outline: none; }
+

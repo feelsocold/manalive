@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+
+
     var formObj = $("form");
     $('.reg-btn').on("click", function(e){
         e.preventDefault();
@@ -203,7 +205,11 @@ function asyncUpload(value){
             contentType : false,
             data: formData,
             type: 'POST',
-            enctype: 'multipart/form-data'
+            enctype: 'multipart/form-data',
+            success : function(result){
+                console.log(result);
+                $("input[name='photo']").val(result[0]);
+            }
          }).done(function (data) {
             if(value.files && value.files[0]) {
                 var reader = new FileReader();

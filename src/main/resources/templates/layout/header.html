@@ -38,11 +38,9 @@
     <header id="header" class="fixed-top">
         <div id="custom-nav">
             <ul>
+                <li th:if="${user}"><a href="/logout" th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}" class='nav-small-word'>로그아웃</a></li>
 
-
-                <li th:if="${user}"><a href="/logout" th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}" class='nav-small-word' style="font-size: 12px">LOGOUT</a></li>
-
-                <li>고객센터</li>
+                <li><a href="#">고객센터</a></li>
                 <li>장바구니</li>
                 <li th:unless="${user}">
                     <a href="/register">회원가입</a>
@@ -57,12 +55,17 @@
                 <li th:if="${user}"><span th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}">마이페이지</span></li>
 
                 <li th:if="${user}">
-                    <span th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}" th:text="${user.name}"></span>
+<!--                    <i th:if="${user.photo != 'null'}"><img id="user-photo" th:src="${user.photo}"></i>-->
+<!--                    <img th:if="${user.photo != 'null'}"  id="user-photo" th:src="${user.photo}">-->
+                    <span th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}" id="user-info">
+                        <i th:if="${user.photo != 'null'}"><img id="user-photo" th:src="${user.photo}"></i>
+                        <label th:text="${user.name}" id="user-name"></label>
+                    </span>
                 </li>
             </ul>
         </div>
 
-        <div class="container-fluid d-flex" style="height:90px; padding-top: 15px; border-top: 1px solid #D5D5D5">
+        <div class="container-fluid d-flex" style="height:70%; padding-top: 15px; border-top: 1px solid #D5D5D5">
             <!--        style="border-top: solid 1px #D5D5D5; height:180px; margin-top: 40px;"-->
 
             <div class="logo mr-auto">
