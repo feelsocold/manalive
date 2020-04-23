@@ -20,24 +20,14 @@ public class BoardController {
 
     @GetMapping("")
     public String boardList() {
-        log.info("board list()");
         return "/community/board/board";
     }
 
     @GetMapping("/write")
     public String board_write() {
-        log.info("board_write()");
         if(httpSession.getAttribute("attachList") != null) {
-
             httpSession.removeAttribute("attachList");
-            log.info("session remove~");
-
-
-
-        }else{
-            log.info("session doesnt exist");
         }
-
         return "community/board/board_write";
     }
 

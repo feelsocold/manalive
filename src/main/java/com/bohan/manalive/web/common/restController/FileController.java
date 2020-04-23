@@ -27,23 +27,28 @@ public class FileController implements Serializable {
     @PostMapping("/s3Upload")
     public List<String> s3Upload(MultipartFile[] multipartFile,
                                  @RequestParam("category") String category) throws IOException{
-        log.info(multipartFile[0].getOriginalFilename());
-        List<String> attachList = s3Uploader.upload(multipartFile, category);
-
-        return attachList;
-
+        List<String> fileList = s3Uploader.upload(multipartFile, category);
+        return fileList;
     }
-
 
     @PostMapping("/s3Delete")
     public void s3Delete(@RequestParam("oper") String oper,
                             @RequestParam("category") String category) throws IOException{
-
         log.info("s3Delete");
         attachSessionService.deleteS3Attach(oper, category);
-
-
         List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
+    }
+
+    @PostMapping("/s3Update")
+    public List<String> s3Update(MultipartFile[] multipartFile,
+                         @RequestParam("oper") String oper,
+                         @RequestParam("category") String category) throws IOException{
+        log.info("s3Update");
+        List<String> fileList = s3Uploader.upload(multipartFile, category);
+        attachSessionService.updateS3Attach(oper, category);
+        //List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
+
+        return fileList;
     }
 
 

@@ -28,7 +28,7 @@ public class S3Uploader {
     private String bucket;
 
     public void deleteFile(String dirName, String fileName) {
-        log.info(dirName +  " * " + fileName);
+        log.info(dirName +  "에서 " + fileName + "이 삭제되었습니다.");
 
         String key = dirName + "/" + getTodayFolder() + "/" + fileName;
         amazonS3Client.deleteObject(bucket, key);
@@ -58,6 +58,9 @@ public class S3Uploader {
     }
 
     private void setSessionAttach(String filename, String extension, String uuid, String category) {
+        if(httpSession.getAttribute("attachList") != null ) {
+            attachList = (List<AttachSaveRequestDto>) httpSession.getAttribute("attachList");
+        }
         AttachSaveRequestDto attach = new AttachSaveRequestDto(filename, extension, uuid, category);
         attachList.add(attach);
         httpSession.setAttribute("attachList", attachList);
@@ -79,15 +82,14 @@ public class S3Uploader {
         dirName = dirName + "/" + getTodayFolder();
 
         for(File uploadFile : uploadFiles) {
-            // 파일명 중복방지용 UUID
+        // 파일명 중복방지용 UUID
             UUID uuid = UUID.randomUUID();
+        // 확장자/파일명 구분
             int pos = uploadFile.getName().lastIndexOf(".");
             String extenstion = uploadFile.getName().substring(pos + 1);
             String onlyFilename = uploadFile.getName().substring(0, pos);
-
-            if(httpSession.getAttribute("attachList") == null){
-                attachList.clear();
-            }
+        // 세션 관리
+            if(httpSession.getAttribute("attachList") == null){attachList.clear();}
             setSessionAttach(onlyFilename, extenstion, uuid.toString(), dirName);
 
             // getFileList(dirName);
@@ -108,9 +110,9 @@ public class S3Uploader {
 
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
-            log.info("파일이 삭제되었습니다.");
+            //log.info("로컬파일이 삭제되었습니다.");
         } else {
-            log.info("파일이 삭제되지 못했습니다.");
+            //log.info("로컬파일이 삭제되지 못했습니다.");
         }
     }
 
