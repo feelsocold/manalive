@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-
-
     var formObj = $("form");
     $('.reg-btn').on("click", function(e){
         e.preventDefault();

@@ -26,11 +26,13 @@
                         <input id="title" type="text" placeholder="제목을 입력해주세요."> <br>
                         <textarea id="content" placeholder="내용을 입력해주세요."></textarea>
 
-                        <div id="hashTag-div" style="display: inline-block">
-                            <span class="size-span" style="display:none"></span>
-                            <span class="hasTag-span">#
-                                <input type="text" class='hashTag-text' onkeydown="keydown(this)" placeholder="키워드" size="10" >
-                            </span>
+                        <div id="hashTag-wrap" style="display: inline-block">
+                            <div class="hashTag-div" style="display: inline-block">
+                                <span class="size-span" style="display:none"></span>
+                                <span class="hasTag-span">#
+                                    <input type="text" maxlength="13" class='hashTag-text' onkeyup="keyUpHash(this)" onkeydown="keydownHash(this)" placeholder="키워드" size="5" >
+                                </span>
+                            </div>
                         </div>
 
                     </div>

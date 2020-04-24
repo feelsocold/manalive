@@ -40,6 +40,7 @@
 
 #write-div {
     /*line-height: 100px;*/
+    margin-top: 20px;
 }
 
 #text-div #title {
@@ -158,9 +159,8 @@
 
 }
 .thumb-Btn:hover {
-    opacity: 0.4;
+    opacity: 0.1;
 }
-
 /* The Modal (background) */
 .img-modal {
     display: none; /* Hidden by default */
@@ -182,8 +182,8 @@
     padding: 0;
     border: 0px solid #888;
     /*width: 50%; !* Could be more or less, depending on screen size *!*/
-    width: 40%;
-    height: 40%;
+    width: 55%;
+    height: 55%;
 
 
 }
@@ -200,40 +200,54 @@
     cursor: pointer;
 }
 
-#hashTag-div {
-    margin-top: 20px;
+
+.hashTag-div {
+    margin-top: 10px;
     font-size: 14px;
     color: #999999;
+    background-color: #F6F6F6;
+    border-radius: 8px;
+    padding-left: 7px;
+    padding-right: 3px;
+    margin-right: 10px;
 }
-#hashTag-div .hasTag-span {
-    /*width: 120px;*/
+.hashTag-div .hasTag-span {
     /*height: 30px;*/
     /*padding: 2px;*/
     /*background-color: #F6F6F6;*/
-    /*border: 1px solid #F6F6F6;*/
+    border-radius: 8px;
+    border: 1px solid #F6F6F6;
+
     /*
     display: inline-block;
     padding-left: 10px;
     paddinig-right:5px;
-
-    border-radius: 8px;
-
      */
 
 }
-#hashTag-div input {
-    /*background-color: #F6F6F6;*/
-    /*border: none;*/
-    /*border-radius: 8px;*/
+.hashTag-div input {
+    color: black;
+    height: 40px;
+    padding-left: 2px;
+    background-color: #F6F6F6;
+    border: none;
+    border-radius: 8px;
     /*
     width: 40px;
     border:none;
-
-
-
      */
 }
+.hashTag-div input::placeholder{
+    color: #D5D5D5;
+}
 
+.x-icon {
+    width: 12px;
+    height: 12px;
+    margin-bottom: 2px;
+    margin-right: 4px;
+    cursor: pointer;
+}
 
 button:focus { outline:0 !important; }
 button:active { outline: none; }

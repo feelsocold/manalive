@@ -1,4 +1,8 @@
+
+
 var uploadedImgCnt = 0;
+var hashTagCnt = 0;
+
 
 // 이미지 클릭시 파일버튼 클릭
 $(function () {
@@ -37,6 +41,7 @@ function asyncUpload(obj){
 
             },beforeSend:function(){
                 $('button').attr('disabled', true);
+                $('button').css('opacity', '0.2');
                 $('input').attr('disabled', 'disabled');
                 for(var i = 0; i < files.length; i++) {
                     $("#thumbnail-wrap ul").append("<li style='width:151px; height:181px;' class='loading-img'><img class='loading-img' src='/custom/img/loading-img.gif' style='width:150px; height:150px;'></li>");
@@ -44,6 +49,7 @@ function asyncUpload(obj){
 
             },complete:function(){
                 $(".loading-img").remove();
+                $('button').css('opacity', '1.0');
                 $('button').attr('disabled', false);
                 $('input').attr('disabled', false);
 
@@ -200,22 +206,61 @@ function showImage(obj) {
 //     $('#virtual_dom').remove();
 // });
 
-function keydown(obj) {
+function keydownHash(obj) {
     var value = $(obj).val();
     $('.size-span').text(value);
 
     var len = $('.size-span').outerWidth();
-    var inputSize = $('.hashTag-text').width();
+    var inputSize = $(obj).width();
+
+    var inputLen = value.length;
+    //console.log(size);
 
     if(len > inputSize){
-        $('.hashTag-text').width(len+10);
-    } else {
-        if(inputSize > 250 ){
-            $('.hashTag-text').width(len+10);
+        //$(obj).width(len+8);
+        $(obj).width(len+3);
+    }else {
+        if(inputSize > 57 ){
+            $(obj).width(len+10);
+        }
+    }
+    var imgobj = $(obj).siblings('img');
+    console.log(imgobj.length);
+
+    // 엔터키 눌렀을 때 동작
+    if(event.keyCode == 13) {
+        if($(obj).val().length > 0 && imgobj.length == 0){
+
+            $(obj).attr('readonly', 'readonly');
+            $(obj).after("<img class='x-icon' onclick='delHash(this)' src='/custom/img/icon/icon-x.png'>");
+
+            var str = "";
+            str += "<div class='hashTag-div' style='display: inline-block'>";
+            str += "<span class='size-span' style='display:none'></span><span class='hasTag-span'>#";
+            str += "<input type='text' maxlength='13' class='hashTag-text' onkeyup='keyUpHash(this)' onkeydown='keydownHash(this)' placeholder='키워드' size='5' ></span></div>";
+
+            $(obj).closest('.hashTag-div').after(str);
+            //$(obj).closest('.hashTag-div').nextSibling('input').focus();
+            $('.hashTag-text').focus();
         }
     }
 }
 
+function keyUpHash(obj) {
+
+    // 스페이스바 금지
+    $(obj).val( $(obj).val().replace(/ /gi, '') );
+    // 특수문자 금지
+    $(obj).val( $(obj).val().replace(/[\{\}\[\]\/?.,;:|\)*~`!^\-+<>@\#$%&\\\=\(\'\"]/gi, '') );
+    // 문자가 없을 때 input width 초기화
+    if($(obj).val().length == 0){
+        $(obj).width(46);
+    }
+
+}
+function delHash(obj) {
+    $(obj).closest('.hashTag-div').remove();
+}
 
 // function setDefault(obj) {
 //     alert("!");
