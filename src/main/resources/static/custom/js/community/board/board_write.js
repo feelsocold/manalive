@@ -71,7 +71,7 @@ function showUploadedImg(result) {
 
     if(uploadedImgCnt< 6) {
         $("#upload-btn").html("사진 추가하기 (" + uploadedImgCnt + "/6)");
-        $("#upload-btn").css('height', '50px');
+        $("#upload-btn").css('height', '40px');
     }else {
         $("#upload-btn").hide();
     }
@@ -91,7 +91,7 @@ function imgDelete(obj) {
             success : function(result){
                 uploadedImgCnt--;
                 $("#upload-btn").html("사진 추가하기 (" + uploadedImgCnt + "/6)");
-                $("#upload-btn").css('height', '50px');
+                $("#upload-btn").css('height', '40px');
                 $("#upload-btn").show();
             },beforeSend:function(){
                 $('button').css('opacity', '0.2');
@@ -226,28 +226,27 @@ function keydownHash(obj) {
     }
     var imgobj = $(obj).siblings('img');
     console.log(imgobj.length);
-
     // 엔터키 눌렀을 때 동작
     if(event.keyCode == 13) {
         if($(obj).val().length > 0 && imgobj.length == 0){
-
+            hashTagCnt++;
             $(obj).attr('readonly', 'readonly');
-            $(obj).after("<img class='x-icon' onclick='delHash(this)' src='/custom/img/icon/icon-x.png'>");
-
-            var str = "";
-            str += "<div class='hashTag-div' style='display: inline-block'>";
-            str += "<span class='size-span' style='display:none'></span><span class='hasTag-span'>#";
-            str += "<input type='text' maxlength='13' class='hashTag-text' onkeyup='keyUpHash(this)' onkeydown='keydownHash(this)' placeholder='키워드' size='5' ></span></div>";
-
-            $(obj).closest('.hashTag-div').after(str);
-            //$(obj).closest('.hashTag-div').nextSibling('input').focus();
-            $('.hashTag-text').focus();
+            $(obj).after("<img class='x-icon' onclick='deleteHashtag(this)' src='/custom/img/icon/icon-x.png'>");
+            if(hashTagCnt < 7) { addHashTag(obj);}
         }
     }
 }
 
-function keyUpHash(obj) {
+function addHashTag(obj) {
+    var str = "";
+    str += "<div class='hashTag-div' style='display: inline-block'>";
+    str += "<span class='size-span' style='display:none'></span><span class='hasTag-span'>#";
+    str += "<input type='text' maxlength='13' name='hashtag' class='hashTag-text' onkeyup='keyUpHash(this)' onkeydown='keydownHash(this)' placeholder='키워드' size='5' ></span></div>";
+    $(obj).closest('.hashTag-div').after(str);
+    $('.hashTag-text').focus();
+}
 
+function keyUpHash(obj) {
     // 스페이스바 금지
     $(obj).val( $(obj).val().replace(/ /gi, '') );
     // 특수문자 금지
@@ -256,9 +255,10 @@ function keyUpHash(obj) {
     if($(obj).val().length == 0){
         $(obj).width(46);
     }
-
 }
-function delHash(obj) {
+function deleteHashtag(obj) {
+    hashTagCnt--;
+    if(hashTagCnt == 6) {addHashTag(obj);}
     $(obj).closest('.hashTag-div').remove();
 }
 
@@ -269,3 +269,16 @@ function delHash(obj) {
 //         $(obj).css('width', '70%');
 //     }
 // };
+$('#board-submitBtn').click(function (e) {
+    e.preventDefault();
+    var hashtags = "";
+    $("input[name='hashtag']").each(function (i) {
+        if( $("input[name='hashtag']").eq(i).val() != '') {
+            hashtags += $("input[name='hashtag']").eq(i).val() + ", ";
+        }
+    });
+    console.log(hashtags);
+    $("input[name='hashtags']").val(hashtags);
+
+    $("#boardForm").submit();
+});

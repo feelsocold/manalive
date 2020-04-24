@@ -18,19 +18,22 @@
         <div class="main-container">
             <div class="write-wrap">
                 <div>
-                    <h2><b>글쓰기</b></h2>
+                    <h2 style="float:left;"><b>글쓰기</b></h2> <input type="button" id="board-submitBtn" value="올리기">
                 </div>
-                <div>
+                <br>
                 <div id="write-div">
                     <div id="text-div">
-                        <input id="title" type="text" placeholder="제목을 입력해주세요."> <br>
-                        <textarea id="content" placeholder="내용을 입력해주세요."></textarea>
-
+                        <form method="post" id="boardForm" action="/board/write">
+                            <input name='title' id="title" type="text" placeholder="제목을 입력해주세요."> <br>
+                            <textarea name='content' id="content" placeholder="내용을 입력해주세요."></textarea>
+                            <input type="hidden" name="hashtags" value="">
+                        </form>
                         <div id="hashTag-wrap" style="display: inline-block">
                             <div class="hashTag-div" style="display: inline-block">
                                 <span class="size-span" style="display:none"></span>
                                 <span class="hasTag-span">#
-                                    <input type="text" maxlength="13" class='hashTag-text' onkeyup="keyUpHash(this)" onkeydown="keydownHash(this)" placeholder="키워드" size="5" >
+                                    <input type="text" maxlength="13" class='hashTag-text' name="hashtag"
+                                           onkeyup="keyUpHash(this)" onkeydown="keydownHash(this)" placeholder="키워드" size="5" >
                                 </span>
                             </div>
                         </div>
@@ -57,12 +60,16 @@
                     </div>
 
                 </div>
-                </div>
             </div>
 
         </div>
+<!--        <hr class="one">-->
+        <div style="text-align: center;">
+<!--            <input type="button" id="board-submitBtn" value="올리기">-->
+        </div>
 
-        <!-- LOGIN Modal -->
+
+        <!--upload-img Modal-->
         <div id="img-Modal" class="img-modal">
             <!-- Modal content -->
             <div class="imgModal-content">
@@ -70,9 +77,9 @@
                 <div id="showImage-area">
 
                 </div>
-
             </div>
         </div> <!--End Login-Model-->
+
 
     </main>
 

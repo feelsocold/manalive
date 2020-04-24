@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -24,11 +25,18 @@ public class BoardController {
     }
 
     @GetMapping("/write")
-    public String board_write() {
+    public String goWrite() {
         if(httpSession.getAttribute("attachList") != null) {
             httpSession.removeAttribute("attachList");
         }
         return "community/board/board_write";
+    }
+
+    @PostMapping("/write")
+    public void boardWrite(String title, String content, String hashtags) {
+        log.info(title);
+        log.info(content);
+        log.info(hashtags);
     }
 
 
