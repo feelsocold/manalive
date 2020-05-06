@@ -2,12 +2,11 @@ package com.bohan.manalive.web.common.service;
 
 import com.bohan.manalive.config.oauth.dto.RegisterUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
-import com.bohan.manalive.domain.attach.Attach;
 import com.bohan.manalive.domain.attach.AttachRepository;
 import com.bohan.manalive.domain.user.Role;
 import com.bohan.manalive.domain.user.User;
 import com.bohan.manalive.domain.user.UserRepository;
-import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
+import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,7 @@ import com.bohan.manalive.config.oauth.dto.OAuthAttributes;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
 import com.bohan.manalive.domain.user.User;
 import com.bohan.manalive.domain.user.UserRepository;
-import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
+import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

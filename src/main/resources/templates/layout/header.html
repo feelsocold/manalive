@@ -38,28 +38,33 @@
     <header id="header" class="fixed-top">
         <div id="custom-nav">
             <ul>
-                <li th:if="${user}"><a href="/logout" th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}" class='nav-small-word'>로그아웃</a></li>
+                <li th:if="${session['user']}"><a href="/logout" th:unless="${session['user'].role.equals('GUEST')}" class='nav-small-word'>로그아웃</a></li>
+
+<!--                <span th:if="${session['user']}" th:text="${session['user'].email}"></span>-->
+<!--                <span th:text="${session['user'].email}"></span>-->
+<!--                <span th:text="${session['user'].role}"></span>-->
 
                 <li><a href="#">고객센터</a></li>
                 <li>장바구니</li>
-                <li th:unless="${user}">
+                <li th:unless="${session['user']}">
                     <a href="/register">회원가입</a>
                     &#47;
                     <a href="#" id="Login-Btn">로그인</a>
                 </li>
-                <li th:if="${user}">
-                    <a th:if="${user.getRole().getKey().equals('ROLE_GUEST')}" href="/register">회원가입</a>
-                    <span th:if="${user.getRole().getKey().equals('ROLE_GUEST')}">&#47;</span>
-                    <a th:if="${user.getRole().getKey().equals('ROLE_GUEST')}" href="#" id="Login-Btn">로그인</a>
+                <li th:if="${session['user']}">
+                    <a th:if="${session['user'].role.equals('GUEST')}" href="/register">회원가입</a>
+                    <span th:if="${session['user'].role.equals('GUEST')}">&#47;</span>
+                    <a th:if="${session['user'].role.equals('GUEST')}" href="#" id="Login-Btn">로그인</a>
                 </li>
-                <li th:if="${user}"><span th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}">마이페이지</span></li>
+                <li th:if="${session['user']}"><span th:unless="${session['user'].role.equals('GUEST')}">마이페이지</span></li>
 
-                <li th:if="${user}">
+                <li th:if="${session['user']}">
 <!--                    <i th:if="${user.photo != 'null'}"><img id="user-photo" th:src="${user.photo}"></i>-->
 <!--                    <img th:if="${user.photo != 'null'}"  id="user-photo" th:src="${user.photo}">-->
-                    <span th:unless="${user.getRole().getKey().equals('ROLE_GUEST')}" id="user-info">
-                        <i th:if="${user.photo != 'null'}"><img id="user-photo" th:src="${user.photo}"></i>
-                        <label th:text="${user.name}" id="user-name"></label>
+
+                    <span th:unless="${session['user'].role.equals('GUEST')}" id="user-info">
+                        <i th:if="${session['user'].photo != 'null'}"><img id="user-photo" th:src="${session['user'].photo}"></i>
+                        <label th:text="${session['user'].name}" id="user-name"></label>
                     </span>
                 </li>
             </ul>

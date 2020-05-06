@@ -1,7 +1,7 @@
 package com.bohan.manalive.web.common.restController;
 
 import com.bohan.manalive.config.S3Uploader;
-import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
+import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
 import com.bohan.manalive.web.community.service.AttachSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class FileController implements Serializable {
 
     @PostMapping("/s3Update")
     public List<String> s3Update(MultipartFile[] multipartFile,
-                         @RequestParam("oper") String oper,
+                         @RequestParam("oper") String oper,         // 사진 넘버
                          @RequestParam("category") String category) throws IOException{
         log.info("s3Update");
         List<String> fileList = s3Uploader.upload(multipartFile, category);

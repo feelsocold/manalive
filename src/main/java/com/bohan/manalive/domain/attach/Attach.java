@@ -31,8 +31,6 @@ public class Attach extends BaseTimeEntity {
     @Column(nullable = false)
     private String uuid;
 
-
-
     @Builder
     public Attach(String filename, String category, Long superKey, String extension, String uuid) {
         this.filename = filename;
@@ -40,10 +38,6 @@ public class Attach extends BaseTimeEntity {
         this.superKey = superKey;
         this.extension = extension;
         this.uuid = uuid;
-
-
     }
-
-
 
 }

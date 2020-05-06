@@ -2,7 +2,7 @@ package com.bohan.manalive.config;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
-import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
+import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,6 +78,7 @@ public class S3Uploader {
 
     private List<String> upload(File[] uploadFiles, String dirName) {
         List<String> uploadImageUrls = new ArrayList<>();
+        String category = dirName;
         // 구분폴더 이름 + 현재 날짜
         dirName = dirName + "/" + getTodayFolder();
 
@@ -90,7 +91,7 @@ public class S3Uploader {
             String onlyFilename = uploadFile.getName().substring(0, pos);
         // 세션 관리
             if(httpSession.getAttribute("attachList") == null){attachList.clear();}
-            setSessionAttach(onlyFilename, extenstion, uuid.toString(), dirName);
+            setSessionAttach(onlyFilename, extenstion, uuid.toString(), category);
 
             // getFileList(dirName);
 

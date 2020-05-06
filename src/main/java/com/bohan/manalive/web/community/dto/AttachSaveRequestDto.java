@@ -1,4 +1,4 @@
-package com.bohan.manalive.web.community.domain;
+package com.bohan.manalive.web.community.dto;
 
 import com.bohan.manalive.domain.attach.Attach;
 import lombok.*;

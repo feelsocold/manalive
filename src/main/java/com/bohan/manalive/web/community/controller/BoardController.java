@@ -1,6 +1,10 @@
 package com.bohan.manalive.web.community.controller;
 
-import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
+import com.bohan.manalive.config.oauth.LoginUser;
+import com.bohan.manalive.config.oauth.dto.SessionUser;
+import com.bohan.manalive.web.community.dto.BoardSaveRequestDto;
+import com.bohan.manalive.web.community.service.AttachService;
+import com.bohan.manalive.web.community.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -9,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -18,6 +21,8 @@ import java.util.List;
 public class BoardController {
 
     private final HttpSession httpSession;
+    private final BoardService boardService;
+    private final AttachService attachService;
 
     @GetMapping("")
     public String boardList() {
@@ -32,11 +37,13 @@ public class BoardController {
         return "community/board/board_write";
     }
 
-    @PostMapping("/write")
-    public void boardWrite(String title, String content, String hashtags) {
-        log.info(title);
-        log.info(content);
-        log.info(hashtags);
+    @PostMapping("/post")
+    public String boardPost(BoardSaveRequestDto boardDto, @LoginUser SessionUser user) throws Exception{
+
+        boardDto.setEmail(user.getEmail());
+        Long boardSeq = boardService.saveBoard(boardDto, user);
+        attachService.saveAttachs("boardAttach", boardSeq);
+        return "redirect:/board";
     }
 
 

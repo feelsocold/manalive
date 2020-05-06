@@ -1,15 +1,13 @@
 package com.bohan.manalive.web.community.service.impl;
 
 import com.bohan.manalive.config.S3Uploader;
-import com.bohan.manalive.web.community.domain.AttachSaveRequestDto;
+import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
 import com.bohan.manalive.web.community.service.AttachSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -45,12 +43,6 @@ public class AttachSessionServiceImpl implements AttachSessionService {
     @Override
     public void updateS3Attach(String oper, String category) {
         List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
-        log.info( "수정 전 세션 사이즈2 : " + ((List<AttachSaveRequestDto>) httpSession.getAttribute("attachList")).size() + "" );
-        log.info("수정 전 세션사이즈 : " + attachList.size() + "");
-        for(AttachSaveRequestDto attach : attachList){
-            System.out.print(attach.getFilename() + ", ");
-        }
-        System.out.println("!");
         AttachSaveRequestDto requestDto = attachList.get(Integer.parseInt(oper));
         String fileName = requestDto.getUuid() + "_" + requestDto.getFilename() + "." + requestDto.getExtension();
 
