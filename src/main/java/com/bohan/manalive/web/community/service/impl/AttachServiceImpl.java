@@ -26,7 +26,6 @@ public class AttachServiceImpl implements AttachService {
         return null;
     }
 
-
     @Override
     public void saveAttachs(String category, Long superkey) throws Exception {
         List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
@@ -37,6 +36,4 @@ public class AttachServiceImpl implements AttachService {
             attachRepository.save(attach.toEntity());
         }
     }
-
-
 }

@@ -262,13 +262,7 @@ function deleteHashtag(obj) {
     $(obj).closest('.hashTag-div').remove();
 }
 
-// function setDefault(obj) {
-//     alert("!");
-//     var length = $(obj).val().length;
-//     if(length == 0) {
-//         $(obj).css('width', '70%');
-//     }
-// };
+// 게시물 등록
 $('#board-submitBtn').click(function (e) {
     e.preventDefault();
     var hashtags = "";
@@ -280,5 +274,41 @@ $('#board-submitBtn').click(function (e) {
     console.log(hashtags);
     $("input[name='hashtags']").val(hashtags);
 
-    $("#boardForm").submit();
+    //$("#boardForm").submit();
+
+        var data = { "title" : document.getElementById("title").value,
+                     "content" : document.getElementById("content").value,
+                     "hashtags" : hashtags
+        };
+
+        //let data = $("#boardForm").serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: '/board/post',
+            contentType : "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            //data: data,
+            dataType : 'json',
+            success : function(result){
+                console.log(result.boardSeq);
+                //document.getElementById('confirm-Modal').show();
+                $("#confirm-modal").show();
+
+            },error: function (jqXHR, textStatus, errorThrown) {
+                alert("error");
+            },beforeSend:function(){
+
+
+            },complete:function(){
+                //alert("complete");
+            }
+        });
+
 });
+
+// Get the modal
+var confirm_modal = document.getElementById('confirm-Modal');
+
+
+

@@ -54,6 +54,12 @@ dependencies {
 
     implementation 'org.springframework.cloud:spring-cloud-starter-aws'
 
+    //jackson
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.7'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.7'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
+
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
     //추가
     testCompile("org.projectlombok:lombok")
