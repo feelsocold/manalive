@@ -1,19 +1,25 @@
 package com.bohan.manalive.domain.user;
 
 import com.bohan.manalive.config.oauth.dto.BaseTimeEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.bohan.manalive.web.community.domain.Board;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
+//@EqualsAndHashCode(callSuper = false, exclude = {"boardList"})
+@ToString(exclude = "boardList")
+@JsonIgnoreProperties
 @Entity
-public class User extends BaseTimeEntity {
+public class User extends BaseTimeEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +53,17 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable=true)
     private String photo;
+
+//    @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<Board> boardList = new ArrayList<Board>();
+
+//    @OneToOne(mappedBy = "userDetail")
+//    private Board board;
+
+
+
+
 
     @Builder
     public User(String email,String name, String photo, Role role, String social, String enable, String nickname, String phone, String password) {
@@ -93,5 +110,7 @@ public class User extends BaseTimeEntity {
 
         return this;
     }
+
+
 
 }

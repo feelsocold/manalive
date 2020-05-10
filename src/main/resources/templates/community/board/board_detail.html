@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>MAN ALIVE!</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/custom/css/community/board/board_detail.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <th:block th:include="layout/header"></th:block>
+
+    <main id="main">
+        <div class="main-container">
+<!--            <h1 th:text="${seq}"></h1>-->
+            <input type="hidden" th:value="${seq}" id="seq">
+        </div>
+    </main>
+
+    <script src="/custom/js/common/index.js"></script>
+    <script src="/custom/js/common/login.js"></script>
+    <script src="/custom/js/community/board/board_detail.js"></script>

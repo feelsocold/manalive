@@ -1,22 +1,4 @@
-.board-wrap{
-    margin-top: 58px;
-    margin-bottom: 30px;
-    font-size: 50px;
-    display: inline-block;
-    width: 55%;
-    height: auto;
-}
 
-#board-table {
-    border:0px blue solid;
-    width: 90%;
-    height: 90%;
-    font-size: 12px;
-    border-collapse: collapse;
-}
-#board-table th, td {
-    border: 1px solid #444444;
-}
 
 .boardwrite-wrap h2 {
     text-align: left;
@@ -88,7 +70,7 @@
 #fileupload-div{
     border: 0px orange solid;
     float: left;
-    width: 50%;
+    width: 40%;
     height: 100%;
     font-size: 12px;
     padding-top: 15px;
@@ -99,7 +81,7 @@
 }
 #upload-btn {
     font-size: 14px;
-    width: 75%;
+    width: 94%;
     height: 195px;
     border-radius: 5px;
     background-color: #F6F6F6;
@@ -140,7 +122,7 @@
 #thumbnail-wrap li {
     text-align: center;
     /*margin: 5px 5px 0 0;*/
-    margin-right: 15px;
+    margin-right: 13px;
     margin-bottom: 10px;
 
     padding: 0 0 0 0;
@@ -264,6 +246,9 @@
     float:right;
     margin-right: 105px;
     height: 50px;
+}
+#board-submitBtn:hover{
+    opacity: 0.5;
 }
 
 button:focus { outline:0 !important; }

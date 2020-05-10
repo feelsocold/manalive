@@ -2,12 +2,14 @@ package com.bohan.manalive.web.community.service.impl;
 
 import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
+import com.bohan.manalive.domain.user.User;
 import com.bohan.manalive.web.community.domain.Board;
 import com.bohan.manalive.web.community.domain.BoardRepository;
 import com.bohan.manalive.web.community.domain.BoardSpecs;
 import com.bohan.manalive.web.community.dto.BoardCriteria;
 import com.bohan.manalive.web.community.dto.BoardListResponseDto;
 import com.bohan.manalive.web.community.dto.BoardSaveRequestDto;
+import com.bohan.manalive.web.community.dto.PageDto;
 import com.bohan.manalive.web.community.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,14 +33,6 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepo;
 
-//    @Transactional
-//    @Override
-//    public List<BoardListResponseDto> findAllDesc() throws Exception {
-//        return boardRepo.findAllDesc().stream()
-//                .map(BoardListResponseDto::new)
-//                .collect(Collectors.toList());
-//    }
-
     @Override
     public Long saveBoard(BoardSaveRequestDto requestDto, @LoginUser SessionUser user) throws Exception {
         return boardRepo.save(requestDto.toEntity()).getSeq();
@@ -45,18 +40,20 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public List<Board> boardList(BoardCriteria criteria) {
+    public HashMap<String, Object> boardListandPaging(BoardCriteria criteria) {
         Pageable paging = null;
         Page<Board> pageInfo = null;
 
+        paging = PageRequest.of(criteria.getPageNumber()-1, criteria.getPageAmount(), Sort.Direction.DESC, criteria.getSorting());
+
+        // default
         if(criteria.getKeyword() == null || criteria.getKeyword().equals("")){
-            paging = PageRequest.of(0, 15, Sort.Direction.DESC, "seq");
+            log.info("criteria는 없다");
+
             pageInfo = boardRepo.findAll(paging);
-        }else{
-
-            log.info("여기있다!!!!!!!!!1");
-
-
+        }
+        // 조건을 가질 때
+        else{
             Map<String, Object> searchRequest = new HashMap<>();
             searchRequest.put(criteria.getCategory(), criteria.getKeyword());
 
@@ -64,15 +61,22 @@ public class BoardServiceImpl implements BoardService {
             for (String key : searchRequest.keySet()) {
                 searchKeys.put(BoardSpecs.SearchKey.valueOf(key.toUpperCase()), searchRequest.get(key));
             }
-
-            paging = PageRequest.of(criteria.getPageNumber(), criteria.getPageAmount(), Sort.Direction.DESC, "seq");
             pageInfo = boardRepo.findAll(BoardSpecs.searchWith(searchKeys), paging);
         }
-//        Page<Board> pageInfo = boardRepo.findByTitleContaining("", paging);
 
+        Long total = pageInfo.getTotalElements();
+        log.info("board total : " + total);
         List<Board> boardList = pageInfo.getContent();
-        log.info(boardList.size() + "");
-        return boardList;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("boardList", boardList);
+        map.put("pageMaker", new PageDto(criteria, (int)(long)total ));
+
+        return map;
+    }
+
+    @Override
+    public Board boardDetail(Long seq) {
+        return boardRepo.findById(seq).get();
     }
 
 

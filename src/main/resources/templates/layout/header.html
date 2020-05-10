@@ -36,6 +36,7 @@
 <body>
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top">
+        <input type="hidden" th:value="${session['user']}" id="sessionUser">
         <div id="custom-nav">
             <ul>
                 <li th:if="${session['user']}"><a href="/logout" th:unless="${session['user'].role.equals('GUEST')}" class='nav-small-word'>로그아웃</a></li>
