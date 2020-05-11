@@ -69,6 +69,8 @@ public class IndexController {
             if(oper.equals("standard")){
                 userService.standardRegister(user);
             }else if(oper.equals("social")) {
+                log.info("^^^^^^ " + user.toString());
+                log.info(user.getPhoto());
                 userService.socialRegister(user);
             }
         }catch(Exception e){

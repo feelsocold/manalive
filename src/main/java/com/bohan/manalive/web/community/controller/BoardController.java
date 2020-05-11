@@ -2,9 +2,6 @@ package com.bohan.manalive.web.community.controller;
 
 import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
-import com.bohan.manalive.web.community.domain.Board;
-import com.bohan.manalive.web.community.domain.BoardRepository;
-import com.bohan.manalive.web.community.domain.BoardSpecs;
 import com.bohan.manalive.web.community.dto.*;
 import com.bohan.manalive.web.community.service.AttachService;
 import com.bohan.manalive.web.community.service.BoardService;
@@ -16,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,7 +39,7 @@ public class BoardController {
 
     @ResponseBody
     @PostMapping("/post")
-    public HashMap<String, Object> boardPost(@RequestBody BoardSaveRequestDto boardDto, @LoginUser SessionUser user) throws Exception{
+    public HashMap<String, Object> boardPost(@RequestBody BoardRequestDto boardDto, @LoginUser SessionUser user) throws Exception{
         boardDto.setEmail(user.getEmail());
         Long boardSeq = boardService.saveBoard(boardDto, user);
 

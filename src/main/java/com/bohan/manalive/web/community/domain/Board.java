@@ -42,6 +42,10 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "email", referencedColumnName = "email", insertable = false, updatable = false)
     private User userDetail;
 
+//    @OneToMany
+//    @JoinColumn(name='seq', referencedColumnName = 'superKey')
+
+
 
     @Builder
     public Board(String title, String content, String hashtags, String email) {

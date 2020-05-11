@@ -1,8 +1,6 @@
 package com.bohan.manalive.web.community.service;
 
-import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
-
-import java.util.List;
+import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
 
 public interface AttachService {
 

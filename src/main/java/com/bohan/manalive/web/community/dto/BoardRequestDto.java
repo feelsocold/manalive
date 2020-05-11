@@ -1,14 +1,12 @@
 package com.bohan.manalive.web.community.dto;
 
 import com.bohan.manalive.web.community.domain.Board;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
-public class BoardSaveRequestDto {
+public class BoardRequestDto {
 
     private String title;
     private String content;

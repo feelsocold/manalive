@@ -2,11 +2,11 @@ package com.bohan.manalive.web.common.service;
 
 import com.bohan.manalive.config.oauth.dto.RegisterUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
-import com.bohan.manalive.domain.attach.AttachRepository;
+import com.bohan.manalive.web.common.domain.attach.AttachRepository;
 import com.bohan.manalive.domain.user.Role;
 import com.bohan.manalive.domain.user.User;
 import com.bohan.manalive.domain.user.UserRepository;
-import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
+import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,8 @@ public class UserService {
                                     .superKey(superKey)
                                     .filename(requestDto.getFilename())
                                     .extension(requestDto.getExtension())
-                                    .uuid((requestDto.getUuid()))
+                                    .uuid(requestDto.getUuid())
+                                    .url(requestDto.getUrl())
                                         .build());
     }
 

@@ -1,4 +1,4 @@
-package com.bohan.manalive.domain.attach;
+package com.bohan.manalive.web.common.domain.attach;
 
 import com.bohan.manalive.config.oauth.dto.BaseTimeEntity;
 import lombok.Builder;
@@ -31,13 +31,17 @@ public class Attach extends BaseTimeEntity {
     @Column(nullable = false)
     private String uuid;
 
+    @Column(nullable = false, updatable = true)
+    private String url;
+
     @Builder
-    public Attach(String filename, String category, Long superKey, String extension, String uuid) {
+    public Attach(String filename, String category, Long superKey, String extension, String uuid, String url) {
         this.filename = filename;
         this.category = category;
         this.superKey = superKey;
         this.extension = extension;
         this.uuid = uuid;
+        this.url = url;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.bohan.manalive.web.common.restController;
 
 import com.bohan.manalive.config.S3Uploader;
-import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
+import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
 import com.bohan.manalive.web.community.service.AttachSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -2,13 +2,13 @@ package com.bohan.manalive.web.community.service.impl;
 
 import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
-import com.bohan.manalive.domain.user.User;
+import com.bohan.manalive.web.common.dto.AttachResponseDto;
 import com.bohan.manalive.web.community.domain.Board;
 import com.bohan.manalive.web.community.domain.BoardRepository;
 import com.bohan.manalive.web.community.domain.BoardSpecs;
 import com.bohan.manalive.web.community.dto.BoardCriteria;
-import com.bohan.manalive.web.community.dto.BoardListResponseDto;
-import com.bohan.manalive.web.community.dto.BoardSaveRequestDto;
+import com.bohan.manalive.web.community.dto.BoardRequestDto;
+import com.bohan.manalive.web.community.dto.BoardResponseDto;
 import com.bohan.manalive.web.community.dto.PageDto;
 import com.bohan.manalive.web.community.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,6 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +32,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepo;
 
     @Override
-    public Long saveBoard(BoardSaveRequestDto requestDto, @LoginUser SessionUser user) throws Exception {
+    public Long saveBoard(BoardRequestDto requestDto, @LoginUser SessionUser user) throws Exception {
         return boardRepo.save(requestDto.toEntity()).getSeq();
     }
 
@@ -62,6 +60,7 @@ public class BoardServiceImpl implements BoardService {
                 searchKeys.put(BoardSpecs.SearchKey.valueOf(key.toUpperCase()), searchRequest.get(key));
             }
             pageInfo = boardRepo.findAll(BoardSpecs.searchWith(searchKeys), paging);
+
         }
 
         Long total = pageInfo.getTotalElements();
@@ -75,8 +74,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board boardDetail(Long seq) {
-        return boardRepo.findById(seq).get();
+    public HashMap<String, Object> boardDetail(Long seq) {
+        HashMap<String, Object> map = new HashMap<>();
+
+        BoardResponseDto boardDto = boardRepo.getBoardDetail(seq);
+        map.put("boardDto", boardDto);
+
+        List<AttachResponseDto> attachList = boardRepo.getBoardAttachList(seq);
+        map.put("attachList", attachList);
+
+        return map;
     }
 
 

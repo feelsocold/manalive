@@ -39,7 +39,7 @@
 <!--                            <img th:unless="${session.attachDto}" id="profile-img" src="/custom/img/icon/icon-profile.jpg"><br>-->
 <!--                            <img th:if="${session.attachDto}" id="profile-img" th:src="${session.attachDto.filename}"><br>-->
                             <img th:unless="${user}" id="profile-img" src="/custom/img/icon/icon-profile.jpg"><br>
-                            <img th:if="${user}" id="profile-img" th:src="${session.attachDto.filename}"><br>
+                            <img th:if="${user}" id="profile-img" th:src="${session.attachDto.url}"><br>
 
                             <input th:unless="${user}" type="button" id="profileImg-btn" value="프로필 사진 등록하기">
                             <input th:if="${user}" type="button" id="profileImg-btn" value="프로필 사진 바꾸기">
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <input th:unless="${user}" type="hidden" value="" name="photo">
-                    <input th:if="${user}" type="hidden" th:value="${session.attachDto.filename}" name="photo">
+                    <input th:if="${user}" type="hidden" th:value="${session.attachDto.url}" name="photo">
 
                     <input type="hidden" value="standard" id="oper" name="oper">
                 </form>

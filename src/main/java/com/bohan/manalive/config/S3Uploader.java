@@ -2,7 +2,7 @@ package com.bohan.manalive.config;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
-import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
+import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,11 +57,13 @@ public class S3Uploader {
         return str;
     }
 
-    private void setSessionAttach(String filename, String extension, String uuid, String category) {
+    private void setSessionAttach(String filename, String extension, String uuid, String category, String url) {
+        log.info("=========> " + url);
+
         if(httpSession.getAttribute("attachList") != null ) {
             attachList = (List<AttachSaveRequestDto>) httpSession.getAttribute("attachList");
         }
-        AttachSaveRequestDto attach = new AttachSaveRequestDto(filename, extension, uuid, category);
+        AttachSaveRequestDto attach = new AttachSaveRequestDto(filename, extension, uuid, category, url);
         attachList.add(attach);
         httpSession.setAttribute("attachList", attachList);
     }
@@ -89,17 +91,18 @@ public class S3Uploader {
             int pos = uploadFile.getName().lastIndexOf(".");
             String extenstion = uploadFile.getName().substring(pos + 1);
             String onlyFilename = uploadFile.getName().substring(0, pos);
-        // 세션 관리
-            if(httpSession.getAttribute("attachList") == null){attachList.clear();}
-            setSessionAttach(onlyFilename, extenstion, uuid.toString(), category);
 
             // getFileList(dirName);
 
             String fileName = uuid.toString() + "_" + uploadFile.getName();
             fileName = dirName + "/" + fileName;
-            //String uploadImageUrl = putS3(uploadFile, fileName);
-            uploadImageUrls.add(putS3(uploadFile, fileName));
+            String uploadImageUrl = putS3(uploadFile, fileName);
+            uploadImageUrls.add(uploadImageUrl);
             removeNewFile(uploadFile);
+            log.info(uploadImageUrl + "<==========");
+            // 세션 관리
+            if(httpSession.getAttribute("attachList") == null){attachList.clear();}
+            setSessionAttach(onlyFilename, extenstion, uuid.toString(), category, uploadImageUrl);
         }
         return uploadImageUrls;
     }

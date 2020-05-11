@@ -1,7 +1,7 @@
 package com.bohan.manalive.web.community.service.impl;
 
-import com.bohan.manalive.domain.attach.AttachRepository;
-import com.bohan.manalive.web.community.dto.AttachSaveRequestDto;
+import com.bohan.manalive.web.common.domain.attach.AttachRepository;
+import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
 import com.bohan.manalive.web.community.service.AttachService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
