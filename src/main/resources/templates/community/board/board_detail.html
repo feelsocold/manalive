@@ -21,7 +21,7 @@
             <div class="main-wrap">
                 <div id="content-wrap">
                 <!--제목과 날짜-->
-                    <div>
+                    <div id="post-header">
                         <div id="title-div">
                             <h2></h2>
                         </div>
@@ -30,8 +30,9 @@
                         </div>
                     </div>
 
-                    <div id="photo-div">
-
+                    <div id="photo-div"></div>
+                    <div id="content-div">
+                        <textarea readonly id="content-textarea"></textarea>
                     </div>
                 </div>
 
@@ -44,6 +45,28 @@
                             <button type="button" id="addfriend-Btn">친구추가</button>
                         </div>
                     </div>
+                    <hr style="width:100%;padding-left: -30px; margin-top: 77px;">
+                    <div id="reply-area">
+                        <div id="reply-getinside" style="border:3px solid darkblue;">
+                        </div>
+                    </div>
+                    <hr style="width:100%;padding-left: -30px; margin-top: 7px;">
+                    <div id="replyinfo-area">
+                        <div>
+                        <img src="/custom/img/icon/icon-emptyheart.png" style="width: 30px; height:30px; float:left">
+                        </div><br>
+                        <div style="margin-top: 0px">
+                            <b>좋아요
+                            <span>1,729개</span>
+                            </b>
+                        </div>
+                    </div>
+                    <hr style="width:100%;padding-left: -30px; margin-top: 7px;">
+                    <div id="replyWrite-area">
+                        <textarea id='reply-content' placeholder="댓글 달기..."></textarea>
+                        <input type="button" id='replypost-btn'value="등록" style="float:right;">
+                    </div>
+
                 </div>
 
             </div>

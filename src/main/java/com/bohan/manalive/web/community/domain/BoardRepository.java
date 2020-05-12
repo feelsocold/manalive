@@ -1,8 +1,6 @@
 package com.bohan.manalive.web.community.domain;
 
-import com.bohan.manalive.web.common.domain.attach.Attach;
 import com.bohan.manalive.web.common.dto.AttachResponseDto;
-import com.bohan.manalive.web.community.dto.BoardRequestDto;
 import com.bohan.manalive.web.community.dto.BoardResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

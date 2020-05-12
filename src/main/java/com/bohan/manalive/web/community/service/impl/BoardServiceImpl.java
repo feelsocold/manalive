@@ -6,11 +6,9 @@ import com.bohan.manalive.web.common.dto.AttachResponseDto;
 import com.bohan.manalive.web.community.domain.Board;
 import com.bohan.manalive.web.community.domain.BoardRepository;
 import com.bohan.manalive.web.community.domain.BoardSpecs;
-import com.bohan.manalive.web.community.dto.BoardCriteria;
-import com.bohan.manalive.web.community.dto.BoardRequestDto;
-import com.bohan.manalive.web.community.dto.BoardResponseDto;
-import com.bohan.manalive.web.community.dto.PageDto;
+import com.bohan.manalive.web.community.dto.*;
 import com.bohan.manalive.web.community.service.BoardService;
+import com.bohan.manalive.web.community.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +28,7 @@ import java.util.Map;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepo;
+    private final ReplyService replyService;
 
     @Override
     public Long saveBoard(BoardRequestDto requestDto, @LoginUser SessionUser user) throws Exception {
@@ -76,12 +75,18 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public HashMap<String, Object> boardDetail(Long seq) {
         HashMap<String, Object> map = new HashMap<>();
+        Map<String, Object> replyObj = new HashMap<>();
 
         BoardResponseDto boardDto = boardRepo.getBoardDetail(seq);
         map.put("boardDto", boardDto);
 
         List<AttachResponseDto> attachList = boardRepo.getBoardAttachList(seq);
         map.put("attachList", attachList);
+
+        //댓글 리스트
+        //List<BoardReplyResponseDto> replyList = replyService.getBoardReplyList(seq, 0);
+        replyObj = replyService.getBoardReplyList(seq, 0);
+        map.put("replyObj", replyObj);
 
         return map;
     }

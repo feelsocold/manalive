@@ -293,6 +293,9 @@ $('#board-submitBtn').click(function (e) {
             success : function(result){
                 console.log(result.boardSeq);
                 //document.getElementById('confirm-Modal').show();
+
+                $("#goDetail-Btn").attr("onclick", "location.href='/board/detail?seq="+result.boardSeq +"'");
+
                 $("#confirm-modal").show();
 
             },error: function (jqXHR, textStatus, errorThrown) {

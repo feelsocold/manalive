@@ -27,6 +27,8 @@
 <!-- CUSTOM CSS File -->
 <link href="/custom/css/common/index.css" rel="stylesheet">
 
+<script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
+
 <!--<meta name="_csrf" th:content="${_csrf.token}">-->
 <!--<meta name="_csrf_header" th:content="${_csrf.headerName}">-->
 
@@ -37,6 +39,7 @@
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top">
         <input type="hidden" th:value="${session['user']}" id="sessionUser">
+        <input th:if="${session['user']}" type="hidden" th:value="${session['user'].email}" id="sessionUser-email">
         <div id="custom-nav">
             <ul>
                 <li th:if="${session['user']}"><a href="/logout" th:unless="${session['user'].role.equals('GUEST')}" class='nav-small-word'>로그아웃</a></li>
