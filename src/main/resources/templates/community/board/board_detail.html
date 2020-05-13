@@ -47,7 +47,7 @@
                     </div>
                     <hr style="width:100%;padding-left: -30px; margin-top: 77px;">
                     <div id="reply-area">
-                        <div id="reply-getinside" style="border:3px solid darkblue;">
+                        <div id="reply-getinside" style="border:0px solid darkblue;">
                         </div>
                     </div>
                     <hr style="width:100%;padding-left: -30px; margin-top: 7px;">
@@ -63,8 +63,11 @@
                     </div>
                     <hr style="width:100%;padding-left: -30px; margin-top: 7px;">
                     <div id="replyWrite-area">
-                        <textarea id='reply-content' placeholder="댓글 달기..."></textarea>
-                        <input type="button" id='replypost-btn'value="등록" style="float:right;">
+                        <textarea th:if="${session['user']}" id='reply-content' placeholder="댓글 달기..."></textarea>
+                        <textarea th:unless="${session['user']}" placeholder="댓글을 작성하려면 로그인 해주세요." readonly></textarea>
+                        <input th:if="${session['user']}" type="button" id='replypost-btn' value="등록" style="float:right;">
+                        <input th:unless="${session['user']}" type="button" value="등록" style="float:right; opacity: 0.4;" disabled>
+
                     </div>
 
                 </div>

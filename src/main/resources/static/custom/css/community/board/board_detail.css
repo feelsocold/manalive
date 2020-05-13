@@ -86,7 +86,7 @@
 }
 #content-div textarea{
     resize: none;
-    width: 80%;
+    width: 90%;
     height: auto;
     border: none;
     line-height:20px;
@@ -95,11 +95,11 @@
 #reply-area {
     text-align: left;
     padding-left: 3%;
-    padding-right: 3%;
+    padding-right: 0%;
     height: 40%;
     width: 100%;
     overflow: scroll;
-    border: 2px solid #35C5F0;
+    border: 0px solid #35C5F0;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 
@@ -158,18 +158,20 @@
 }
 .replyerPhoto-area {
     float:left;
-    /*margin-right: 10px;*/
+    margin-right: 10px;
     width:13%;
     border: #18d26e solid 0px;
+    padding-left: 10px;
+
 }
 .replyerContent-area{
     float: left;
     font-size: 13px;
     line-height: 20px;
-    width: 78%;
+    width: 73%;
     padding-bottom: 10px;
     padding-top: 10px;
-    border: salmon 2px solid;
+    border: salmon 0px solid;
 }
 .replyerContent-area .replyer-nickname{
     font-weight: bold;
@@ -188,10 +190,29 @@
     color: #8E8E8E;
     font-size: 12px;
 }
+.delete-reply a {
+    font-size: 11px;
+    font-weight: bold;
+}
 #plusicon-div{
     text-align: center;
+    margin-top: 20px;
+    display: inline-block;
+    transform: translate(-50%, -50%);
+    margin-left: 52%;
+
+
+
 }
 #plusicon-div img {
     width: 26px;
     height: 26px;
+}
+.replylike-div{
+    float: right;
+    width:8%;
+    border: #4DC7A0 0px dotted;
+}
+#morereply-btn{
+    cursor: pointer;
 }

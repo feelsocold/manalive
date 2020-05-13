@@ -5,6 +5,7 @@ import com.bohan.manalive.web.community.dto.BoardReplyResponseDto;
 import com.bohan.manalive.web.community.dto.BoardReplySaveRequestDto;
 import com.bohan.manalive.web.community.service.ReplyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReplyServiceImpl implements ReplyService {
@@ -28,14 +30,17 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public Map<String, Object> getBoardReplyList(Long b_seq, int PageNumber) {
+    public Map<String, Object> getBoardReplyList(Long b_seq, int pageNumber) {
         List<BoardReplyResponseDto> replyList = replyRepository.getBoardReplyList(b_seq);
-        //return replyRepository.getBoardReplyList(b_seq);
-        int end = (replyList.size() >= 10) ? 10 : replyList.size();
-        Pageable paging = PageRequest.of(PageNumber, 10, Sort.Direction.DESC, "r_seq");
-        Page<BoardReplyResponseDto> pageInfo = new PageImpl<>(replyList.subList(0, end), paging, replyList.size());
+        log.info("댓글pagenumber : " + pageNumber);
+        int start = pageNumber * 10;
+        int end = (pageNumber+1) * 10;
+        if( replyList.size() - ((pageNumber+1)*10) < 0 || replyList.size() < 10) {
+            end = replyList.size();
+        };
 
-        System.out.println("댓글리스트 사이즈 : " + pageInfo.getContent().size());
+        Pageable paging = PageRequest.of(pageNumber, 10, Sort.Direction.DESC, "r_seq");
+        Page<BoardReplyResponseDto> pageInfo = new PageImpl<>(replyList.subList(start, end), paging, replyList.size());
 
         List<BoardReplyResponseDto> pagingList = pageInfo.getContent();
         HashMap<String, Object> map = new HashMap<>();

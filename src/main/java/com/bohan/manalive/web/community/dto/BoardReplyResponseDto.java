@@ -16,13 +16,15 @@ public class BoardReplyResponseDto {
     //user
     private String nickname;
     private String photo;
+    private String email;
 
-    public BoardReplyResponseDto(Long r_seq, String content, LocalDateTime createDate, String nickname, String photo ){
+    public BoardReplyResponseDto(Long r_seq, String content, LocalDateTime createDate, String nickname, String photo, String email ){
         this.r_seq = r_seq;
         this.content = content;
         this.createDate = createDate;
         this.nickname = nickname;
         this.photo = photo;
+        this.email = email;
     }
 
 

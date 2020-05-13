@@ -12,7 +12,7 @@ public interface BoardReplyRepository extends JpaRepository<BoardReply, Long>,
                                                 CrudRepository<BoardReply, Long> {
 
     @Query(" SELECT new com.bohan.manalive.web.community.dto.BoardReplyResponseDto(" +
-            "   a.r_seq, a.content, a.createDate, b.nickname, b.photo)" +
+            "   a.r_seq, a.content, a.createDate, b.nickname, b.photo, b.email)" +
             " FROM BoardReply a INNER JOIN User b" +
             "   ON a.replyer = b.email" +
             " WHERE a.b_seq = :seq" +
