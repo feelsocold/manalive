@@ -68,7 +68,7 @@
 
                     <span th:unless="${session['user'].role.equals('GUEST')}" id="user-info">
                         <i th:if="${session['user'].photo != 'null'}"><img id="user-photo" th:src="${session['user'].photo}"></i>
-                        <label th:text="${session['user'].name}" id="user-name"></label>
+                        <label th:text="${session['user'].nickname}" id="user-name"></label>
                     </span>
                 </li>
             </ul>

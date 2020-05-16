@@ -3,19 +3,19 @@ package com.bohan.manalive.web.community.domain;
 import com.bohan.manalive.config.oauth.dto.BaseTimeEntity;
 import com.bohan.manalive.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
+@Setter
 @Getter
 @RequiredArgsConstructor
 //@EqualsAndHashCode(callSuper = false, exclude = {"user"})
 @ToString(exclude = "user")
 @Entity
-public class Board extends BaseTimeEntity {
+public class Board extends BaseTimeEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,14 +38,17 @@ public class Board extends BaseTimeEntity {
 //    @JsonBackReference
 //    private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "email", referencedColumnName = "email", insertable = false, updatable = false)
+    //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    //@Cascade(value = { CascadeType.SAVE_UPDATE, CascadeType.DETACH })
+    //@JoinColumn(name = "email", referencedColumnName = "email", insertable = false, updatable = false)
+    @JsonIgnore
+    @ManyToOne(targetEntity=User.class, fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    @JoinColumn(name="email", nullable = false, insertable = false, updatable = false)
     private User userDetail;
 
 //    @OneToMany
 //    @JoinColumn(name='seq', referencedColumnName = 'superKey')
-
-
 
     @Builder
     public Board(String title, String content, String hashtags, String email) {

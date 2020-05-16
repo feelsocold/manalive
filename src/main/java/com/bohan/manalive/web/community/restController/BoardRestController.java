@@ -1,6 +1,7 @@
 package com.bohan.manalive.web.community.restController;
 
 import com.bohan.manalive.web.community.dto.BoardResponseDto;
+import com.bohan.manalive.web.community.service.AttachService;
 import com.bohan.manalive.web.community.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 public class BoardRestController {
 
     private final BoardService boardService;
+    private final AttachService attachService;
 
     @PostMapping("/boardDetail")
     public HashMap<String, Object> getBoardDetail(@RequestParam String seq) throws Exception {
@@ -23,6 +25,12 @@ public class BoardRestController {
         log.info(seq);
 
         return boardService.boardDetail(Long.parseLong(seq));
+    }
+
+    @PostMapping("/boardDelete")
+    public void deleteBoard(@RequestParam("b_seq") Long b_seq) throws Exception {
+        //attachService.deleteAttach(b_seq, "boardAttach");
+        boardService.deleteBoard(b_seq);
     }
 
 }

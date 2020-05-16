@@ -1,6 +1,7 @@
 var replyPageNumber = 0;
 var seq = $("#seq").val();
 var sessionEmail = $("#sessionUser-email").val();
+var replyDelayCnt = 0;
 
 $(document).ready(function() {
 
@@ -33,7 +34,12 @@ function spreadBoardInfo(result) {
     var attachList = result.attachList;
 
     $("#title-div h2").html(boardDto.title);
-    $("#date-div span").html(timeForToday(boardDto.createDate));
+    if(sessionEmail === boardDto.email) {
+        $("#updbuttons-div span").append("<div style='float:left'>" +
+            "<a href='"+boardDto.seq+"' id='board-modbtn'>수정</a>" +
+            "&nbsp;&nbsp;<a href='"+boardDto.seq+"' id='board-delbtn'>삭제</a>");
+    }
+    // $("#date-div span").html(timeForToday(boardDto.createDate));
 
     for(var i=0; i < attachList.length; i++) {
         $("#photo-div").append("<div class='eachphoto-div'><img class='eachphoto-img' src='"+ attachList[i].url + "'></div>");
@@ -42,6 +48,10 @@ function spreadBoardInfo(result) {
     $("#content-div textarea").html(boardDto.content);
     autosize($("#content-div textarea"));
 
+    // if(sessionEmail === boardDto.email) {
+    //     $("#udt-buttons").append("<div><input type='button' id='board-modbtn' value='수정'>" +
+    //         "&nbsp;&nbsp;<input type='button' data-oper='"+boardDto.seq+"' id='board-delbtn' value='삭제'></div>");
+    // }
 
     $("#writer-profile").append("<img id='writer-photo' src='"+ boardDto.photo +"'>" +
         "<span id='writer-nick'>"+boardDto.nickname+"</span>");
@@ -117,6 +127,7 @@ $(document).on('click','#replypost-btn',function(e){
             success : function(result){
                 console.log(result);
                 replyPageNumber = 0;
+                replyDelayCnt = 0;
                 //alert(replyPageNumber);
                 $("#reply-getinside").empty();
                 $("#reply-content").val('');
@@ -145,7 +156,8 @@ $(document).on('click','#morereply-btn',function(e){
     replyPageNumber++;
     //alert(replyPageNumber);
     var data = { "b_seq" : $("#seq").val(),
-                "pageNumber" :  replyPageNumber
+                "pageNumber" :  replyPageNumber,
+                "delayCnt" : replyDelayCnt
     }
 
     $.ajax({
@@ -172,21 +184,40 @@ $(document).on('click','.delete-reply a',function(e) {
     var r_seq = $(this).attr("href");
     $(this).closest('.reply-onerow').remove();
     var data = { "r_seq" : r_seq };
-    $.ajax({
-        type: 'POST',
-        url: '/reply/board/delete',
-        data: data,
-        success : function(result){
-            console.log("삭제완료");
-        },error: function (jqXHR, textStatus, errorThrown) {
-            alert("error");
-        },beforeSend:function(){
+        $.ajax({
+            type: 'POST',
+            url: '/reply/board/delete',
+            data: data,
+            success : function(result){
+                console.log("삭제완료");
+                replyDelayCnt++;
+            },error: function (jqXHR, textStatus, errorThrown) {
+                alert("error");
+            },beforeSend:function(){
+
+            },complete:function(){
+                //alert("complete");
+            }
+        });
+});
+$(document).on('click','#board-delbtn',function(e) {
+    e.preventDefault();
+    var seq = $(this).attr("href");
+    var data = { "b_seq" : seq };
+
+        $.ajax({
+            type: 'POST',
+            url: '/boardDelete',
+            data: data,
+            success : function(result){
+                console.log("삭제완료");
+            },error: function (jqXHR, textStatus, errorThrown) {
+                alert("error");
+            },beforeSend:function(){
 
 
-        },complete:function(){
-            //alert("complete");
-        }
-    });
-
-
+            },complete:function(){
+                //alert("complete");
+            }
+        });
 });

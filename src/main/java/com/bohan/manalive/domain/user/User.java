@@ -3,16 +3,14 @@ package com.bohan.manalive.domain.user;
 import com.bohan.manalive.config.oauth.dto.BaseTimeEntity;
 import com.bohan.manalive.web.community.domain.Board;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+@Setter
 @Getter
 @NoArgsConstructor
 //@EqualsAndHashCode(callSuper = false, exclude = {"boardList"})
@@ -34,7 +32,7 @@ public class User extends BaseTimeEntity implements Serializable {
     @Column(nullable = true)
     private String social;
 
-    @Column(nullable = false)
+    @Column(name="email", nullable = false)
     private String email;
 
     @Column(nullable = true)
@@ -54,16 +52,15 @@ public class User extends BaseTimeEntity implements Serializable {
     @Column(nullable=true)
     private String photo;
 
+    @OneToMany(mappedBy="userDetail", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Board> boardList = new ArrayList<>();
+
 //    @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JsonManagedReference
 //    private List<Board> boardList = new ArrayList<Board>();
 
 //    @OneToOne(mappedBy = "userDetail")
 //    private Board board;
-
-
-
-
 
     @Builder
     public User(String email,String name, String photo, Role role, String social, String enable, String nickname, String phone, String password) {
@@ -109,6 +106,10 @@ public class User extends BaseTimeEntity implements Serializable {
         this.photo = photo;
 
         return this;
+    }
+
+    public void deleteBoard(Board board) {
+
     }
 
 

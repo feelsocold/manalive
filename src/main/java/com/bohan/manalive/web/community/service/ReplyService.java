@@ -9,5 +9,6 @@ import java.util.Map;
 public interface ReplyService {
 
     public void saveBoardReply(BoardReplySaveRequestDto dto);
-    public Map<String, Object> getBoardReplyList(Long b_seq, int pageNumber);
+    public Map<String, Object> getBoardReplyList(Long b_seq, int pageNumber, int deplayCnt);
+    public void deleteBoardReply(Long b_seq);
 }

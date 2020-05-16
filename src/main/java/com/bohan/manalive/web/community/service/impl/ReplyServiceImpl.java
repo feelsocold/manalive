@@ -30,10 +30,10 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public Map<String, Object> getBoardReplyList(Long b_seq, int pageNumber) {
+    public Map<String, Object> getBoardReplyList(Long b_seq, int pageNumber, int deplayCnt) {
         List<BoardReplyResponseDto> replyList = replyRepository.getBoardReplyList(b_seq);
         log.info("댓글pagenumber : " + pageNumber);
-        int start = pageNumber * 10;
+        int start = (pageNumber * 10) - deplayCnt;
         int end = (pageNumber+1) * 10;
         if( replyList.size() - ((pageNumber+1)*10) < 0 || replyList.size() < 10) {
             end = replyList.size();
@@ -49,5 +49,10 @@ public class ReplyServiceImpl implements ReplyService {
         map.put("replyCnt", replyList.size());
 
         return map;
+    }
+
+    @Override
+    public void deleteBoardReply(Long b_seq) {
+        replyRepository.deleteById(b_seq);
     }
 }

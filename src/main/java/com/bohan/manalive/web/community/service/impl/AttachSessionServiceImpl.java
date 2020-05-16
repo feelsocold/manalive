@@ -25,14 +25,15 @@ public class AttachSessionServiceImpl implements AttachSessionService {
         log.info("삭제 전 세션사이즈 : " + attachList.size() + "");
         int delNumber = Integer.parseInt(oper);
         AttachSaveRequestDto requestDto = attachList.get(delNumber);
-        String fileName = requestDto.getUuid() + "_" + requestDto.getFilename() + "." + requestDto.getExtension();
 
         // 파일첨부 세션에서 삭제
         attachList.remove(delNumber);
         httpSession.removeAttribute("attachList");
         httpSession.setAttribute("attachList", attachList);
         // s3 스토리지에서 삭제
-        s3Uploader.deleteFile(category, fileName);
+        String fileName = requestDto.getUuid() + "_" + requestDto.getFilename() + "." + requestDto.getExtension();
+        String dirName = category + "/" + s3Uploader.getTodayFolder();
+        s3Uploader.deleteFile(dirName, fileName);
         // 확인
         for(AttachSaveRequestDto attach : attachList){
             System.out.print(attach.getFilename() + ", ");

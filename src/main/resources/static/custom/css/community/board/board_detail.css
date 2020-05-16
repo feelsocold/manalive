@@ -40,10 +40,11 @@
     padding-left: 20px;
     margin-left: 10px;
 }
-#date-div{
+#updbuttons-div{
     color: #757575;
     margin-right: 30px;
     font-size: 15px;
+    float:right;
 }
 #writer-profile{
     float:left;
@@ -215,4 +216,16 @@
 }
 #morereply-btn{
     cursor: pointer;
+}
+
+#board-modbtn {
+    color: #18d26e;
+    font-size: 13px;
+    font-weight: bold;
+}
+#board-delbtn {
+    /*color: #ED0000;*/
+    color: #ff5e52;
+    font-size: 13px;
+    font-weight: bold;
 }

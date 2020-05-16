@@ -1,12 +1,14 @@
 package com.bohan.manalive.web.community.dto;
 
 import com.bohan.manalive.web.community.domain.Board;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-
+@AllArgsConstructor
 @Getter
-public class BoardListResponseDto {
+public class BoardListResponseDto implements Serializable {
 
     private Long board_seq;
     private String title;
@@ -15,6 +17,9 @@ public class BoardListResponseDto {
     private String email;
     private LocalDateTime create_date;
     private LocalDateTime modified_date;
+
+    private String nickname;
+    private String photo;
 
     public BoardListResponseDto(Board entity) {
         this.title = entity.getTitle();

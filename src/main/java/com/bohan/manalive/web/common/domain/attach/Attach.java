@@ -4,9 +4,11 @@ import com.bohan.manalive.config.oauth.dto.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
+@ToString
 @Getter
 @RequiredArgsConstructor
 @Entity

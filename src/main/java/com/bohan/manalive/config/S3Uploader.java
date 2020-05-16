@@ -30,7 +30,8 @@ public class S3Uploader {
     public void deleteFile(String dirName, String fileName) {
         log.info(dirName +  "에서 " + fileName + "이 삭제되었습니다.");
 
-        String key = dirName + "/" + getTodayFolder() + "/" + fileName;
+        //String key = dirName + "/" + getTodayFolder() + "/" + fileName;
+        String key = dirName + "/" + fileName;
         amazonS3Client.deleteObject(bucket, key);
         //amazonS3Client.deleteObject(bucket, "profilePhoto/2020/04/20/0ab2f76f-3873-4793-b6e1-654fce7ff191_nongnongnong.png");
     }
@@ -50,7 +51,7 @@ public class S3Uploader {
         } while (objects.isTruncated());
     }
 
-    private String getTodayFolder() {
+    public String getTodayFolder() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         String str = sdf.format(date);

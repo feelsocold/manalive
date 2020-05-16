@@ -20,8 +20,9 @@ public class BoardResponseDto {
 
     private String nickname;
     private String photo;
+    private String email;
 
-    public BoardResponseDto(Long seq, String title, String content, String hashtags, LocalDateTime createDate, LocalDateTime modifiedDate, String nickname, String photo){
+    public BoardResponseDto(Long seq, String title, String content, String hashtags, LocalDateTime createDate, LocalDateTime modifiedDate, String nickname, String photo, String email){
         this.seq = seq;
         this.title = title;
         this.content = content;
@@ -30,6 +31,7 @@ public class BoardResponseDto {
         this.modifiedDate = modifiedDate;
         this.nickname = nickname;
         this.photo = photo;
+        this.email = email;
 
     }
 

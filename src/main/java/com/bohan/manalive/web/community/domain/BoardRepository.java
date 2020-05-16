@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
@@ -14,9 +15,10 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long>,
                                          CrudRepository<Board, Long>,
-                                         JpaSpecificationExecutor<Board> {
+                                         JpaSpecificationExecutor<Board>,
+                                         QuerydslPredicateExecutor<Board> {
 
-     @Query(" SELECT new com.bohan.manalive.web.community.dto.BoardResponseDto(a.seq, a.title, a.content, a.hashtags, a.createDate, a.modifiedDate, b.nickname, b.photo ) " +
+     @Query(" SELECT new com.bohan.manalive.web.community.dto.BoardResponseDto(a.seq, a.title, a.content, a.hashtags, a.createDate, a.modifiedDate, b.nickname, b.photo, b.email ) " +
             " FROM Board AS a INNER JOIN User AS b " +
             "   ON a.email = b.email" +
             " WHERE a.seq = :seq " )
