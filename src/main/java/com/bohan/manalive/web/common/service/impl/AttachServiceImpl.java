@@ -1,17 +1,15 @@
-package com.bohan.manalive.web.community.service.impl;
+package com.bohan.manalive.web.common.service.impl;
 
 import com.bohan.manalive.config.S3Uploader;
-import com.bohan.manalive.web.common.domain.attach.Attach;
 import com.bohan.manalive.web.common.domain.attach.AttachRepository;
 import com.bohan.manalive.web.common.dto.AttachResponseDto;
 import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
-import com.bohan.manalive.web.community.service.AttachService;
+import com.bohan.manalive.web.common.service.AttachService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class AttachServiceImpl implements AttachService {
     }
 
     @Override
-    public void deleteAttach(Long superKey, String category) throws Exception {
+    public void deleteAttachs(Long superKey, String category) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         List<AttachResponseDto> attachList = attachRepository.getAttachListBySuperKey(superKey, category);
         for(AttachResponseDto dto : attachList) {

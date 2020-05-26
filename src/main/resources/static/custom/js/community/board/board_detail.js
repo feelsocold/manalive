@@ -2,22 +2,25 @@ var replyPageNumber = 0;
 var seq = $("#seq").val();
 var sessionEmail = $("#sessionUser-email").val();
 var replyDelayCnt = 0;
+var replyCnt = 0;
+var likeCnt = 0;
 
 $(document).ready(function() {
-
     var data = { "seq" : seq };
 
     $.ajax({
         type: 'POST',
         url: '/boardDetail',
         data: data,
-        // data: seq,
-        //data: {"seq" : seq },
-        // dataType : 'json',
         success : function(result){
             console.log(result);
             spreadBoardInfo(result);
             spreadReplyList(result.replyObj);
+            discernLike();
+
+            $("#likecnt-span").html(result.likeCnt);
+            $("#replycnt-span").html(result.replyObj.replyCnt);
+            replyCnt = Number(result.replyObj.replyCnt);
         },error: function (jqXHR, textStatus, errorThrown) {
             alert("error");
         },beforeSend:function(){
@@ -25,18 +28,45 @@ $(document).ready(function() {
         },complete:function(){
         }
     });
-
-
 });
+function discernLike() {
+    var str = "";
+    if(sessionEmail == null){
+        console.log("세션X");
+        str += "<img src='/custom/img/icon/icon-unlike.png' class='like-btns' id='dolike_btn'>";
+        $("#likebtn-area").append(str);
+    }else{
+        console.log("세션O");
+        var data = { "b_seq" : seq };
+        $.ajax({
+            type: 'POST',
+            url: '/boardLikeDiscern',
+            data: data,
+            success : function(result){
+                console.log("already? : " + result);
+                if(result == false) {
+                    str += "<img src='/custom/img/icon/icon-unlike.png' class='like-btns' id='dolike_btn'>";
+                }else {
+                    str += "<img src='/custom/img/icon/icon-like.png' class='like-btns' id='dounlike_btn'>";
+                }
+                $("#likebtn-area").append(str);
+            },error: function (jqXHR, textStatus, errorThrown) {
+                alert("error");
+            }
+        });
+    }
+}
 
 function spreadBoardInfo(result) {
     var boardDto = result.boardDto;
     var attachList = result.attachList;
 
+    $("#deleteConfirm-Btn").val(boardDto.seq);
+
     $("#title-div h2").html(boardDto.title);
     if(sessionEmail === boardDto.email) {
         $("#updbuttons-div span").append("<div style='float:left'>" +
-            "<a href='"+boardDto.seq+"' id='board-modbtn'>수정</a>" +
+            "<a href='/board/modify?b_seq="+boardDto.seq+"' id='board-modbtn'>수정</a>" +
             "&nbsp;&nbsp;<a href='"+boardDto.seq+"' id='board-delbtn'>삭제</a>");
     }
     // $("#date-div span").html(timeForToday(boardDto.createDate));
@@ -55,30 +85,43 @@ function spreadBoardInfo(result) {
 
     $("#writer-profile").append("<img id='writer-photo' src='"+ boardDto.photo +"'>" +
         "<span id='writer-nick'>"+boardDto.nickname+"</span>");
+
+    var hashtags = boardDto.hashtags.split(',');
+    for ( var i in hashtags ) {
+        //document.write( '<p>' + jbSplit[i] + '</p>' );
+        if(hashtags[i] != ' ' && hashtags[i] != ''){
+            console.log(hashtags);
+            $("#hashtags-div").append("<span>#"+hashtags[i]+"</span>&nbsp;");
+        }
+    }
+
 }
 // 댓글리스트 뿌리기
 function spreadReplyList(result) {
     var replyList = result.replyList;
     var replyCnt = result.replyCnt;
-    for(var i=0; i < replyList.length; i++) {
-        var str = "";
-        str += "<div class='reply-onerow'><div class='replyerPhoto-area' ><img class='replyerphoto-img' src='"+ replyList[i].photo +"'></div>";
-        str += "<div class='replyerContent-area'><span class='replyer-nickname'>"+replyList[i].nickname+"</span>" + replyList[i].content;
-        // str += "    <label>"+replyList[i].content+"</label>";
-        str += "    <br><span class='reply-date'>"+timeForToday(replyList[i].createDate)+"</span>&nbsp;";
-        if(sessionEmail === replyList[i].email){
-            str += "<span class='delete-reply'><a href='"+replyList[i].r_seq+"' style='color: #ff5e52;'>삭제</a></span>"
+    if(replyList != null) {
+        for(var i=0; i < replyList.length; i++) {
+            var str = "";
+            str += "<div class='reply-onerow'><div class='replyerPhoto-area' ><img class='replyerphoto-img' src='"+ replyList[i].photo +"'></div>";
+            str += "<div class='replyerContent-area'><span class='replyer-nickname'>"+replyList[i].nickname+"</span>" + replyList[i].content;
+            // str += "    <label>"+replyList[i].content+"</label>";
+            str += "    <br><span class='reply-date'>"+timeForToday(replyList[i].createDate)+"</span>&nbsp;";
+            if(sessionEmail === replyList[i].email){
+                str += "<span class='delete-reply'><a href='"+replyList[i].r_seq+"' style='color: #ff5e52;'>삭제</a></span>"
+            }
+            str += "</div></div>";
+            //str += "<div class='replylike-div'><img src='/custom/img/icon/icon-emptyheart.png' style='width: 20px; height: 20px;'></div></div>";
+            $("#reply-getinside").append(str);
+            //$("#reply-getinside").append("<div id='plusicon-div'><img src='/custom/img/icon/icon-plus.png'></div>");
         }
-        str += "</div>";
-        str += "<div class='replylike-div'><img src='/custom/img/icon/icon-emptyheart.png' style='width: 20px; height: 20px;'></div></div>";
-        $("#reply-getinside").append(str);
-        //$("#reply-getinside").append("<div id='plusicon-div'><img src='/custom/img/icon/icon-plus.png'></div>");
+        if(replyCnt > (replyPageNumber+1)*10) {
+            //$("#reply-area").("<div id='plusicon-div'><img src='/custom/img/icon/icon-plus.png'></div>");
+            $("#reply-getinside").append("<div id='plusicon-div'><img id='morereply-btn' src='/custom/img/icon/icon-plus.png'></div>");
+        }
+    }else{
+        return false;
     }
-    if(replyCnt > (replyPageNumber+1)*10) {
-        //$("#reply-area").("<div id='plusicon-div'><img src='/custom/img/icon/icon-plus.png'></div>");
-        $("#reply-getinside").append("<div id='plusicon-div'><img id='morereply-btn' src='/custom/img/icon/icon-plus.png'></div>");
-    }
-
 }
 
 function timeForToday(value) {
@@ -114,6 +157,7 @@ $("#replyWrite-area textarea").keypress(function(event) {
 
 $(document).on('click','#replypost-btn',function(e){
     //alert(replyPageNumber);
+    replyCnt++;
     var data = { "b_seq" : $("#seq").val(),
                  "content" :  $("#reply-content").val()
     }
@@ -132,6 +176,7 @@ $(document).on('click','#replypost-btn',function(e){
                 $("#reply-getinside").empty();
                 $("#reply-content").val('');
 
+                $("#replycnt-span").html(replyCnt);
                 spreadReplyList(result);
 
             },error: function (jqXHR, textStatus, errorThrown) {
@@ -202,22 +247,83 @@ $(document).on('click','.delete-reply a',function(e) {
 });
 $(document).on('click','#board-delbtn',function(e) {
     e.preventDefault();
-    var seq = $(this).attr("href");
+    $("#confirm-modal").show();
+
+
+});
+
+$(document).on('click','#cancelDelete-Btn',function(e) {
+    $("#confirm-modal").hide();
+});
+
+$(document).on('click','#deleteConfirm-Btn',function(e) {
+    var seq = $(this).val();
     var data = { "b_seq" : seq };
 
+    $.ajax({
+        type: 'POST',
+        url: '/boardDelete',
+        data: data,
+        success : function(result){
+            console.log("삭제완료");
+            location.href="/board";
+
+        },error: function (jqXHR, textStatus, errorThrown) {
+            alert("error");
+        },beforeSend:function(){
+
+
+        },complete:function(){
+            //alert("complete");
+        }
+    });
+});
+
+$(document).on('click','#dolike_btn',function(e) {
+    if(sessionEmail == null){
+        alert("로그인 후 이용해주세요");
+        return false;
+    }else{
+        var data = { "b_seq" : seq };
         $.ajax({
             type: 'POST',
-            url: '/boardDelete',
+            url: '/boardLike',
             data: data,
             success : function(result){
-                console.log("삭제완료");
+                var str = "";
+                str += "<img src='/custom/img/icon/icon-like.png' class='like-btns' id='dounlike_btn'>";
+                $("#likebtn-area").empty();
+                $("#likebtn-area").append(str);
+                var cnt = $("#likecnt-span").html();
+                $("#likecnt-span").html(Number(cnt)+1);
             },error: function (jqXHR, textStatus, errorThrown) {
                 alert("error");
-            },beforeSend:function(){
-
-
-            },complete:function(){
-                //alert("complete");
             }
         });
+    }
 });
+
+$(document).on('click','#dounlike_btn',function(e) {
+    if(sessionEmail == null){
+        alert("로그인 후 이용해주세요");
+        return false;
+    }else{
+        var data = { "b_seq" : seq };
+        $.ajax({
+            type: 'POST',
+            url: '/boardUnLike',
+            data: data,
+            success : function(result){
+                var str = "";
+                str += "<img src='/custom/img/icon/icon-unlike.png' class='like-btns' id='dolike_btn'>";
+                $("#likebtn-area").empty();
+                $("#likebtn-area").append(str);
+                var cnt = $("#likecnt-span").html();
+                $("#likecnt-span").html(Number(cnt)-1);
+            },error: function (jqXHR, textStatus, errorThrown) {
+                alert("error");
+            }
+        });
+    }
+});
+s

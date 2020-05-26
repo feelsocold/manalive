@@ -3,14 +3,18 @@ package com.bohan.manalive.web.community.dto;
 import com.bohan.manalive.web.community.domain.Board;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 @AllArgsConstructor
+@RequiredArgsConstructor
+@Setter
 @Getter
 public class BoardListResponseDto implements Serializable {
 
-    private Long board_seq;
+    private Long seq;
     private String title;
     private String content;
     private String hashtags;
@@ -20,6 +24,12 @@ public class BoardListResponseDto implements Serializable {
 
     private String nickname;
     private String photo;
+
+    public BoardListResponseDto(Long seq, String email, String nickname){
+        this.seq = seq;
+        this.email = email;
+        this.nickname = nickname;
+    }
 
     public BoardListResponseDto(Board entity) {
         this.title = entity.getTitle();

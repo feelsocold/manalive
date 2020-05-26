@@ -1,6 +1,49 @@
-
-
+var seq = $("#seq").val();
 var uploadedImgCnt = 0;
+
+$(document).ready(function() {
+    var data = { "seq" : seq };
+
+    $.ajax({
+        type: 'POST',
+        url: '/boardDetail',
+        data: data,
+        success : function(result){
+            console.log(result);
+            spreadDto(result);
+            uploadedImgCnt = result.attachList.length;
+            showUploadedImg(result.attachList);
+        },error: function (jqXHR, textStatus, errorThrown) {
+            alert("error");
+        },beforeSend:function(){
+
+        },complete:function(){
+        }
+    });
+});
+
+function spreadDto(result) {
+    var dto = result.boardDto;
+    $("#title").val(dto.title);
+    $("#content").val(dto.content);
+}
+
+function showUploadedImg(result) {
+    for(var i = 0; i < result.length; i++) {
+        $("#thumbnail-wrap ul").append("<li><img src='"+ result[i].url +"' onclick='showImage(this)' class='thumnail-image'>" +
+            "<br><button class='thumb-Btn' id='thumb-delBtn' onclick='imgDelete(this)' value='"+result[i].att_no+"'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-trashbin.png'></button>" +
+            "<input type='file' onchange='updateUpload(this)' class='re-uploadBtn' name='uploadFile' style='display: none;' multiple>" +
+            "&nbsp;<button class='thumb-Btn' id='thumb-modBtn' onclick='imgUpdate(this)' value='"+result[i].att_no+"'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-modify.png'></button></li>");
+    }
+
+    if(uploadedImgCnt< 6) {
+        $("#upload-btn").html("사진 추가하기 (" + uploadedImgCnt + "/6)");
+        $("#upload-btn").css('height', '40px');
+    }else {
+        $("#upload-btn").hide();
+    }
+}
+
 var hashTagCnt = 0;
 
 
@@ -61,21 +104,7 @@ function asyncUpload(obj){
         return false;
     }
 }
-function showUploadedImg(result) {
-    for(var i = 0; i < result.length; i++) {
-        $("#thumbnail-wrap ul").append("<li><img src='"+ result[i] +"' onclick='showImage(this)' class='thumnail-image'>" +
-            "<br><button class='thumb-Btn' id='thumb-delBtn' onclick='imgDelete(this)'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-trashbin.png'></button>" +
-            "<input type='file' onchange='updateUpload(this)' class='re-uploadBtn' name='uploadFile' style='display: none;' multiple>" +
-            "&nbsp;<button class='thumb-Btn' id='thumb-modBtn' onclick='imgUpdate(this)'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-modify.png'></button></li>");
-    }
 
-    if(uploadedImgCnt< 6) {
-        $("#upload-btn").html("사진 추가하기 (" + uploadedImgCnt + "/6)");
-        $("#upload-btn").css('height', '40px');
-    }else {
-        $("#upload-btn").hide();
-    }
-}
 function imgDelete(obj) {
     var oper = $(obj).closest("li").index();
     //alert("index -------" + oper);
@@ -83,7 +112,9 @@ function imgDelete(obj) {
     $(obj).closest("li").remove();
 
     var data = { oper : oper,
-                category : "boardPhoto" };
+                category : "boardPhoto",
+                att_no : $(obj).val()
+    };
         $.ajax({
             url: '/s3Delete',
             data: data,

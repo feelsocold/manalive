@@ -1,22 +1,27 @@
 $.get("/board/list", function ( data ) {
+    //alert(data);
+    console.log(data);
     var boardList = data.boardList;
     var pageMaker = data.pageMaker;
-    console.log(pageMaker);
-
-    spreadBoardList( boardList );
+    // console.log(pageMaker);
+    // console.log(boardList);
+    spreadBoardList( data );
     spreadPaging( pageMaker );
 
 });
 
-function spreadBoardList( boardList) {
+function spreadBoardList( data ) {
+    var boardList = data.boardList;
+    var userDetail = data.userDetail;
+
     $(".board-data").empty();
     // LIST 뿌리기
     for(var i=0; i < boardList.length; i++) {
         var str = "";
         str += "<tr><td>" + boardList[i].seq + "</td>";
         str += "<td style='text-align: left; padding-left: 25px; color: #337ab7;' class='board-title'><a href='/board/detail?seq="+boardList[i].seq+"'>" + boardList[i].title + "</a></td>";
-        str += "<td style='text-align: left; padding-left: 10px'>" + "<img class='profile-photo' src='"+ boardList[i].userDetail.photo +"'>";
-        str += boardList[i].userDetail.nickname + "</td>";
+        str += "<td style='text-align: left; padding-left: 10px'>" + "<img class='profile-photo' src='"+ userDetail[i].photo +"'>";
+        str += userDetail[i].nickname + "</td>";
         str += "<td>" + timeForToday(boardList[i].createDate) + "</td>";
         str += "<td>" + "0" + "</td>";
         str += "<td>" + "0" + "</td></tr>";
@@ -83,7 +88,7 @@ $(document).on('click','.page-item a',function(e){
         dataType : 'json',
         success : function(result){
 
-            spreadBoardList( result.boardList );
+            spreadBoardList(result);
             spreadPaging( result.pageMaker );
 
         },error: function (jqXHR, textStatus, errorThrown) {

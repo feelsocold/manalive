@@ -1,4 +1,4 @@
-package com.bohan.manalive.web.community.service;
+package com.bohan.manalive.web.common.service;
 
 public interface AttachSessionService {
 

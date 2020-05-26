@@ -3,8 +3,11 @@ package com.bohan.manalive.domain.user;
 import com.bohan.manalive.config.oauth.dto.BaseTimeEntity;
 import com.bohan.manalive.web.community.domain.Board;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -52,12 +55,11 @@ public class User extends BaseTimeEntity implements Serializable {
     @Column(nullable=true)
     private String photo;
 
-    @OneToMany(mappedBy="userDetail", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Board> boardList = new ArrayList<>();
-
-//    @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JsonManagedReference
-//    private List<Board> boardList = new ArrayList<Board>();
+//    @OneToMany(mappedBy="userDetail", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    private List<Board> boardList = new ArrayList<>();
+    @OneToMany(mappedBy="userDetail", fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference
+    private List<Board> boardList = new ArrayList<Board>();
 
 //    @OneToOne(mappedBy = "userDetail")
 //    private Board board;
@@ -107,11 +109,6 @@ public class User extends BaseTimeEntity implements Serializable {
 
         return this;
     }
-
-    public void deleteBoard(Board board) {
-
-    }
-
 
 
 }

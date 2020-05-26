@@ -34,6 +34,7 @@
                     <div id="content-div">
                         <textarea readonly id="content-textarea"></textarea>
                     </div>
+
                 </div>
 
                 <div id="info-wrap">
@@ -52,13 +53,16 @@
                     </div>
                     <hr style="width:100%;padding-left: -30px; margin-top: 7px;">
                     <div id="replyinfo-area">
-                        <div>
-                        <img src="/custom/img/icon/icon-emptyheart.png" style="width: 30px; height:30px; float:left">
-                        </div><br>
-                        <div style="margin-top: 0px">
-                            <b>좋아요
-                            <span>1,729개</span>
-                            </b>
+                        <div id="likebtn-area"></div>
+                        <div style="margin-top: 0px; margin-left: 30px">
+                            <b>좋아요 <span id="likecnt-span"></span>개</b>
+                        </div>
+                        <div><img src='/custom/img/icon/icon-reply.png' id='reply-icon'></div>
+                        <div style="margin-top: 0px; margin-left: 30px;">
+                            <b>댓글 <span id="replycnt-span"></span>개</b>
+                        </div>
+                        <div id="hashtags-div">
+
                         </div>
                     </div>
                     <hr style="width:100%;padding-left: -30px; margin-top: 7px;">
@@ -67,13 +71,25 @@
                         <textarea th:unless="${session['user']}" placeholder="댓글을 작성하려면 로그인 해주세요." readonly></textarea>
                         <input th:if="${session['user']}" type="button" id='replypost-btn' value="등록" style="float:right;">
                         <input th:unless="${session['user']}" type="button" value="등록" style="float:right; opacity: 0.4;" disabled>
-
                     </div>
-
                 </div>
-
             </div>
         </div>
+        <!--confirm Modal-->
+        <div id="confirm-modal">
+            <!-- Modal content -->
+            <div class="confirm-content">
+                <div>
+                    <div>
+                        <span id="confirm-notice">정말로 삭제하시겠습니까?<span>
+                    </div>
+                    <div id="confirmBtn-area">
+                        <button id='deleteConfirm-Btn'>네, 삭제할게요.</button> &nbsp;&nbsp;
+                        <button id='cancelDelete-Btn' value="">아니오. 취소할게요.</button>
+                    </div>
+                </div>
+            </div>
+        </div> <!--End Login-Model-->
     </main>
 
     <script src="/custom/js/common/index.js"></script>

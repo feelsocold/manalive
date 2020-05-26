@@ -11,6 +11,7 @@
 
     <link href="/custom/css/community/board/board_write.css" rel="stylesheet">
 
+    <input type="hidden" th:value="${seq}" id="seq">
 
     <th:block th:include="layout/header"></th:block>
 
@@ -18,7 +19,7 @@
         <div class="main-container">
             <div class="write-wrap">
                 <div>
-                    <h2 style="float:left;"><b>글쓰기</b></h2> <input type="button" id="board-submitBtn" value="올리기">
+                    <h2 style="float:left;"><b>작성글 수정하기</b></h2> <input type="button" id="board-submitBtn" value="수정하기">
                 </div>
                 <br>
                 <div id="write-div">
@@ -86,7 +87,7 @@
             <div class="confirm-content">
                 <div>
                     <div>
-                        <span id="confirm-notice">작성한 글이 등록되었습니다!<span>
+                        <span id="confirm-notice">수정되었습니다!<span>
                     </div>
                     <div id="confirmBtn-area">
                         <button id='goDetail-Btn'>내가 쓴 글 보러가기</button> &nbsp;&nbsp;
@@ -100,4 +101,4 @@
     </main>
 
     <script src="/custom/js/common/index.js"></script>
-    <script src="/custom/js/community/board/board_write.js"></script>
+    <script src="/custom/js/community/board/board_modify.js"></script>

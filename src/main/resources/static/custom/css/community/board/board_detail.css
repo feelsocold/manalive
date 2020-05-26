@@ -38,7 +38,6 @@
     color: #757575;
     float:left;
     padding-left: 20px;
-    margin-left: 10px;
 }
 #updbuttons-div{
     color: #757575;
@@ -228,4 +227,81 @@
     color: #ff5e52;
     font-size: 13px;
     font-weight: bold;
+}
+
+#confirm-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    /*background-color: rgb(0,0,0); !* Fallback color *!*/
+    /*background-color: rgba(0,0,0,0.4); !* Black w/ opacity *!*/
+    background-color: rgba( 255, 255, 255, 0.5 );
+}
+
+/* Modal Content/Box */
+.confirm-content {
+    background-color: #fefefe;
+    margin: 20% auto; /* 15% from the top and centered */
+    padding-top: 2%;
+    padding-bottom: 1%;
+    padding-left: 0%;
+    padding-right: 0%;
+    border: 1px solid #35C5F0;
+    border-radius: 10px;
+    /*width: 50%; !* Could be more or less, depending on screen size *!*/
+    width: 500px;
+    height: 200px;
+    text-align: center;
+}
+
+#confirm-modal button {
+    background-color: #35C5F0;
+    color: #FFFFFF;
+    border-radius: 7px;
+    border: 1px solid #35C5F0;
+    font-size: 15px;
+    font-weight: bold;
+    padding-left: 17px;
+    padding-right: 17px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: 50px;
+}
+#confirmBtn-area {
+    margin-top: 25px;
+}
+
+#confirm-notice {
+    font-size: 30px;
+}
+
+.like-btns {
+    cursor: pointer;
+    width: 23px;
+    height:21px;
+    float:left;
+    margin-top: 4px;
+}
+.like-btns:hover {
+    opacity: 0.5;
+}
+
+#reply-icon{
+    margin-left: 2px;
+    margin-top: 5px;
+    width: 23px;
+    height:21px;
+    float:left;
+}
+#hashtags-div{
+    margin-top: 10px;
+    text-align: left;
+    color: #757575;
+    font-size: 12px;
+    width: 80%;
 }

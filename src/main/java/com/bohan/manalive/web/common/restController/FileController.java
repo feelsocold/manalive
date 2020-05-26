@@ -1,8 +1,8 @@
 package com.bohan.manalive.web.common.restController;
 
 import com.bohan.manalive.config.S3Uploader;
-import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
-import com.bohan.manalive.web.community.service.AttachSessionService;
+import com.bohan.manalive.web.common.service.AttachService;
+import com.bohan.manalive.web.common.service.AttachSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +21,7 @@ import java.util.List;
 public class FileController implements Serializable {
 
     private final S3Uploader s3Uploader;
+    private final AttachService attachService;
     private final AttachSessionService attachSessionService;
     private final HttpSession httpSession;
 
@@ -32,11 +33,19 @@ public class FileController implements Serializable {
     }
 
     @PostMapping("/s3Delete")
-    public void s3Delete(@RequestParam("oper") String oper,
+    public void s3Delete(@RequestParam(value="oper") String oper, @RequestParam(value="att_no", required=false) Long att_no,
                             @RequestParam("category") String category) throws IOException{
         log.info("s3Delete");
-        attachSessionService.deleteS3Attach(oper, category);
-        List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
+        // 게시판 글 작성 중, 회원가입 프로필사진 변경시
+        if(httpSession.getAttribute("attachList") != null ) {
+            attachSessionService.deleteS3Attach(oper, category);
+        }
+        // 게시글 수정 시
+        else{
+            log.info(att_no + "");
+            //attachService.deleteAttach(att_no, );
+        }
+
     }
 
     @PostMapping("/s3Update")
