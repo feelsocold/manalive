@@ -27,7 +27,7 @@ public interface BoardRepository extends JpaRepository<Board, Long>,
 
      @Query( " SELECT new com.bohan.manalive.web.common.dto.AttachResponseDto(b.att_no, b.url)" +
              " FROM Board AS a INNER JOIN Attach b " +
-             "  ON a.seq = b.superKey AND b.category = 'boardAttach'" +
+             "  ON a.seq = b.superKey AND b.category = 'boardPhoto'" +
              " WHERE a.seq = :seq ")
      List<AttachResponseDto> getBoardAttachList(@Param("seq") Long seq);
 

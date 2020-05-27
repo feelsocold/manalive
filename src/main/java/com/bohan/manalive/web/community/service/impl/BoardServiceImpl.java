@@ -1,8 +1,12 @@
 package com.bohan.manalive.web.community.service.impl;
 
+import com.bohan.manalive.config.S3Uploader;
 import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
 import com.bohan.manalive.domain.user.UserRepository;
+import com.bohan.manalive.web.common.domain.attach.Attach;
+import com.bohan.manalive.web.common.domain.attach.AttachRepository;
+import com.bohan.manalive.web.common.dto.AttachDto;
 import com.bohan.manalive.web.common.dto.AttachResponseDto;
 import com.bohan.manalive.web.common.service.AttachService;
 import com.bohan.manalive.web.community.domain.Board;
@@ -21,7 +25,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +44,10 @@ public class BoardServiceImpl implements BoardService {
     private final BoardLikeRepository boardLikeRepo;
     private final ReplyService replyService;
     private final AttachService attachService;
+    private final AttachRepository attachRepo;
+    private final HttpSession httpSession;
+    private final S3Uploader s3Uploader;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 //    @PersistenceContext
 //    private EntityManager em;
 
@@ -138,10 +148,65 @@ public class BoardServiceImpl implements BoardService {
         //Board 테이블에서 게시글 삭제
         //boardRepo.deleteById(seq);
         boardRepo.deleteBoard(seq);
+    }
 
+    @Override
+    public Long updateBoard(BoardRequestDto dto) throws Exception {
+        log.info(dto.toString());
 
-        //Attach 테이블에서 첨부파일 삭제 + S3에 업로드된 파일 삭제
-        attachService.deleteAttachs(seq, "boardAttach");
+        Board board = boardRepo.findById(dto.getSeq())
+                .map(entity -> entity.update(dto.getTitle(),
+                                            dto.getContent(),
+                                            dto.getHashtags())).get();
+
+        // 첨부파일 수정
+        List<AttachDto> savedList = attachService.getAttachList(dto.getSeq(), "boardPhoto");
+        List<AttachDto> sessionList = (List<AttachDto>)httpSession.getAttribute("attachList");
+
+        for(int i = 0; i < savedList.size(); i++){
+            AttachDto sessionDto = (AttachDto)sessionList.get(i);
+            AttachDto savedDto =  (AttachDto)savedList.get(i);
+            //수정
+            if(!sessionList.get(i).getFilename().equals("") && !sessionList.get(i).getFilename().equals(savedList.get(i).getFilename())){
+                Attach attach = attachRepo.findById(savedList.get(i).getAtt_no())
+                        .map(entity -> entity.update(sessionDto.getFilename(),
+                                                    sessionDto.getExtension(),
+                                                    sessionDto.getUuid(),
+                                                    sessionDto.getUrl()
+                                                       )).get();
+                //S3에 업로드된 파일 삭제
+                String dateDir = formatter.format(savedDto.getModifiedDate());
+                String dirName = savedDto.getCategory() + "/" + dateDir;
+                String fileName = savedDto.getUuid() + "_" + savedDto.getFilename() +"." + savedDto.getExtension();
+                s3Uploader.deleteFile(dirName, fileName);
+            }
+            //삭제
+            else if(sessionList.get(i).getFilename().equals("")){
+                attachService.deleteAttachOne(sessionDto.getAtt_no(), sessionDto.getCategory());
+            }
+        }
+
+        for(AttachDto sessionDto : sessionList){
+            //새로 추가
+            if(sessionDto.getAtt_no() == null){
+                sessionDto.setSuperKey(dto.getSeq());
+                sessionDto.setCategory("BoardPhoto");
+                attachRepo.save(sessionDto.toEntity().builder()
+                                    .category(sessionDto.getCategory())
+                                    .superKey(dto.getSeq())
+                                    .filename(sessionDto.getFilename())
+                                    .extension(sessionDto.getExtension())
+                                    .uuid(sessionDto.getUuid())
+                                    .url(sessionDto.getUrl())
+                                       .build());
+            }
+//            //삭제
+//            if(sessionDto.getFilename().equals("")){
+//                attachService.deleteAttachOne(sessionDto.getAtt_no(), sessionDto.getCategory());
+//            }
+
+        }
+        return board.getSeq();
     }
 
     @Transactional

@@ -4,7 +4,7 @@ import com.bohan.manalive.config.oauth.dto.OAuthAttributes;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
 import com.bohan.manalive.domain.user.User;
 import com.bohan.manalive.domain.user.UserRepository;
-import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
+import com.bohan.manalive.web.common.dto.AttachDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +72,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private void setSessionAttach(String filename) {
         UUID uuid = UUID.randomUUID();
-        AttachSaveRequestDto attach = new AttachSaveRequestDto(null, null, uuid.toString(), "profilePhoto", filename);
+        AttachDto attach = new AttachDto(null, null, uuid.toString(), "profilePhoto", filename);
         httpSession.setAttribute("attachDto", attach);
     }
 

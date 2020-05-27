@@ -66,7 +66,7 @@ function spreadBoardInfo(result) {
     $("#title-div h2").html(boardDto.title);
     if(sessionEmail === boardDto.email) {
         $("#updbuttons-div span").append("<div style='float:left'>" +
-            "<a href='/board/modify?b_seq="+boardDto.seq+"' id='board-modbtn'>수정</a>" +
+            "<a href='/board/update/"+boardDto.seq+"' id='board-modbtn'>수정</a>" +
             "&nbsp;&nbsp;<a href='"+boardDto.seq+"' id='board-delbtn'>삭제</a>");
     }
     // $("#date-div span").html(timeForToday(boardDto.createDate));
@@ -74,8 +74,17 @@ function spreadBoardInfo(result) {
     for(var i=0; i < attachList.length; i++) {
         $("#photo-div").append("<div class='eachphoto-div'><img class='eachphoto-img' src='"+ attachList[i].url + "'></div>");
     }
-
-    $("#content-div textarea").html(boardDto.content);
+    // 글 내용 뿌리기
+    var str ="";
+    str += "<div ><div class='replyerPhoto-area' ><img class='replyerphoto-img' src='"+ boardDto.photo +"'></div>";
+    str += "<div class='replyerContent-area'><span class='replyer-nickname'>"+boardDto.nickname+"</span>" + boardDto.content;
+    //str += "<textarea readonly id='content-textarea'>" + boardDto.content + "</textarea>";
+    str += "<br><span class='reply-date'>"+timeForToday(boardDto.createDate);
+    if(boardDto.createDate != boardDto.modifiedDate){
+        str += " (" + timeForToday(boardDto.modifiedDate) +" 전 수정됨)" ;
+    }
+    str += "</span><div id='hashtags-div'></div> </div>";
+    $("#content-div").prepend(str);
     autosize($("#content-div textarea"));
 
     // if(sessionEmail === boardDto.email) {
@@ -129,19 +138,19 @@ function timeForToday(value) {
     const timeValue = new Date(value);
 
     const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
-    if (betweenTime < 1) return '방금 전';
+    if (betweenTime < 1) return '방금';
     if (betweenTime < 60) {
-        return `${betweenTime}분 전`;
+        return `${betweenTime}분`;
     }
 
     const betweenTimeHour = Math.floor(betweenTime / 60);
     if (betweenTimeHour < 24) {
-        return `${betweenTimeHour}시간 전`;
+        return `${betweenTimeHour}시간`;
     }
 
     const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
     if (betweenTimeDay < 365) {
-        return `${betweenTimeDay}일 전`;
+        return `${betweenTimeDay}일`;
     }
 
     return `${Math.floor(betweenTimeDay / 365)}년전`;
@@ -228,11 +237,9 @@ $(document).on('click','.delete-reply a',function(e) {
     e.preventDefault();
     var r_seq = $(this).attr("href");
     $(this).closest('.reply-onerow').remove();
-    var data = { "r_seq" : r_seq };
         $.ajax({
-            type: 'POST',
-            url: '/reply/board/delete',
-            data: data,
+            type: 'DELETE',
+            url: '/reply/board/delete/'+ r_seq,
             success : function(result){
                 console.log("삭제완료");
                 replyDelayCnt++;
@@ -258,12 +265,10 @@ $(document).on('click','#cancelDelete-Btn',function(e) {
 
 $(document).on('click','#deleteConfirm-Btn',function(e) {
     var seq = $(this).val();
-    var data = { "b_seq" : seq };
 
     $.ajax({
-        type: 'POST',
-        url: '/boardDelete',
-        data: data,
+        type: 'DELETE',
+        url: '/boardDelete/' + seq,
         success : function(result){
             console.log("삭제완료");
             location.href="/board";
@@ -326,4 +331,3 @@ $(document).on('click','#dounlike_btn',function(e) {
         });
     }
 });
-s

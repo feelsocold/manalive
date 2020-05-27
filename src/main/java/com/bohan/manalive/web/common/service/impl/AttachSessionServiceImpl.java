@@ -1,7 +1,7 @@
 package com.bohan.manalive.web.common.service.impl;
 
 import com.bohan.manalive.config.S3Uploader;
-import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
+import com.bohan.manalive.web.common.dto.AttachDto;
 import com.bohan.manalive.web.common.service.AttachSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,42 +20,43 @@ public class AttachSessionServiceImpl implements AttachSessionService {
     private final HttpSession httpSession;
 
     @Override
-    public void deleteS3Attach(String oper, String category) {
-        List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
+    public void deleteS3Attach(int oper, String category) {
+        List<AttachDto> attachList = (List<AttachDto>)httpSession.getAttribute("attachList");
         log.info("삭제 전 세션사이즈 : " + attachList.size() + "");
-        int delNumber = Integer.parseInt(oper);
-        AttachSaveRequestDto requestDto = attachList.get(delNumber);
+        //int delNumber = Integer.parseInt(oper);
+        AttachDto requestDto = attachList.get(oper);
 
         // 파일첨부 세션에서 삭제
-        attachList.remove(delNumber);
+        attachList.remove(oper);
         httpSession.removeAttribute("attachList");
         httpSession.setAttribute("attachList", attachList);
-        // s3 스토리지에서 삭제
-        String fileName = requestDto.getUuid() + "_" + requestDto.getFilename() + "." + requestDto.getExtension();
-        String dirName = category + "/" + s3Uploader.getTodayFolder();
-        s3Uploader.deleteFile(dirName, fileName);
-        // 확인
-        for(AttachSaveRequestDto attach : attachList){
-            System.out.print(attach.getFilename() + ", ");
-        }
+
+//        // s3 스토리지에서 삭제
+//        String fileName = requestDto.getUuid() + "_" + requestDto.getFilename() + "." + requestDto.getExtension();
+//        String dirName = category + "/" + s3Uploader.getTodayFolder();
+//        s3Uploader.deleteFile(dirName, fileName);
+//        // 확인
+//        for(AttachDto attach : attachList){
+//            System.out.print(attach.getFilename() + ", ");
+//        }
         log.info("삭제 후 세션사이즈 : " + attachList.size() + "");
     }
 
     @Override
-    public void updateS3Attach(String oper, String category) {
-        List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
-        AttachSaveRequestDto requestDto = attachList.get(Integer.parseInt(oper));
+    public void updateS3Attach(int oper, String category) {
+        List<AttachDto> attachList = (List<AttachDto>)httpSession.getAttribute("attachList");
+        AttachDto requestDto = attachList.get(oper);
         String fileName = requestDto.getUuid() + "_" + requestDto.getFilename() + "." + requestDto.getExtension();
 
         // s3 스토리지에서 삭제
         s3Uploader.deleteFile(category, fileName);
         // 파일첨부 세션 수정
-        AttachSaveRequestDto newDto = attachList.get(attachList.size()-1);
-        attachList.set(Integer.parseInt(oper), newDto);
+        AttachDto newDto = attachList.get(attachList.size()-1);
+        attachList.set(oper, newDto);
         attachList.remove(attachList.size()-1);
         httpSession.setAttribute("attachList", attachList);
         // 확인
-        for(AttachSaveRequestDto attach : attachList){
+        for(AttachDto attach : attachList){
             System.out.print(attach.getFilename() + ", ");
         }
         log.info("수정 후 세션사이즈 : " + attachList.size() + "");

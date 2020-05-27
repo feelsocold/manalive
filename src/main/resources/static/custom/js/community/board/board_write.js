@@ -1,5 +1,3 @@
-
-
 var uploadedImgCnt = 0;
 var hashTagCnt = 0;
 
@@ -16,8 +14,6 @@ function asyncUpload(obj){
     var file = $("input[name='uploadFile']");
     var formData = new FormData();
     var files = file[0].files;
-    //alert(files.length);
-    //alert(uploadedImgCnt);
 
     if(files.length < 7 && (uploadedImgCnt+files.length) < 7) {
         for(var i = 0; i < files.length; i++) {
@@ -35,7 +31,7 @@ function asyncUpload(obj){
             enctype: 'multipart/form-data',
             success : function(result){
                 uploadedImgCnt += files.length;
-                console.log(result);
+                console.log("upload result : " + result);
                 showUploadedImg(result);
             },error: function (jqXHR, textStatus, errorThrown) {
 
@@ -294,7 +290,7 @@ $('#board-submitBtn').click(function (e) {
                 console.log(result.boardSeq);
                 //document.getElementById('confirm-Modal').show();
 
-                $("#goDetail-Btn").attr("onclick", "location.href='/board/detail?seq="+result.boardSeq +"'");
+                $("#goDetail-Btn").attr("onclick", "location.href='/board/detail/"+result.boardSeq +"'");
 
                 $("#confirm-modal").show();
 

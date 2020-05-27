@@ -2,6 +2,8 @@ package com.bohan.manalive.web.community.controller;
 
 import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
+import com.bohan.manalive.web.common.dto.AttachDto;
+import com.bohan.manalive.web.common.dto.AttachResponseDto;
 import com.bohan.manalive.web.common.service.AttachService;
 import com.bohan.manalive.web.community.domain.Board;
 import com.bohan.manalive.web.community.dto.BoardCriteria;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,7 +58,7 @@ public class BoardController {
         Long boardSeq = boardService.saveBoard(boardDto, user);
 
         if(httpSession.getAttribute("attachList") != null) {
-            attachService.saveAttachs("boardAttach", boardSeq);
+            attachService.saveAttachs("boardPhoto", boardSeq);
         }
         //return "redirect:/board";
         HashMap<String, Object> map = new HashMap<String, Object>();
@@ -66,23 +69,45 @@ public class BoardController {
     }
 
     @ResponseBody
+    @PostMapping("/update")
+    public HashMap<String, Object> boardUpdate(@RequestBody BoardRequestDto boardDto,
+                            HttpSession session) throws Exception{
+        log.info("boardUPdate()");
+        Long seq = boardService.updateBoard(boardDto);
+        log.info(":::::SEQ : " + seq);
+
+//        if(httpSession.getAttribute("attachList") != null) {
+//            attachService.saveAttachs("boardPhoto", boardSeq);
+//        }
+//        //return "redirect:/board";
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("boardSeq", seq);
+//
+//        session.removeAttribute("attachList");
+        return map;
+    }
+
+    @ResponseBody
     @GetMapping("/list")
     public HashMap<String, Object> getBoardList(@ModelAttribute BoardCriteria criteria) throws Exception {
 
         return boardService.boardListandPaging(criteria);
     }
 
-    @GetMapping("/detail")
-    public String boardDetail(String seq, Model model) {
+    @GetMapping("/detail/{seq}")
+    public String boardDetail(@PathVariable String seq, Model model) {
         model.addAttribute("seq", seq);
         return "community/board/board_detail";
     }
 
-    @GetMapping("/modify")
-    public String modifyBoard(@RequestParam("b_seq") Long b_seq, Model model) throws Exception {
-        //boardService.deleteBoard(b_seq);
-        log.info(b_seq + "");
+    @GetMapping("/update/{b_seq}")
+    public String updateBoard(@PathVariable Long b_seq, Model model) throws Exception {
         model.addAttribute("seq", b_seq);
+
+        List<AttachDto> list = attachService.getAttachList(b_seq, "boardPhoto");
+        httpSession.setAttribute("attachList", list);
+        log.info(list.size() + "<- 세션 리스트 사이즈");
+
         return "community/board/board_modify";
 
     }

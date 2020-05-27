@@ -2,7 +2,7 @@ package com.bohan.manalive.config;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
-import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
+import com.bohan.manalive.web.common.dto.AttachDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ import java.util.*;
 public class S3Uploader {
     private final HttpSession httpSession;
     private final AmazonS3Client amazonS3Client;
-    List<AttachSaveRequestDto> attachList = new ArrayList<>();
+    List<AttachDto> attachList = new ArrayList<>();
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -59,12 +59,11 @@ public class S3Uploader {
     }
 
     private void setSessionAttach(String filename, String extension, String uuid, String category, String url) {
-        log.info("=========> " + url);
 
         if(httpSession.getAttribute("attachList") != null ) {
-            attachList = (List<AttachSaveRequestDto>) httpSession.getAttribute("attachList");
+            attachList = (List<AttachDto>) httpSession.getAttribute("attachList");
         }
-        AttachSaveRequestDto attach = new AttachSaveRequestDto(filename, extension, uuid, category, url);
+        AttachDto attach = new AttachDto(filename, extension, uuid, category, url);
         attachList.add(attach);
         httpSession.setAttribute("attachList", attachList);
     }
@@ -100,7 +99,6 @@ public class S3Uploader {
             String uploadImageUrl = putS3(uploadFile, fileName);
             uploadImageUrls.add(uploadImageUrl);
             removeNewFile(uploadFile);
-            log.info(uploadImageUrl + "<==========");
             // 세션 관리
             if(httpSession.getAttribute("attachList") == null){attachList.clear();}
             setSessionAttach(onlyFilename, extenstion, uuid.toString(), category, uploadImageUrl);

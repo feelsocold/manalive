@@ -19,7 +19,7 @@ function spreadBoardList( data ) {
     for(var i=0; i < boardList.length; i++) {
         var str = "";
         str += "<tr><td>" + boardList[i].seq + "</td>";
-        str += "<td style='text-align: left; padding-left: 25px; color: #337ab7;' class='board-title'><a href='/board/detail?seq="+boardList[i].seq+"'>" + boardList[i].title + "</a></td>";
+        str += "<td style='text-align: left; padding-left: 25px; color: #337ab7;' class='board-title'><a href='/board/detail/"+boardList[i].seq+"'>" + boardList[i].title + "</a></td>";
         str += "<td style='text-align: left; padding-left: 10px'>" + "<img class='profile-photo' src='"+ userDetail[i].photo +"'>";
         str += userDetail[i].nickname + "</td>";
         str += "<td>" + timeForToday(boardList[i].createDate) + "</td>";

@@ -5,9 +5,10 @@ import lombok.*;
 
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 public class BoardRequestDto {
-
+    private Long seq;
     private String title;
     private String content;
     private String hashtags;

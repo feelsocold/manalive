@@ -46,4 +46,12 @@ public class Attach extends BaseTimeEntity {
         this.url = url;
     }
 
+    public Attach update(String filename, String extension, String uuid, String url) {
+        this.filename = filename;
+        this.extension = extension;
+        this.uuid = uuid;
+        this.url = url;
+        return this;
+    }
+
 }

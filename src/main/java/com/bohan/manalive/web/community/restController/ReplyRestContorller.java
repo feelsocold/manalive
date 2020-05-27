@@ -37,8 +37,8 @@ public class ReplyRestContorller {
         return replyService.getBoardReplyList(b_seq, pageNumber, delayCnt);
     }
 
-    @PostMapping("/reply/board/delete")
-    public void deleteBoardReply(@RequestParam Long r_seq){
+    @DeleteMapping("/reply/board/delete/{r_seq}")
+    public void deleteBoardReply(@PathVariable Long r_seq){
         log.info(r_seq + "!!!!!");
         replyService.deleteBoardReply(r_seq);
     }

@@ -66,4 +66,12 @@ public class Board extends BaseTimeEntity implements Serializable {
         this.email = email;
         this.userDetail = userDetail;
     }
+
+    public Board update(String title, String content, String hashtags){
+        this.title = title;
+        this.content = content;
+        this.hashtags = hashtags;
+
+        return this;
+    }
 }

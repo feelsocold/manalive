@@ -13,9 +13,10 @@ import java.util.List;
 public interface BoardService {
 
     public Long saveBoard(BoardRequestDto saveDto, @LoginUser SessionUser user) throws Exception;
+    public void deleteBoard(Long seq) throws Exception;
+    public Long updateBoard(BoardRequestDto dto) throws Exception;
     public HashMap<String, Object> boardListandPaging(BoardCriteria criteria);
     public HashMap<String, Object> boardDetail(Long seq);
-    public void deleteBoard(Long seq) throws Exception;
     public List<Board> getBoardList(BoardCriteria criteria) throws Exception;
     public void doLikeBoard(BoardLikeRequestDto dto) throws Exception;
     public void doUnLikeBoard(BoardLikeRequestDto dto) throws Exception;

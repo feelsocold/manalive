@@ -24,7 +24,6 @@ public class BoardReplySaveRequestDto implements Serializable {
     }
 
     public BoardReply toEntity() {
-
         return BoardReply.builder()
                 .b_seq(b_seq)
                 .content(content)

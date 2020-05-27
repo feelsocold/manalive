@@ -86,10 +86,10 @@
 }
 #content-div textarea{
     resize: none;
-    width: 90%;
+    width: auto;
     height: auto;
     border: none;
-    line-height:20px;
+    /*line-height:20px;*/
     font-size: 15px;
 }
 #reply-area {
@@ -292,16 +292,16 @@
 }
 
 #reply-icon{
-    margin-left: 2px;
+    margi-left: 2px;
     margin-top: 5px;
     width: 23px;
     height:21px;
     float:left;
 }
 #hashtags-div{
-    margin-top: 10px;
+    margin-top: 5px;
     text-align: left;
-    color: #757575;
+    color: #35C5F0;
     font-size: 12px;
-    width: 80%;
+    width: auto;
 }

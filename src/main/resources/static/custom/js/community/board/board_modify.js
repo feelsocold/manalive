@@ -1,5 +1,6 @@
 var seq = $("#seq").val();
 var uploadedImgCnt = 0;
+var hashTagCnt = 0;
 
 $(document).ready(function() {
     var data = { "seq" : seq };
@@ -9,10 +10,9 @@ $(document).ready(function() {
         url: '/boardDetail',
         data: data,
         success : function(result){
-            console.log(result);
             spreadDto(result);
             uploadedImgCnt = result.attachList.length;
-            showUploadedImg(result.attachList);
+            loadUploadedImg(result.attachList);
         },error: function (jqXHR, textStatus, errorThrown) {
             alert("error");
         },beforeSend:function(){
@@ -28,14 +28,7 @@ function spreadDto(result) {
     $("#content").val(dto.content);
 }
 
-function showUploadedImg(result) {
-    for(var i = 0; i < result.length; i++) {
-        $("#thumbnail-wrap ul").append("<li><img src='"+ result[i].url +"' onclick='showImage(this)' class='thumnail-image'>" +
-            "<br><button class='thumb-Btn' id='thumb-delBtn' onclick='imgDelete(this)' value='"+result[i].att_no+"'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-trashbin.png'></button>" +
-            "<input type='file' onchange='updateUpload(this)' class='re-uploadBtn' name='uploadFile' style='display: none;' multiple>" +
-            "&nbsp;<button class='thumb-Btn' id='thumb-modBtn' onclick='imgUpdate(this)' value='"+result[i].att_no+"'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-modify.png'></button></li>");
-    }
-
+function controlImgCnt() {
     if(uploadedImgCnt< 6) {
         $("#upload-btn").html("사진 추가하기 (" + uploadedImgCnt + "/6)");
         $("#upload-btn").css('height', '40px');
@@ -44,7 +37,28 @@ function showUploadedImg(result) {
     }
 }
 
-var hashTagCnt = 0;
+function loadUploadedImg(result) {
+    console.log(result);
+
+    for(var i = 0; i < result.length; i++) {
+        $("#thumbnail-wrap ul").append("<li><img src='"+ result[i].url +"' onclick='showImage(this)' class='thumnail-image'>" +
+            "<br><button class='thumb-Btn' id='thumb-delBtn' onclick='imgDelete(this)' value='"+result[i].att_no+"'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-trashbin.png'></button>" +
+            "<input type='file' onchange='updateUpload(this)' class='re-uploadBtn' name='uploadFile' style='display: none;' multiple>" +
+            "&nbsp;<button class='thumb-Btn' id='thumb-modBtn' onclick='imgUpdate(this)' value='"+result[i].att_no+"'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-modify.png'></button></li>");
+    }2
+    controlImgCnt();
+
+}
+function showUploadedImg(result) {
+    for(var i = 0; i < result.length; i++) {
+        $("#thumbnail-wrap ul").append("<li><img src='"+ result[i] +"' onclick='showImage(this)' class='thumnail-image'>" +
+            "<br><button class='thumb-Btn' id='thumb-delBtn' onclick='imgDelete(this)'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-trashbin.png'></button>" +
+            "<input type='file' onchange='updateUpload(this)' class='re-uploadBtn' name='uploadFile' style='display: none;' multiple>" +
+            "&nbsp;<button class='thumb-Btn' id='thumb-modBtn' onclick='imgUpdate(this)'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-modify.png'></button></li>");
+    }
+    controlImgCnt();
+}
+
 
 
 // 이미지 클릭시 파일버튼 클릭
@@ -67,10 +81,11 @@ function asyncUpload(obj){
             formData.append("multipartFile", files[i]);
         }
         formData.append("category", "boardPhoto");
+        formData.append("b_seq", seq);
         console.log(files);
 
         $.ajax({
-            url: '/s3Upload',
+            url: '/modifyBoardAttachUpload',
             processData: false,
             contentType : false,
             data: formData,
@@ -78,8 +93,9 @@ function asyncUpload(obj){
             enctype: 'multipart/form-data',
             success : function(result){
                 uploadedImgCnt += files.length;
-                console.log(result);
+                console.log("upload result : " + result);
                 showUploadedImg(result);
+
             },error: function (jqXHR, textStatus, errorThrown) {
 
             },beforeSend:function(){
@@ -116,7 +132,7 @@ function imgDelete(obj) {
                 att_no : $(obj).val()
     };
         $.ajax({
-            url: '/s3Delete',
+            url: '/modifyBoardAttachDelete',
             data: data,
             type: 'POST',
             success : function(result){
@@ -156,6 +172,8 @@ function updateUpload(obj){
     var file = $(obj);
     var formData = new FormData();
     var files = file[0].files;
+    var att_no = $(obj).siblings("#thumb-modBtn").val();
+    //alert(att_no);
 
     console.log(files);
     for(var i = 0; i < files.length; i++) {
@@ -163,9 +181,12 @@ function updateUpload(obj){
     }
     formData.append("category", "boardPhoto");
     formData.append("oper", oper);
+    formData.append("b_seq", seq);
+    formData.append("att_no", att_no);
+
 
         $.ajax({
-            url: '/s3Update',
+            url: '/modifyBoardAttachUpdate',
             processData: false,
             contentType : false,
             data: formData,
@@ -293,7 +314,7 @@ function deleteHashtag(obj) {
     $(obj).closest('.hashTag-div').remove();
 }
 
-// 게시물 등록
+// 게시물 수정
 $('#board-submitBtn').click(function (e) {
     e.preventDefault();
     var hashtags = "";
@@ -307,7 +328,8 @@ $('#board-submitBtn').click(function (e) {
 
     //$("#boardForm").submit();
 
-        var data = { "title" : document.getElementById("title").value,
+        var data = { "seq" : seq,
+                      "title" : document.getElementById("title").value,
                      "content" : document.getElementById("content").value,
                      "hashtags" : hashtags
         };
@@ -316,7 +338,7 @@ $('#board-submitBtn').click(function (e) {
 
         $.ajax({
             type: 'POST',
-            url: '/board/post',
+            url: '/board/update',
             contentType : "application/json; charset=utf-8",
             data: JSON.stringify(data),
             //data: data,
@@ -325,9 +347,7 @@ $('#board-submitBtn').click(function (e) {
                 console.log(result.boardSeq);
                 //document.getElementById('confirm-Modal').show();
 
-                $("#goDetail-Btn").attr("onclick", "location.href='/board/detail?seq="+result.boardSeq +"'");
-
-                $("#confirm-modal").show();
+                location.href="/board/detail/" + seq;
 
             },error: function (jqXHR, textStatus, errorThrown) {
                 alert("error");

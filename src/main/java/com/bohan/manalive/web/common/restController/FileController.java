@@ -1,6 +1,7 @@
 package com.bohan.manalive.web.common.restController;
 
 import com.bohan.manalive.config.S3Uploader;
+import com.bohan.manalive.web.common.dto.AttachDto;
 import com.bohan.manalive.web.common.service.AttachService;
 import com.bohan.manalive.web.common.service.AttachSessionService;
 import lombok.RequiredArgsConstructor;
@@ -33,29 +34,27 @@ public class FileController implements Serializable {
     }
 
     @PostMapping("/s3Delete")
-    public void s3Delete(@RequestParam(value="oper") String oper, @RequestParam(value="att_no", required=false) Long att_no,
-                            @RequestParam("category") String category) throws IOException{
+    public void s3Delete(@RequestParam(value="oper") int oper,
+                            @RequestParam("category") String category) throws Exception{
         log.info("s3Delete");
-        // 게시판 글 작성 중, 회원가입 프로필사진 변경시
-        if(httpSession.getAttribute("attachList") != null ) {
-            attachSessionService.deleteS3Attach(oper, category);
-        }
-        // 게시글 수정 시
-        else{
-            log.info(att_no + "");
-            //attachService.deleteAttach(att_no, );
-        }
+        attachSessionService.deleteS3Attach(oper, category);
+
+        // s3 스토리지에서 삭제
+        List<AttachDto> attachList = (List<AttachDto>)httpSession.getAttribute("attachList");
+        AttachDto requestDto = attachList.get(oper);
+        String fileName = requestDto.getUuid() + "_" + requestDto.getFilename() + "." + requestDto.getExtension();
+        String dirName = category + "/" + s3Uploader.getTodayFolder();
+        s3Uploader.deleteFile(dirName, fileName);
 
     }
 
     @PostMapping("/s3Update")
     public List<String> s3Update(MultipartFile[] multipartFile,
-                         @RequestParam("oper") String oper,         // 사진 넘버
+                         @RequestParam("oper") int oper,         // 사진 넘버
                          @RequestParam("category") String category) throws IOException{
         log.info("s3Update");
         List<String> fileList = s3Uploader.upload(multipartFile, category);
         attachSessionService.updateS3Attach(oper, category);
-        //List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
 
         return fileList;
     }

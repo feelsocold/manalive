@@ -6,7 +6,7 @@ import com.bohan.manalive.web.common.domain.attach.AttachRepository;
 import com.bohan.manalive.domain.user.Role;
 import com.bohan.manalive.domain.user.User;
 import com.bohan.manalive.domain.user.UserRepository;
-import com.bohan.manalive.web.common.dto.AttachSaveRequestDto;
+import com.bohan.manalive.web.common.dto.AttachDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,8 @@ public class UserService {
 
 
     public void saveAttach(Long superKey) {
-        List<AttachSaveRequestDto> attachList = (List<AttachSaveRequestDto>)httpSession.getAttribute("attachList");
-        AttachSaveRequestDto requestDto = attachList.get(0);
+        List<AttachDto> attachList = (List<AttachDto>)httpSession.getAttribute("attachList");
+        AttachDto requestDto = attachList.get(0);
         attachRepository.save(requestDto.toEntity().builder()
                                     .category(requestDto.getCategory())
                                     .superKey(superKey)
