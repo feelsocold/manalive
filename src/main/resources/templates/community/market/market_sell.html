@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MAN ALIVE!</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <link href="/custom/css/community/market/market_sell.css" rel="stylesheet">
+
+
+    <th:block th:include="layout/header"></th:block>
+
+    <main id="main" style="height:40%">
+        <div class="main-container">
+            <div id="title-wrap" style="border: 0px solid #4DC7A0">
+                <h2 style="float:left;"><b>중고마켓에 판매하기</b></h2> <input type="button" id="sell-submitBtn" value="등록하기">
+            </div>
+            <br>
+            <div id="sell-wrap" >
+                <div class="each-div">
+                    <div class="sell-left">상품 사진</div>
+                    <div class="sell-right">
+                        <input type="file" id="hdn-uploadBtn" name="uploadFile" multiple style="display: none;" onchange="asyncUpload(this)">
+                        <button id="upload-btn" >
+                                <span>
+                                    <i>
+                                        <img id="icon-camera" src="/custom/img/icon/icon-camera.png">
+                                    </i><br>
+                                    <span id="uploadBtn-text">사진올리기<br>*3MB이하, 최대 6장까지</span>
+                                </span>
+                        </button>
+                        <div id="thumbnail-wrap">
+                            <ul></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="each-div">
+                    <div class="sell-left">제목</div>
+                    <div class="sell-right">
+                        <input name='title' id="title" type="text" maxlength="30" onkeyup="keydownTitle(this)" placeholder="상품 제목을 입력해주세요.">
+                        <span style="margin-left: 15px"><label id="title-textCnt">0</label>/30</span>
+                    </div>
+                </div>
+                <div class="each-div">
+                    <div class="sell-left">카테고리</div>
+                    <div class="sell-right">
+                        <select id="cate-selectbox">
+                            <option selected>선택해주세요.</option>
+                            <option>VINYL</option>
+                            <option>CD</option>
+                            <option>CASSETTE</option>
+                            <option>GOODS</option>
+                            <option>기타</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="each-div">
+                    <div class="sell-left" style="padding-top: 5px">상태</div>
+                    <div class="sell-right">
+                        <input type="radio" value="used" name="state"> 중고상품&nbsp;&nbsp;&nbsp;<input type="radio" value="new" name="state"> 새상품
+                    </div>
+                </div>
+                <div class="each-div">
+                    <div class="sell-left">가격</div>
+                    <div class="sell-right">
+                        <input name='price' id="price-input" type="text" onchange="numberFormat(this.value)" placeholder="숫자만 입력해주세요.">&nbsp;원
+                        <input type="hidden" id="price" value="">
+                    </div>
+                </div>
+                <div class="each-div">
+                    <div class="sell-left">수량</div>
+                    <div class="sell-right">
+                        <input name='quantity' id="quantity" type="number" >&nbsp;개
+                    </div>
+                </div>
+                <div class="each-div">
+                    <div class="sell-left" style="padding-top: 5px">배송</div>
+                    <div class="sell-right">
+                        <input type="radio" value="free" name="delivery"> 무료배송&nbsp;&nbsp;&nbsp;<input type="radio" value="charged" name="delivery"> 유료배송
+                    </div>
+                </div>
+                <div class="each-div">
+                    <div class="sell-left">상품 설명</div>
+                    <div class="sell-right">
+                        <textarea name='content' id="content" onkeyup="keydownContent(this)" maxlength="2000" placeholder="상품을 설명해주세요."></textarea>
+                        <div style="float:right; margin-top: 20px;"><span style="margin-left: 15px"><label id="title-ContentCnt">0</label>/2000</span></div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+
+<!--            <div class="write-wrap">-->
+<!--                <div>-->
+<!--                    <h2 style="float:left;"><b>중고마켓에 판매하기</b></h2> <input type="button" id="sell-submitBtn" value="등록하기">-->
+<!--                </div>-->
+<!--                <br>-->
+<!--                <div id="write-div">-->
+<!--                    <div id="text-div">-->
+<!--                        <form method="post" id="boardForm" action="/board/post">-->
+<!--                            <input name='title' id="title" type="text" placeholder="제목을 입력해주세요."> <br>-->
+<!--                            <textarea name='content' id="content" placeholder="내용을 입력해주세요."></textarea>-->
+<!--                            <input type="hidden" name="hashtags" value="">-->
+<!--                        </form>-->
+<!--                        <div id="hashTag-wrap" style="display: inline-block">-->
+<!--                            <div class="hashTag-div" style="display: inline-block">-->
+<!--                                <span class="size-span" style="display:none"></span>-->
+<!--                                <span class="hashTag-span">#-->
+<!--                                    <input type="text" maxlength="13" class='hashTag-text' name="hashtag"-->
+<!--                                           onkeyup="keyUpHash(this)" onkeydown="keydownHash(this)" placeholder="키워드" size="5" >-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+<!--                    <div id="fileupload-div">-->
+<!--                        <div id="uploadbtn-div">-->
+<!--                            <input type="file" id="hdn-uploadBtn" name="uploadFile" multiple style="display: none;" onchange="asyncUpload(this)">-->
+<!--                            <div>-->
+<!--                                <button id="upload-btn" >-->
+<!--                                <span>-->
+<!--                                    <i>-->
+<!--                                        <img id="icon-camera" src="/custom/img/icon/icon-camera.png">-->
+<!--                                    </i><br>-->
+<!--                                    <span id="uploadBtn-text">사진올리기<br>*3MB이하, 최대 6장까지</span>-->
+<!--                                </span>-->
+<!--                                </button>-->
+<!--                            </div>-->
+
+<!--                            <div id="thumbnail-wrap">-->
+<!--                                <ul></ul>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--        &lt;!&ndash;        <hr class="one">&ndash;&gt;-->
+<!--        <div style="text-align: center;">-->
+<!--            &lt;!&ndash;            <input type="button" id="board-submitBtn" value="올리기">&ndash;&gt;-->
+<!--        </div>-->
+
+
+        <!--upload-img Modal-->
+        <div id="img-Modal" class="img-modal">
+            <!-- Modal content -->
+            <div class="imgModal-content">
+                <span class="imgModal-close">&times;</span>
+                <div id="showImㅈage-area">
+
+                </div>
+            </div>
+        </div> <!--End Login-Model-->
+
+        <!--confirm Modal-->
+        <div id="confirm-modal">
+            <!-- Modal content -->
+            <div class="confirm-content">
+                <div>
+                    <div>
+                        <span id="confirm-notice">작성한 글이 등록되었습니다!<span>
+                    </div>
+                    <div id="confirmBtn-area">
+                        <button id='goDetail-Btn'>내가 쓴 글 보러가기</button> &nbsp;&nbsp;
+                        <button onclick="location.href='/board'">자유게시판으로 가기</button>
+                    </div>
+                </div>
+            </div>
+        </div> <!--End Login-Model-->
+
+
+    </main>
+    <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="/custom/js/common/index.js"></script>
+    <script src="/custom/js/community/market/market_sell.js"></script>

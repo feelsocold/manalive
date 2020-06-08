@@ -80,7 +80,7 @@ function spreadBoardInfo(result) {
     str += "<div class='replyerContent-area'><span class='replyer-nickname'>"+boardDto.nickname+"</span>" + boardDto.content;
     //str += "<textarea readonly id='content-textarea'>" + boardDto.content + "</textarea>";
     str += "<br><span class='reply-date'>"+timeForToday(boardDto.createDate);
-    if(boardDto.createDate != boardDto.modifiedDate){
+    if(boardDto.createDate != boardDto.modifiedDate && boardDto.modifiedDate != null ){
         str += " (" + timeForToday(boardDto.modifiedDate) +" 전 수정됨)" ;
     }
     str += "</span><div id='hashtags-div'></div> </div>";
@@ -99,7 +99,6 @@ function spreadBoardInfo(result) {
     for ( var i in hashtags ) {
         //document.write( '<p>' + jbSplit[i] + '</p>' );
         if(hashtags[i] != ' ' && hashtags[i] != ''){
-            console.log(hashtags);
             $("#hashtags-div").append("<span>#"+hashtags[i]+"</span>&nbsp;");
         }
     }

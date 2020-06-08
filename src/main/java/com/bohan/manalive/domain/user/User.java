@@ -1,13 +1,11 @@
 package com.bohan.manalive.domain.user;
 
 import com.bohan.manalive.config.oauth.dto.BaseTimeEntity;
-import com.bohan.manalive.web.community.domain.Board;
+import com.bohan.manalive.web.community.domain.Board.Board;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;

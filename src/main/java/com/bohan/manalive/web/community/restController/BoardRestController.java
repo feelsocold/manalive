@@ -6,7 +6,7 @@ import com.bohan.manalive.config.oauth.dto.SessionUser;
 import com.bohan.manalive.web.common.dto.AttachDto;
 import com.bohan.manalive.web.common.service.AttachService;
 import com.bohan.manalive.web.common.service.AttachSessionService;
-import com.bohan.manalive.web.community.dto.BoardLikeRequestDto;
+import com.bohan.manalive.web.community.dto.Board.BoardLikeRequestDto;
 import com.bohan.manalive.web.community.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

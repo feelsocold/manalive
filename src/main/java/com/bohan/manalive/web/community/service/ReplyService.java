@@ -1,9 +1,7 @@
 package com.bohan.manalive.web.community.service;
 
-import com.bohan.manalive.web.community.dto.BoardReplyResponseDto;
-import com.bohan.manalive.web.community.dto.BoardReplySaveRequestDto;
+import com.bohan.manalive.web.community.dto.Board.BoardReplySaveRequestDto;
 
-import java.util.List;
 import java.util.Map;
 
 public interface ReplyService {

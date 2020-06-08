@@ -2,10 +2,10 @@ package com.bohan.manalive.web.community.service;
 
 import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
-import com.bohan.manalive.web.community.domain.Board;
-import com.bohan.manalive.web.community.dto.BoardCriteria;
-import com.bohan.manalive.web.community.dto.BoardLikeRequestDto;
-import com.bohan.manalive.web.community.dto.BoardRequestDto;
+import com.bohan.manalive.web.community.domain.Board.Board;
+import com.bohan.manalive.web.community.dto.Board.BoardCriteria;
+import com.bohan.manalive.web.community.dto.Board.BoardLikeRequestDto;
+import com.bohan.manalive.web.community.dto.Board.BoardRequestDto;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +21,6 @@ public interface BoardService {
     public void doLikeBoard(BoardLikeRequestDto dto) throws Exception;
     public void doUnLikeBoard(BoardLikeRequestDto dto) throws Exception;
     public boolean discernLikeBoard(BoardLikeRequestDto dto) throws Exception;
-
+    public void increaseReadcount(Long seq);
 
 }

@@ -10,6 +10,7 @@ $(document).ready(function() {
         url: '/boardDetail',
         data: data,
         success : function(result){
+            console.log(result);
             spreadDto(result);
             uploadedImgCnt = result.attachList.length;
             loadUploadedImg(result.attachList);
@@ -26,6 +27,24 @@ function spreadDto(result) {
     var dto = result.boardDto;
     $("#title").val(dto.title);
     $("#content").val(dto.content);
+
+    var hashtags = dto.hashtags.split(',');
+    for ( var i in hashtags ) {
+        if(hashtags[i] != ' ' && hashtags[i] != ''){
+            hashTagCnt++;
+            var str = "";
+            str += "<div class=\"hashTag-div\" style=\"display: inline-block\"><span class=\"hashTag-span\">#";
+            str += "<input type='text' maxlength='10' class='hashTag-text' name='hashtag' size='auto' readonly value='"+hashtags[i]+"'>";
+            str += "<img class='x-icon' onclick='deleteHashtag(this)' src='/custom/img/icon/icon-x.png'></span></div>";
+            $("#hashTag-wrap").append(str);
+        }
+    }
+    if(hashTagCnt < 7) {
+       // alert(hashTagCnt);
+        var str2 = addHashTag();
+        $("#hashTag-wrap").append(str2);
+        $('.hashTag-text').focus();
+    }
 }
 
 function controlImgCnt() {
@@ -210,9 +229,6 @@ function updateUpload(obj){
                 $('input').attr('disabled', false);
             }
         });
-
-
-
 }
 
 // $('.thumnail-image').on({
@@ -284,18 +300,24 @@ function keydownHash(obj) {
             hashTagCnt++;
             $(obj).attr('readonly', 'readonly');
             $(obj).after("<img class='x-icon' onclick='deleteHashtag(this)' src='/custom/img/icon/icon-x.png'>");
-            if(hashTagCnt < 7) { addHashTag(obj);}
+            alert(hashTagCnt);
+            if(hashTagCnt < 7) {
+                var str = addHashTag();
+                $(obj).closest('.hashTag-div').after(str);
+                $('.hashTag-text').focus();
+
+            }
         }
     }
 }
 
-function addHashTag(obj) {
+function addHashTag() {
     var str = "";
     str += "<div class='hashTag-div' style='display: inline-block'>";
     str += "<span class='size-span' style='display:none'></span><span class='hasTag-span'>#";
     str += "<input type='text' maxlength='13' name='hashtag' class='hashTag-text' onkeyup='keyUpHash(this)' onkeydown='keydownHash(this)' placeholder='키워드' size='5' ></span></div>";
-    $(obj).closest('.hashTag-div').after(str);
-    $('.hashTag-text').focus();
+    return str;
+
 }
 
 function keyUpHash(obj) {
@@ -310,7 +332,12 @@ function keyUpHash(obj) {
 }
 function deleteHashtag(obj) {
     hashTagCnt--;
-    if(hashTagCnt == 6) {addHashTag(obj);}
+    alert(hashTagCnt);
+    if(hashTagCnt < 7 ) {
+        var str = addHashTag();
+        $("#hashTag-wrap").append(str);
+        $('.hashTag-text').focus();
+    }
     $(obj).closest('.hashTag-div').remove();
 }
 

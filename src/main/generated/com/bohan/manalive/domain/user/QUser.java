@@ -22,7 +22,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final com.bohan.manalive.config.oauth.dto.QBaseTimeEntity _super = new com.bohan.manalive.config.oauth.dto.QBaseTimeEntity(this);
 
-    public final ListPath<com.bohan.manalive.web.community.domain.Board, com.bohan.manalive.web.community.domain.QBoard> boardList = this.<com.bohan.manalive.web.community.domain.Board, com.bohan.manalive.web.community.domain.QBoard>createList("boardList", com.bohan.manalive.web.community.domain.Board.class, com.bohan.manalive.web.community.domain.QBoard.class, PathInits.DIRECT2);
+    public final ListPath<com.bohan.manalive.web.community.domain.Board.Board, com.bohan.manalive.web.community.domain.Board.QBoard> boardList = this.<com.bohan.manalive.web.community.domain.Board.Board, com.bohan.manalive.web.community.domain.Board.QBoard>createList("boardList", com.bohan.manalive.web.community.domain.Board.Board.class, com.bohan.manalive.web.community.domain.Board.QBoard.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;

@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -16,6 +17,8 @@ import com.querydsl.core.types.Path;
 public class QAttach extends EntityPathBase<Attach> {
 
     private static final long serialVersionUID = 1878436069L;
+
+    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QAttach attach = new QAttach("attach");
 
@@ -32,6 +35,8 @@ public class QAttach extends EntityPathBase<Attach> {
 
     public final StringPath filename = createString("filename");
 
+    public final com.bohan.manalive.web.community.domain.Market.QMarket marketAttach;
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
@@ -42,15 +47,24 @@ public class QAttach extends EntityPathBase<Attach> {
     public final StringPath uuid = createString("uuid");
 
     public QAttach(String variable) {
-        super(Attach.class, forVariable(variable));
+        this(Attach.class, forVariable(variable), INITS);
     }
 
     public QAttach(Path<? extends Attach> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QAttach(PathMetadata metadata) {
-        super(Attach.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QAttach(PathMetadata metadata, PathInits inits) {
+        this(Attach.class, metadata, inits);
+    }
+
+    public QAttach(Class<? extends Attach> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.marketAttach = inits.isInitialized("marketAttach") ? new com.bohan.manalive.web.community.domain.Market.QMarket(forProperty("marketAttach")) : null;
     }
 
 }

@@ -9,11 +9,11 @@ import com.bohan.manalive.web.common.domain.attach.AttachRepository;
 import com.bohan.manalive.web.common.dto.AttachDto;
 import com.bohan.manalive.web.common.dto.AttachResponseDto;
 import com.bohan.manalive.web.common.service.AttachService;
-import com.bohan.manalive.web.community.domain.Board;
-import com.bohan.manalive.web.community.domain.BoardLikeRepository;
-import com.bohan.manalive.web.community.domain.BoardRepository;
-import com.bohan.manalive.web.community.domain.BoardSpecs;
-import com.bohan.manalive.web.community.dto.*;
+import com.bohan.manalive.web.community.domain.Board.Board;
+import com.bohan.manalive.web.community.domain.Board.BoardLikeRepository;
+import com.bohan.manalive.web.community.domain.Board.BoardRepository;
+import com.bohan.manalive.web.community.domain.Board.BoardSpecs;
+import com.bohan.manalive.web.community.dto.Board.*;
 import com.bohan.manalive.web.community.service.BoardService;
 import com.bohan.manalive.web.community.service.ReplyService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ public class BoardServiceImpl implements BoardService {
     private final AttachRepository attachRepo;
     private final HttpSession httpSession;
     private final S3Uploader s3Uploader;
+    LocalDateTime currentDateTime = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 //    @PersistenceContext
 //    private EntityManager em;
@@ -81,7 +83,6 @@ public class BoardServiceImpl implements BoardService {
                 searchKeys.put(BoardSpecs.SearchKey.valueOf(key.toUpperCase()), searchRequest.get(key));
             }
             pageInfo = boardRepo.findAll(BoardSpecs.searchWith(searchKeys), paging);
-
         }
 
         Long total = pageInfo.getTotalElements();
@@ -117,7 +118,6 @@ public class BoardServiceImpl implements BoardService {
         List<AttachResponseDto> attachList = boardRepo.getBoardAttachList(seq);
         map.put("attachList", attachList);
 
-
         // 댓글 리스트
         //List<BoardReplyResponseDto> replyList = replyService.getBoardReplyList(seq, 0);
         replyObj = replyService.getBoardReplyList(seq, 0, 0);
@@ -129,7 +129,6 @@ public class BoardServiceImpl implements BoardService {
 
         return map;
     }
-
 
     @Transactional
     @Override
@@ -154,10 +153,11 @@ public class BoardServiceImpl implements BoardService {
     public Long updateBoard(BoardRequestDto dto) throws Exception {
         log.info(dto.toString());
 
+
         Board board = boardRepo.findById(dto.getSeq())
                 .map(entity -> entity.update(dto.getTitle(),
                                             dto.getContent(),
-                                            dto.getHashtags())).get();
+                                            dto.getHashtags(), currentDateTime)).get();
 
         // 첨부파일 수정
         List<AttachDto> savedList = attachService.getAttachList(dto.getSeq(), "boardPhoto");
@@ -298,6 +298,15 @@ public class BoardServiceImpl implements BoardService {
     public boolean discernLikeBoard(BoardLikeRequestDto dto) throws Exception {
         int a = boardLikeRepo.discernBoardLike(dto.getB_seq(), dto.getEmail());
         return a>0 ? true : false;
+    }
+
+    @Override
+    public void increaseReadcount(Long seq) {
+        Board board = boardRepo.findById(seq).get();
+        int beforeCnt = board.getReadCount();
+
+        boardRepo.findById(seq)
+                .map(entity -> entity.update(beforeCnt+1));
     }
 
 }

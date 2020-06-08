@@ -19,12 +19,15 @@ function spreadBoardList( data ) {
     for(var i=0; i < boardList.length; i++) {
         var str = "";
         str += "<tr><td>" + boardList[i].seq + "</td>";
-        str += "<td style='text-align: left; padding-left: 25px; color: #337ab7;' class='board-title'><a href='/board/detail/"+boardList[i].seq+"'>" + boardList[i].title + "</a></td>";
-        str += "<td style='text-align: left; padding-left: 10px'>" + "<img class='profile-photo' src='"+ userDetail[i].photo +"'>";
+        str += "<td style='text-align: left; padding-left: 25px; color: #337ab7;' class='board-title'><a href='/board/detail/"+boardList[i].seq+"'>" + boardList[i].title + "</a>";
+        if(boardList[i].boardReplyList.length != 0){
+            str += "<span style='color:#707070; font-size: 11px;'> ("+boardList[i].boardReplyList.length + ")</span>";
+        }
+        str += "</td><td style='text-align: left; padding-left: 10px'>" + "<img class='profile-photo' src='"+ userDetail[i].photo +"'>";
         str += userDetail[i].nickname + "</td>";
         str += "<td>" + timeForToday(boardList[i].createDate) + "</td>";
-        str += "<td>" + "0" + "</td>";
-        str += "<td>" + "0" + "</td></tr>";
+        str += "<td>" + boardList[i].readCount + "</td>";
+        str += "<td>" + boardList[i].boardLikeList.length + "</td></tr>";
         $(".board-data").append(str);
     }
 }

@@ -15,6 +15,7 @@ public class SessionUser implements Serializable {
     private Role role;
     private String photo;
     private String nickname;
+    private String phone;
 
     public SessionUser(User user) {
         this.name = user.getName();
@@ -22,6 +23,7 @@ public class SessionUser implements Serializable {
         this.photo = user.getPhoto();
         this.role = user.getRole();
         this.nickname = user.getNickname();
+        this.phone = user.getPhone();
 
     }
 

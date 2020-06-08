@@ -2,15 +2,12 @@ package com.bohan.manalive.web.community.restController;
 
 import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
-import com.bohan.manalive.web.community.dto.BoardReplyResponseDto;
-import com.bohan.manalive.web.community.dto.BoardReplySaveRequestDto;
+import com.bohan.manalive.web.community.dto.Board.BoardReplySaveRequestDto;
 import com.bohan.manalive.web.community.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j

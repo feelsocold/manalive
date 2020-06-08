@@ -29,7 +29,10 @@ public class FileController implements Serializable {
     @PostMapping("/s3Upload")
     public List<String> s3Upload(MultipartFile[] multipartFile,
                                  @RequestParam("category") String category) throws IOException{
+        log.info("s3Upload()");
+
         List<String> fileList = s3Uploader.upload(multipartFile, category);
+
         return fileList;
     }
 

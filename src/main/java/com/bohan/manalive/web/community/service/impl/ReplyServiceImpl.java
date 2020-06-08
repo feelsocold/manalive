@@ -1,8 +1,8 @@
 package com.bohan.manalive.web.community.service.impl;
 
-import com.bohan.manalive.web.community.domain.BoardReplyRepository;
-import com.bohan.manalive.web.community.dto.BoardReplyResponseDto;
-import com.bohan.manalive.web.community.dto.BoardReplySaveRequestDto;
+import com.bohan.manalive.web.community.domain.Board.BoardReplyRepository;
+import com.bohan.manalive.web.community.dto.Board.BoardReplyResponseDto;
+import com.bohan.manalive.web.community.dto.Board.BoardReplySaveRequestDto;
 import com.bohan.manalive.web.community.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

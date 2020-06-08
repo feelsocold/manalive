@@ -3,11 +3,10 @@ package com.bohan.manalive.web.community.controller;
 import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
 import com.bohan.manalive.web.common.dto.AttachDto;
-import com.bohan.manalive.web.common.dto.AttachResponseDto;
 import com.bohan.manalive.web.common.service.AttachService;
-import com.bohan.manalive.web.community.domain.Board;
-import com.bohan.manalive.web.community.dto.BoardCriteria;
-import com.bohan.manalive.web.community.dto.BoardRequestDto;
+import com.bohan.manalive.web.community.domain.Board.Board;
+import com.bohan.manalive.web.community.dto.Board.BoardCriteria;
+import com.bohan.manalive.web.community.dto.Board.BoardRequestDto;
 import com.bohan.manalive.web.community.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class BoardController {
     }
 
     @GetMapping("")
-    public String board() {
+    public String boardIndex() {
         return "/community/board/board";
     }
 
@@ -95,7 +93,8 @@ public class BoardController {
     }
 
     @GetMapping("/detail/{seq}")
-    public String boardDetail(@PathVariable String seq, Model model) {
+    public String boardDetail(@PathVariable Long seq, Model model) {
+        boardService.increaseReadcount(seq);
         model.addAttribute("seq", seq);
         return "community/board/board_detail";
     }

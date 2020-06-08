@@ -29,16 +29,24 @@ public class IndexController {
         logger.info("INDEX()");
 
         //SessionUser user = (SessionUser) httpSession.getAttribute("user");
-
         if(user != null) {
             model.addAttribute("userName", user.getName());
             model.addAttribute("user", user);
 
             logger.info(user.getRole().getKey());
-             if(user.getRole().getKey().equals("ROLE_GUEST")){
+
+             if(user.getRole().getKey().equals("ROLE_GUEST")) {
 //                 model.addAttribute("user", user);
-                return "redirect:/register";
-            }
+                 return "redirect:/register";
+             }else if(user.getRole().getKey().equals("ROLE_ADMIN")){
+//                 model.addAttribute("user", user);
+
+                 return "redirect:/admin";
+             }
+//            }else if(user.getRole().getKey().equals("ROLE_ADMIN")){
+////                 model.addAttribute("user", user);
+//                 return "admin/adminStart";
+//             }
         }
         return "index";
     }

@@ -9,7 +9,6 @@ $(document).ready(function() {
             document.getElementById("oper").value = operation;
         }
         formObj.submit();
-
     })
 
 // 이메일 중복 체크

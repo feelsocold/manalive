@@ -236,7 +236,7 @@ function keydownHash(obj) {
 function addHashTag(obj) {
     var str = "";
     str += "<div class='hashTag-div' style='display: inline-block'>";
-    str += "<span class='size-span' style='display:none'></span><span class='hasTag-span'>#";
+    str += "<span class='size-span' style='display:none'></span><span class='hashTag-span'>#";
     str += "<input type='text' maxlength='13' name='hashtag' class='hashTag-text' onkeyup='keyUpHash(this)' onkeydown='keydownHash(this)' placeholder='키워드' size='5' ></span></div>";
     $(obj).closest('.hashTag-div').after(str);
     $('.hashTag-text').focus();
