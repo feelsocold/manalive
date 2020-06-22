@@ -19,13 +19,15 @@
         <div class="main-container">
             <div class="market-wrap" style="border: 0px solid">
                 <h2 style="float: left; font-weight: bold;">중고마켓</h2>
+                <span id="marketsearch-span"><input type="text" id="marketsearch-input" placeholder="상품명, 상점이름으로 검색해보세요." onkeyup="getXicon(this.value)">
+                    <button type="button" id="searchemtpy-btn" onclick="emptysearchinput(this)"><img src='/custom/img/icon/icon-X-empty.png'></button>
+                    <button type="button" id='marketsearch-btn' value="검색" onclick="">검색</button></span>
                 <input th:if="${session['user'] != null && not #strings.isEmpty(session['user'].phone)}" type="button" id="goSell-btn" value="판매하기" onclick="location.href='/market/sell'">
-                <input th:if="${(session['user'] != null && #strings.isEmpty(session['user'].phone)) or (session['user'] == null)}" type="button" id="makeMarket-btn" value="내 상점 개설하기" onclick="">
+                <input th:if="${(session['user'] != null && #strings.isEmpty(session['user'].phone)) or (session['user'] == null)}" type="button" id="makeMarket-btn" value="내 상점 개설하기" onclick="makeMarket()">
                 <br>
-            <div>
+            <div style="margin-top: 25px;">
                 <div id='category-area'>
                     <h4 style="margin-left: 12px;">카테고리</h4>
-
                     <li class="category-list">
                         <ul data-oper="">전체 상품</ul>
                         <ul data-oper="VINYL">VINYL</ul>
@@ -41,7 +43,7 @@
                 </div>
             </div>
 
-            <div class="container" id="paging-wrap" style="display: none;">
+            <div class="container" id="paging-wrap" style="display: inline-block">
                 <div class="row">
                     <div class="col">
                         <ul class="pagination pagination-sm" id="paging">
@@ -50,9 +52,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        </div>
+            <input type="hidden" id="paging-category" value="">
     </main>
 
     <script src="/custom/js/common/index.js"></script>

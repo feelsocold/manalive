@@ -60,10 +60,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }else {
             logger.info("아이디 XXXXXXXXXXXXXXX");
         }
-        User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName()))
-                //.map(entity -> entity.update(attributes.getName()))
-                .orElse(attributes.toEntity());
+//        User user = userRepository.findByEmail(attributes.getEmail())
+//                .map(entity -> entity.update(attributes.getName()))
+//                //.map(entity -> entity.update(attributes.getName()))
+//                .orElse(attributes.toEntity());
+        User user = userRepository.findByEmail(attributes.getEmail()).get();
 
         setSessionAttach(attributes.getPicture());
 

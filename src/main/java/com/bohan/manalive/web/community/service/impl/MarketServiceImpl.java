@@ -3,10 +3,12 @@ package com.bohan.manalive.web.community.service.impl;
 import com.bohan.manalive.web.community.domain.Market.Market;
 import com.bohan.manalive.web.community.domain.Market.MarketRepository;
 import com.bohan.manalive.web.community.domain.Market.MarketSpecs;
+import com.bohan.manalive.web.community.domain.UserMarket.UserMarketRepository;
 import com.bohan.manalive.web.community.dto.Market.MarketCriteria;
 import com.bohan.manalive.web.community.dto.Market.MarketPageDto;
 import com.bohan.manalive.web.community.dto.Market.MarketRequestDto;
 import com.bohan.manalive.web.community.dto.Board.PageDto;
+import com.bohan.manalive.web.community.dto.UserMarket.UserMarketRequestDto;
 import com.bohan.manalive.web.community.service.MarketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,15 +29,15 @@ import java.util.Map;
 @Service
 public class MarketServiceImpl implements MarketService {
 
-
-    private final MarketRepository marketRep;
+    private final MarketRepository marketRepo;
+    private final UserMarketRepository userMarketRepo;
 
     LocalDateTime currentDateTime = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
     @Override
-    public Long saveBoard(MarketRequestDto requestDto) throws Exception {
-        return marketRep.save(requestDto.toEntity()).getSeq();
+    public Long saveMarket(MarketRequestDto requestDto) throws Exception {
+        return marketRepo.save(requestDto.toEntity()).getSeq();
     }
 
     @Override
@@ -51,13 +53,11 @@ public class MarketServiceImpl implements MarketService {
         ) {
             log.info("criteria는 없다");
 
-            pageInfo = marketRep.findAll(paging);
+            pageInfo = marketRepo.findAll(paging);
         }
         // 조건을 가질 때
         else if( (criteria.getKeyword() != null && !criteria.getKeyword().equals("") ) ||
                 (criteria.getCategory() != null && !criteria.getCategory().equals("")) ){
-
-
 
             Map<String, Object> searchRequest = new HashMap<>();
             searchRequest.put(criteria.getCategory(), criteria.getKeyword());
@@ -66,21 +66,13 @@ public class MarketServiceImpl implements MarketService {
             for (String key : searchRequest.keySet()) {
                 searchKeys.put(MarketSpecs.SearchKey.valueOf(key.toUpperCase()), searchRequest.get(key));
             }
-            pageInfo = marketRep.findAll(MarketSpecs.searchWith(searchKeys), paging);
+            pageInfo = marketRepo.findAll(MarketSpecs.searchWith(searchKeys), paging);
         }
 
         Long total = pageInfo.getTotalElements();
         log.info("board total : " + total);
         List<Market> marketList = pageInfo.getContent();
         log.info(marketList.size() + " <- 마켓리스트 사이즈");
-
-//        List<BoardUserDetailDto> detailList = new ArrayList<>();
-//        for(Market BoardDto : boardList){
-//            BoardUserDetailDto userDetail = new BoardUserDetailDto();
-//            userDetail.setNickname(BoardDto.getUserDetail().getNickname());
-//            userDetail.setPhoto(BoardDto.getUserDetail().getPhoto());
-//            detailList.add(userDetail);
-//        }
 
         HashMap<String, Object> map = new HashMap<>();
         //map.put("userDetail", detailList);
@@ -89,4 +81,23 @@ public class MarketServiceImpl implements MarketService {
 
         return map;
     }
+
+    @Override
+    public HashMap<String, Object> getMarketDetail(Long seq) {
+
+        HashMap<String, Object> map = new HashMap<>();
+        Market market = marketRepo.findById(seq).get();
+
+        map.put("userMarketDto", market.getUserMarket());
+        map.put("marketDto", market);
+
+        return map;
+    }
+
+    @Override
+    public Long openMarket(UserMarketRequestDto dto) throws Exception {
+        return userMarketRepo.save(dto.toEntity()).getSeq();
+    }
+
+
 }

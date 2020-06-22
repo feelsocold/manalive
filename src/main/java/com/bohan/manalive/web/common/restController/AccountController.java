@@ -34,8 +34,8 @@ public class AccountController {
 
     // 회원가입시 이메일 중복체크
     @PostMapping("/duplicate_check")
-    public Boolean duplicate_check(String email) {
-        boolean bool = userService.duplicateCheck(email);
+    public Boolean duplicateEmailCheck(String email) {
+        boolean bool = userService.duplicateEmailCheck(email);
         return bool;
     }
 
@@ -57,8 +57,24 @@ public class AccountController {
 
     @PostMapping("/user/login")
     public void userLogin(String login_email, String login_password) throws Exception {
-
-
         logger.error("======> userLogin()");
     }
+
+    // 휴대폰 본인인증시 번호 중복체크
+    @PostMapping("/duplicatePhoneCheck")
+    public Boolean duplicatePhoneCheck(String phone) {
+        return userService.duplicatePhoneCheck(phone);
+    }
+
+    // 휴대폰 본인인증 번호 전송
+    @PostMapping("/smsAuthentication_send")
+    public int smsAuthentication_send(HttpServletRequest req, String addrs, String to) throws MailException, MessagingException {
+        logger.info(to + "");
+        double result = (int)Math.floor(Math.random() * 1000000)+100000;
+        if(result>1000000){
+            result = result - 100000;
+        }
+        return (int)Math.round(result);
+    }
+
 }

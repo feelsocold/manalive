@@ -40,7 +40,8 @@ public class FileController implements Serializable {
     public void s3Delete(@RequestParam(value="oper") int oper,
                             @RequestParam("category") String category) throws Exception{
         log.info("s3Delete");
-        attachSessionService.deleteS3Attach(oper, category);
+        log.info(oper + ", " + category);
+
 
         // s3 스토리지에서 삭제
         List<AttachDto> attachList = (List<AttachDto>)httpSession.getAttribute("attachList");
@@ -49,6 +50,7 @@ public class FileController implements Serializable {
         String dirName = category + "/" + s3Uploader.getTodayFolder();
         s3Uploader.deleteFile(dirName, fileName);
 
+        attachSessionService.deleteS3Attach(oper, category);
     }
 
     @PostMapping("/s3Update")

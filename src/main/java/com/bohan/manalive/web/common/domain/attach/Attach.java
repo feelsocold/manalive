@@ -3,6 +3,7 @@ package com.bohan.manalive.web.common.domain.attach;
 import com.bohan.manalive.config.oauth.dto.BaseTimeEntity;
 import com.bohan.manalive.web.community.domain.Board.Board;
 import com.bohan.manalive.web.community.domain.Market.Market;
+import com.bohan.manalive.web.community.domain.UserMarket.UserMarket;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jdk.vm.ci.code.site.Mark;
 import lombok.Builder;
@@ -47,6 +48,12 @@ public class Attach extends BaseTimeEntity {
     @JoinColumn(referencedColumnName = "seq", name="superKey", nullable = false, insertable = false, updatable = false)
     @Where(clause = "category = 'marketPhoto'")
     private Market marketAttach;
+
+    @ManyToOne(targetEntity= UserMarket.class, fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    @JoinColumn(referencedColumnName = "seq", name="superKey", nullable = false, insertable = false, updatable = false)
+    @Where(clause = "category = 'marketProfile_Photo'")
+    private UserMarket userMarket;
 
     @Builder
     public Attach(String filename, String category, Long superKey, String extension, String uuid, String url) {

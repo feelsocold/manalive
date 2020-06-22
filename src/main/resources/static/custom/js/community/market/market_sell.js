@@ -3,14 +3,19 @@ var hashTagCnt = 0;
 
 
 // 이미지 클릭시 파일버튼 클릭
-$(function () {
-    $('#upload-btn').click(function (e) {
-        e.preventDefault();
-        $('#hdn-uploadBtn').click();
-    });
+// $(function () {
+//     $('#upload-btn').click(function (e) {
+//         e.preventDefault();
+//         $('#hdn-uploadBtn').click();
+//     });
+// });
+$(document).on('click','#upload-btn',function(e){
+    e.preventDefault();
+    $('#hdn-uploadBtn').click();
 });
 
 function asyncUpload(obj){
+
     var file = $("input[name='uploadFile']");
     var formData = new FormData();
     var files = file[0].files;
@@ -22,6 +27,10 @@ function asyncUpload(obj){
         formData.append("category", "marketPhoto");
         console.log(files);
 
+        if(uploadedImgCnt + files.length > 5) {
+            $("#upload-btn").hide();
+        }
+
         $.ajax({
             url: '/s3Upload',
             processData: false,
@@ -32,7 +41,9 @@ function asyncUpload(obj){
             success : function(result){
                 uploadedImgCnt += files.length;
                 console.log("upload result : " + result);
+
                 showUploadedImg(result);
+                // $("#upload-btn").remove();
             },error: function (jqXHR, textStatus, errorThrown) {
 
             },beforeSend:function(){
@@ -59,26 +70,25 @@ function asyncUpload(obj){
 }
 function showUploadedImg(result) {
     for(var i = 0; i < result.length; i++) {
+        // $("#upload-btn").before
         $("#thumbnail-wrap ul").append("<li><img src='"+ result[i] +"' onclick='showImage(this)' class='thumnail-image'>" +
             "<br><button class='thumb-Btn' id='thumb-delBtn' onclick='imgDelete(this)'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-trashbin.png'></button>" +
             "<input type='file' onchange='updateUpload(this)' class='re-uploadBtn' name='uploadFile' style='display: none;' multiple>" +
             "&nbsp;<button class='thumb-Btn' id='thumb-modBtn' onclick='imgUpdate(this)'><img style='width:15px; height:15px;' src='/custom/img/icon/icon-modify.png'></button></li>");
     }
 
-    if(uploadedImgCnt< 6) {
-        $("#upload-btn").html("사진 추가하기 (" + uploadedImgCnt + "/6)");
-        $("#upload-btn").css('height', '40px');
-    }else {
-        $("#upload-btn").hide();
-    }
+    // if(uploadedImgCnt< 6) {
+
+        $("#uploadBtn-cnt").html(uploadedImgCnt);
+
+    // }
 }
 function imgDelete(obj) {
-    var oper = $(obj).closest("li").index();
-    //alert("index -------" + oper);
+    var oper = $(obj).closest("li").index() - 1;
 
     $(obj).closest("li").remove();
 
-    var data = { oper : oper,
+    var data = { oper : oper ,
                 category : "marketPhoto" };
         $.ajax({
             url: '/s3Delete',
@@ -86,8 +96,7 @@ function imgDelete(obj) {
             type: 'POST',
             success : function(result){
                 uploadedImgCnt--;
-                $("#upload-btn").html("사진 추가하기 (" + uploadedImgCnt + "/6)");
-                $("#upload-btn").css('height', '40px');
+                $("#uploadBtn-cnt").html(uploadedImgCnt);
                 $("#upload-btn").show();
             },beforeSend:function(){
                 $('button').css('opacity', '0.2');
@@ -284,7 +293,7 @@ $('#sell-submitBtn').click(function (e) {
                 console.log(result.boardSeq);
                 //document.getElementById('confirm-Modal').show();
 
-                $("#goDetail-Btn").attr("onclick", "location.href='/board/detail/"+result.seq +"'");
+                $("#goDetail-Btn").attr("onclick", "location.href='/market/detail/"+result.seq +"'");
 
                 $("#confirm-modal").show();
 

@@ -2,6 +2,7 @@ $.get("/market/list", function ( data ) {
     //alert(data);
     console.log(data);
     spreadMarketList(data);
+    spreadPaging(data.pageMaker);
 });
 
 function spreadMarketList( data ) {
@@ -12,14 +13,14 @@ function spreadMarketList( data ) {
     // LIST 뿌리기
     for(var i = 0; i < list.length; i++) {
         var str = "";
-        str += "<div class='item-wrapper'>";
+        str += "<div class='item-wrapper' data-oper='"+list[i].seq+"'>";
         str += "<div class='item-image'><img src='"+list[i].attachList[0].url+"'></div>";
         str += "<div class='item-info'>";
         str += "<span class='item-title'>"+list[i].title+"</span><br>";
-        str += "<span class='item-price'>"+numberFormat(list[i].price)+"원</span><br>";
+        str += "<span class='item-price'>"+numberFormat(list[i].price)+" 원</span><br>";
         str += "<span class='item-regdate'>"+timeForToday(list[i].createDate)+"</span><hr>";
-        str += "<span class='item-readcnt'>조회 <label>"+"0"+"</label></span>&nbsp;";
-        str += "<span class='item-wishcnt'>&sdot;&nbsp;찜 <label>"+"0"+"</label></span>";
+        str += "<span class='item-readcnt'>조회 <label>"+"0"+"</label></span>";
+        str += "<span class='item-wishcnt'>&nbsp;&sdot;&nbsp;찜 <label>"+"0"+"</label></span>";
         str += "</div>";
         $("#list-wrap").append(str);
     }
@@ -51,6 +52,8 @@ $(".category-list").on('click','ul',function(e){
     var oper = $(this).data("oper");
 
     $("#categoryinfo-wrap h5").html(oper);
+    $("#paging-category").val(oper);
+
     var data;
     if( oper !== "") {
          data = { "category" : "CATEGORY",
@@ -69,6 +72,7 @@ $(".category-list").on('click','ul',function(e){
         success : function(result){
             console.log(result);
             spreadMarketList(result);
+            spreadPaging(result.pageMaker);
         },error: function (jqXHR, textStatus, errorThrown) {
             alert("error");
         },beforeSend:function(){
@@ -81,21 +85,28 @@ $(".category-list").on('click','ul',function(e){
 
 });
 
+$(document).on('click','.item-wrapper',function(e){
+    var seq = $(this).data("oper");
+    location.href = "/market/detail/" + seq;
+
+});
 $(document).on('click','.page-item a',function(e){
     e.preventDefault();
     var pageNumber = $(this).attr("href");
 
-    var data = { "pageNumber" : pageNumber };
+    var data = { "pageNumber" : pageNumber,
+                 "category" : "CATEGORY",
+                 "keyword" : $("#paging-category").val() };
 
     $.ajax({
         type: 'GET',
-        url: '/board/list',
+        url: '/market/list',
         //data: JSON.stringify(data),
         data: data,
         dataType : 'json',
         success : function(result){
-
-            spreadBoardList(result);
+            console.log(result);
+            spreadMarketList(result);
             spreadPaging( result.pageMaker );
 
         },error: function (jqXHR, textStatus, errorThrown) {
@@ -145,4 +156,26 @@ function timeForToday(value) {
 // 통화 변환
 function numberFormat( value ) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function getXicon( val ){
+    if(val.length) {
+        $("#searchemtpy-btn").css("display", "inline");
+    }else{
+        $("#searchemtpy-btn").css("display", "none");
+    }
+}
+
+function emptysearchinput(obj){
+    $("#marketsearch-input").val("");
+    $(obj).css("display", "none");
+}
+
+function makeMarket() {
+    var sessionVal = $("#sessionUser").val();
+    if(sessionVal == "") {
+        $('#Login-Btn').click();
+    }else{
+        location.href="/market/open";
+    }
 }

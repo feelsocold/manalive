@@ -64,7 +64,7 @@ public class QAttach extends EntityPathBase<Attach> {
 
     public QAttach(Class<? extends Attach> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.marketAttach = inits.isInitialized("marketAttach") ? new com.bohan.manalive.web.community.domain.Market.QMarket(forProperty("marketAttach")) : null;
+        this.marketAttach = inits.isInitialized("marketAttach") ? new com.bohan.manalive.web.community.domain.Market.QMarket(forProperty("marketAttach"), inits.get("marketAttach")) : null;
     }
 
 }

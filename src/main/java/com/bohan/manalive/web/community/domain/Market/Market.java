@@ -4,6 +4,7 @@ import com.bohan.manalive.domain.user.User;
 import com.bohan.manalive.web.common.domain.attach.Attach;
 import com.bohan.manalive.web.community.domain.Board.BoardLike;
 import com.bohan.manalive.web.community.domain.Board.BoardReply;
+import com.bohan.manalive.web.community.domain.UserMarket.UserMarket;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -21,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 //@EqualsAndHashCode(callSuper = false, exclude = {"user"})
-@ToString(exclude = "attachList")
+@ToString(exclude = "attachList, userMarket")
 @Entity
 public class Market implements Serializable {
 
@@ -76,6 +77,11 @@ public class Market implements Serializable {
 //
 //    @OneToMany(mappedBy="replyBoard", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<BoardReply> boardReplyList = new ArrayList<>();
+    @ManyToOne(targetEntity= UserMarket.class, fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    @JoinColumn(referencedColumnName = "email", name="email", nullable = false, insertable = false, updatable = false)
+    //@Where(clause = "category = 'marketPhoto'")
+    private UserMarket userMarket;
 
     @Builder
     public Market(String email, String title, String content, String category, String state, String delivery, int price, int quantity, LocalDateTime createDate) {

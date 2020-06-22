@@ -25,16 +25,17 @@
                     <div class="sell-left">상품 사진</div>
                     <div class="sell-right">
                         <input type="file" id="hdn-uploadBtn" name="uploadFile" multiple style="display: none;" onchange="asyncUpload(this)">
-                        <button id="upload-btn" >
+
+                        <div id="thumbnail-wrap" style="float:left;">
+                            <ul>
+                            <button id='upload-btn'>
                                 <span>
-                                    <i>
-                                        <img id="icon-camera" src="/custom/img/icon/icon-camera.png">
-                                    </i><br>
-                                    <span id="uploadBtn-text">사진올리기<br>*3MB이하, 최대 6장까지</span>
+                                    <i><img id='icon-camera' src='/custom/img/icon/icon-camera.png'></i><br>
+                                    <span id='uploadBtn-text'>사진올리기<br>*3MB이하, 최대 6장까지</span><br>
+                                    <span>( <lable id='uploadBtn-cnt'>0 </lable>/ 6 )</span>
                                 </span>
-                        </button>
-                        <div id="thumbnail-wrap">
-                            <ul></ul>
+                            </button>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -54,7 +55,7 @@
                             <option>CD</option>
                             <option>CASSETTE</option>
                             <option>GOODS</option>
-                            <option>기타</option>
+                            <option>ETC</option>
                         </select>
                     </div>
                 </div>
@@ -90,9 +91,6 @@
                         <div style="float:right; margin-top: 20px;"><span style="margin-left: 15px"><label id="title-ContentCnt">0</label>/2000</span></div>
                     </div>
                 </div>
-
-
-
             </div>
 
 
@@ -167,11 +165,11 @@
             <div class="confirm-content">
                 <div>
                     <div>
-                        <span id="confirm-notice">작성한 글이 등록되었습니다!<span>
+                        <span id="confirm-notice">판매 등록이 완되었습니다!<span>
                     </div>
                     <div id="confirmBtn-area">
                         <button id='goDetail-Btn'>내가 쓴 글 보러가기</button> &nbsp;&nbsp;
-                        <button onclick="location.href='/board'">자유게시판으로 가기</button>
+                        <button onclick="location.href='/market'">중고마켓으로 가기</button>
                     </div>
                 </div>
             </div>

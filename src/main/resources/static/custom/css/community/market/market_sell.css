@@ -165,13 +165,20 @@
 }
 #upload-btn {
     font-size: 14px;
-    width: 200px;
-    height: 200px;
-    border-radius: 5px;
+    width: 190px;
+    height: 190px;
+    border-radius: 8px;
     background-color: #F6F6F6;
-    border: 1px solid #F6F6F6;
+    border: 1px solid #D5D5D5;
     margin-bottom: 10px;
+    float: left;
+    margin-right: 13px;
 }
+#upload-btn:hover{
+    transform: scale(1.1, 1.1);
+    opacity: 0.9;
+}
+
 #icon-camera {
     width: 50px;
     height: 50px;
@@ -187,6 +194,7 @@
 
 #thumbnail-wrap ul li {
     list-style:none;
+    float: left;
 }
 
 #thumbnail-wrap ul li img{
@@ -222,12 +230,11 @@
     width: 15px;
     height: 15px;
     margin-right: 4px;
-
-
 }
 .thumb-Btn:hover {
-    opacity: 0.1;
+    opacity: 0.3;
 }
+
 /* The Modal (background) */
 .img-modal {
     display: none; /* Hidden by default */

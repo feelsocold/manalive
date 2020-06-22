@@ -16,6 +16,7 @@ body {
   color: #212529;
   margin-top: 108px;
   height: auto;
+  overflow-x:hidden;
   /*height:1500px;*/
 }
 

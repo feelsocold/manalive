@@ -1,5 +1,6 @@
 package com.bohan.manalive.web.common.service;
 
+import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.RegisterUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
 import com.bohan.manalive.web.common.domain.attach.AttachRepository;
@@ -93,9 +94,8 @@ public class UserService {
         httpSession.setAttribute("user", new SessionUser(user));
     }
 
-    public Boolean duplicateCheck(String email) {
+    public Boolean duplicateEmailCheck(String email) {
         boolean bool;
-        //User user = userRepository.findByEmail(email).orElse(null);
         Optional<User> userOpt =  userRepository.findByEmail(email);
         if (userOpt.isPresent()) {
             User user = userRepository.findByEmail(email).get();
@@ -112,5 +112,20 @@ public class UserService {
             return bool;
         }
     }
+
+    public Boolean duplicatePhoneCheck(String phone) {
+        Optional<User> userOpt =  userRepository.findByPhone(phone);
+        return (userOpt.isPresent()) ? true : false;
+    }
+
+    public void updatePhone(String email, String phone) {
+
+        User user = userRepository.findByEmail(email)
+                .map(entity -> entity.update(phone)).get();
+
+        httpSession.setAttribute("user", new SessionUser(user));
+
+    }
+
 
 }

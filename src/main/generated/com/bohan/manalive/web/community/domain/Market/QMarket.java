@@ -18,6 +18,8 @@ public class QMarket extends EntityPathBase<Market> {
 
     private static final long serialVersionUID = -714812309L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QMarket market = new QMarket("market");
 
     public final ListPath<com.bohan.manalive.web.common.domain.attach.Attach, com.bohan.manalive.web.common.domain.attach.QAttach> attachList = this.<com.bohan.manalive.web.common.domain.attach.Attach, com.bohan.manalive.web.common.domain.attach.QAttach>createList("attachList", com.bohan.manalive.web.common.domain.attach.Attach.class, com.bohan.manalive.web.common.domain.attach.QAttach.class, PathInits.DIRECT2);
@@ -46,16 +48,27 @@ public class QMarket extends EntityPathBase<Market> {
 
     public final StringPath title = createString("title");
 
+    public final com.bohan.manalive.web.community.domain.UserMarket.QUserMarket userMarket;
+
     public QMarket(String variable) {
-        super(Market.class, forVariable(variable));
+        this(Market.class, forVariable(variable), INITS);
     }
 
     public QMarket(Path<? extends Market> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QMarket(PathMetadata metadata) {
-        super(Market.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QMarket(PathMetadata metadata, PathInits inits) {
+        this(Market.class, metadata, inits);
+    }
+
+    public QMarket(Class<? extends Market> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.userMarket = inits.isInitialized("userMarket") ? new com.bohan.manalive.web.community.domain.UserMarket.QUserMarket(forProperty("userMarket")) : null;
     }
 
 }

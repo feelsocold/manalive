@@ -8,13 +8,18 @@ import com.bohan.manalive.web.community.dto.Board.BoardLikeRequestDto;
 import com.bohan.manalive.web.community.dto.Board.BoardRequestDto;
 import com.bohan.manalive.web.community.dto.Market.MarketCriteria;
 import com.bohan.manalive.web.community.dto.Market.MarketRequestDto;
+import com.bohan.manalive.web.community.dto.UserMarket.UserMarketRequestDto;
 
 import java.util.HashMap;
 import java.util.List;
 
 public interface MarketService {
 
-    public Long saveBoard(MarketRequestDto dto) throws Exception;
+    public Long saveMarket(MarketRequestDto dto) throws Exception;
     public HashMap<String, Object> getMarketList(MarketCriteria criteria);
+    public HashMap<String, Object> getMarketDetail(Long seq);
+
+    public Long openMarket(UserMarketRequestDto dto) throws Exception;
+
 
 }
