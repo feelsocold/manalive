@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class BoardController {
         return "community/board/board_write";
     }
 
+    @Transactional
     @ResponseBody
     @PostMapping("/post")
     public HashMap<String, Object> boardPost(@RequestBody BoardRequestDto boardDto,
@@ -56,7 +58,7 @@ public class BoardController {
         Long boardSeq = boardService.saveBoard(boardDto, user);
 
         if(httpSession.getAttribute("attachList") != null) {
-            attachService.saveAttachs("boardPhoto", boardSeq);
+            attachService.saveAttachs(boardSeq);
         }
         //return "redirect:/board";
         HashMap<String, Object> map = new HashMap<String, Object>();
@@ -103,7 +105,7 @@ public class BoardController {
     public String updateBoard(@PathVariable Long b_seq, Model model) throws Exception {
         model.addAttribute("seq", b_seq);
 
-        List<AttachDto> list = attachService.getAttachList(b_seq, "boardPhoto");
+        List<AttachDto> list = attachService.getAttachList(b_seq, "BOARD");
         httpSession.setAttribute("attachList", list);
         log.info(list.size() + "<- 세션 리스트 사이즈");
 

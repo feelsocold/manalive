@@ -1,8 +1,10 @@
 package com.bohan.manalive.web.community.domain.UserMarket;
 
+import com.bohan.manalive.web.common.domain.attach.Attach;
 import com.bohan.manalive.web.community.domain.Market.Market;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 //@EqualsAndHashCode(callSuper = false, exclude = {"user"})
-@ToString(exclude = "marketList")
+@ToString(exclude = "marketList, attachList2")
 @Entity
 public class UserMarket implements Serializable {
 
@@ -46,11 +48,11 @@ public class UserMarket implements Serializable {
     private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy="userMarket", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    //@Where(clause = "category = 'marketPhoto'")
     private List<Market> marketList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy="replyBoard", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<BoardReply> boardReplyList = new ArrayList<>();
+
+//    @OneToMany(mappedBy="userMarketAttach", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Where(clause = "category = 'marketProfile_Photo'")
+//    private List<Attach> attachList2 ;
 
     @Builder
     public UserMarket(String email, String marketName, String marketPhoto, String phone, LocalDateTime createDate) {

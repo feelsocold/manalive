@@ -16,8 +16,8 @@ import java.util.List;
 public interface MarketService {
 
     public Long saveMarket(MarketRequestDto dto) throws Exception;
-    public HashMap<String, Object> getMarketList(MarketCriteria criteria);
-    public HashMap<String, Object> getMarketDetail(Long seq);
+    public HashMap<String, Object> getMarketList(MarketCriteria criteria) throws Exception;
+    public HashMap<String, Object> getMarketDetail(Long seq) throws Exception;
 
     public Long openMarket(UserMarketRequestDto dto) throws Exception;
 

@@ -193,7 +193,7 @@ function asyncUpload(value){
     for(var i = 0; i < files.length; i++) {
         formData.append("multipartFile", files[i]);
     }
-    formData.append("category", "profilePhoto");
+    formData.append("category", "USER");
     console.log(files);
 
         $.ajax({

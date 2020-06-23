@@ -71,9 +71,9 @@ public class Market implements Serializable {
 //    @JoinColumn(referencedColumnName = "email", name="email", nullable = false, insertable = false, updatable = false)
 //    private User userDetail;
 
-    @OneToMany(mappedBy="marketAttach", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Where(clause = "category = 'marketPhoto'")
-    private List<Attach> attachList = new ArrayList<>();
+//    @OneToMany(mappedBy="marketAttach", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Where(clause = "category = 'marketPhoto'")
+//    private List<Attach> attachList = new ArrayList<>();
 //
 //    @OneToMany(mappedBy="replyBoard", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<BoardReply> boardReplyList = new ArrayList<>();

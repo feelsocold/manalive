@@ -110,7 +110,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public HashMap<String, Object> boardDetail(Long seq) {
         HashMap<String, Object> map = new HashMap<>();
-        Map<String, Object> replyObj = new HashMap<>();
+        //Map<String, Object> replyObj = new HashMap<>();
 
         BoardResponseDto boardDto = boardRepo.getBoardDetail(seq);
         map.put("boardDto", boardDto);
@@ -120,7 +120,7 @@ public class BoardServiceImpl implements BoardService {
 
         // 댓글 리스트
         //List<BoardReplyResponseDto> replyList = replyService.getBoardReplyList(seq, 0);
-        replyObj = replyService.getBoardReplyList(seq, 0, 0);
+        Map<String, Object> replyObj = replyService.getBoardReplyList(seq, 0, 0);
         map.put("replyObj", replyObj);
 
         // 좋아요 수
@@ -190,7 +190,7 @@ public class BoardServiceImpl implements BoardService {
             //새로 추가
             if(sessionDto.getAtt_no() == null){
                 sessionDto.setSuperKey(dto.getSeq());
-                sessionDto.setCategory("BoardPhoto");
+                sessionDto.setCategory("BOARD");
                 attachRepo.save(sessionDto.toEntity().builder()
                                     .category(sessionDto.getCategory())
                                     .superKey(dto.getSeq())

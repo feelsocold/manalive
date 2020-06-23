@@ -55,11 +55,12 @@ public class AttachServiceImpl implements AttachService {
     }
 
     @Override
-    public void saveAttachs(String category, Long superkey) throws Exception {
+    public void saveAttachs(Long superkey) throws Exception {
+        log.info("saveAttachs() and " + superkey);
         List<AttachDto> attachList = (List<AttachDto>)httpSession.getAttribute("attachList");
 
         for(AttachDto attach : attachList){
-            attach.setCategory(category);
+
             attach.setSuperKey(superkey);
             attachRepository.save(attach.toEntity());
         }

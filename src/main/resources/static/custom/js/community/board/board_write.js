@@ -19,7 +19,7 @@ function asyncUpload(obj){
         for(var i = 0; i < files.length; i++) {
             formData.append("multipartFile", files[i]);
         }
-        formData.append("category", "boardPhoto");
+        formData.append("category", "BOARD");
         console.log(files);
 
         $.ajax({
@@ -79,7 +79,7 @@ function imgDelete(obj) {
     $(obj).closest("li").remove();
 
     var data = { oper : oper,
-                category : "boardPhoto" };
+                category : "BOARD" };
         $.ajax({
             url: '/s3Delete',
             data: data,
@@ -126,7 +126,7 @@ function updateUpload(obj){
     for(var i = 0; i < files.length; i++) {
         formData.append("multipartFile", files[i]);
     }
-    formData.append("category", "boardPhoto");
+    formData.append("category", "BOARD");
     formData.append("oper", oper);
 
         $.ajax({

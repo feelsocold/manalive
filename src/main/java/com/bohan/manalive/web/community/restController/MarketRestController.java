@@ -45,7 +45,7 @@ public class MarketRestController {
         Long marketSeq = marketService.saveMarket(requestDto);
 
         if(httpSession.getAttribute("attachList") != null) {
-            attachService.saveAttachs("marketPhoto", marketSeq);
+            attachService.saveAttachs(marketSeq);
         }
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("seq", marketSeq + "");

@@ -22,8 +22,6 @@ public class QMarket extends EntityPathBase<Market> {
 
     public static final QMarket market = new QMarket("market");
 
-    public final ListPath<com.bohan.manalive.web.common.domain.attach.Attach, com.bohan.manalive.web.common.domain.attach.QAttach> attachList = this.<com.bohan.manalive.web.common.domain.attach.Attach, com.bohan.manalive.web.common.domain.attach.QAttach>createList("attachList", com.bohan.manalive.web.common.domain.attach.Attach.class, com.bohan.manalive.web.common.domain.attach.QAttach.class, PathInits.DIRECT2);
-
     public final StringPath category = createString("category");
 
     public final StringPath content = createString("content");

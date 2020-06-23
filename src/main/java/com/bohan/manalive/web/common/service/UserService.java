@@ -119,9 +119,10 @@ public class UserService {
     }
 
     public void updatePhone(String email, String phone) {
+        log.info("updatePhone() and " + phone);
 
         User user = userRepository.findByEmail(email)
-                .map(entity -> entity.update(phone)).get();
+                .map(entity -> entity.updatePhone(phone)).get();
 
         httpSession.setAttribute("user", new SessionUser(user));
 

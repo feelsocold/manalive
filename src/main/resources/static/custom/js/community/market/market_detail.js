@@ -15,7 +15,7 @@ $(document).ready(function() {
         success : function(result){
             console.log(result);
             spreadItemInfo(result.marketDto);
-            spreadPhotolist(result.marketDto.attachList);
+            spreadPhotolist(result.attachList);
         },error: function (jqXHR, textStatus, errorThrown) {
             alert("error");
         },beforeSend:function(){

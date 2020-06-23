@@ -1,6 +1,7 @@
 package com.bohan.manalive.web.community.domain.Board;
 
 import com.bohan.manalive.domain.user.User;
+import com.bohan.manalive.web.common.domain.attach.Attach;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 //@EqualsAndHashCode(callSuper = false, exclude = {"user"})
-@ToString(exclude = "user, boardLike")
+@ToString(exclude = "user, boardLike, attachList")
 @Entity
 public class Board implements Serializable {
 
@@ -65,13 +66,14 @@ public class Board implements Serializable {
     @JoinColumn(referencedColumnName = "email", name="email", nullable = false, insertable = false, updatable = false)
     private User userDetail;
 
-//    @OneToMany
-//    @JoinColumn(name='seq', referencedColumnName = 'superKey')
     @OneToMany(mappedBy="likeBoard", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardLike> boardLikeList = new ArrayList<>();
 
     @OneToMany(mappedBy="replyBoard", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardReply> boardReplyList = new ArrayList<>();
+
+//    @OneToMany(mappedBy="boardAttach", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Attach> attachList = new ArrayList<>();
 
     @Builder
     public Board(String title, String content, String hashtags, String email, User userDetail, LocalDateTime createDate) {

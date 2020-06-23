@@ -5,20 +5,24 @@ import com.bohan.manalive.web.community.domain.Board.Board;
 import com.bohan.manalive.web.community.domain.Market.Market;
 import com.bohan.manalive.web.community.domain.UserMarket.UserMarket;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jdk.vm.ci.code.site.Mark;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.Constraint;
 
-@ToString(exclude = "marketAttach")
+@ToString(exclude = "marketAttach, boardAttach")
 @Getter
 @RequiredArgsConstructor
 @Entity
+//@Table(
+//        name="Attach",
+//        uniqueConstraints=
+//        @UniqueConstraint(columnNames={"superKey"})
+//)
 public class Attach extends BaseTimeEntity {
 
     @Id
@@ -28,7 +32,7 @@ public class Attach extends BaseTimeEntity {
     @Column(nullable = false)
     private String category;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = false)
     private Long superKey;
 
     @Column(nullable = false)
@@ -43,17 +47,23 @@ public class Attach extends BaseTimeEntity {
     @Column(nullable = false, updatable = true)
     private String url;
 
-    @ManyToOne(targetEntity= Market.class, fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonBackReference
-    @JoinColumn(referencedColumnName = "seq", name="superKey", nullable = false, insertable = false, updatable = false)
-    @Where(clause = "category = 'marketPhoto'")
-    private Market marketAttach;
+//    @ManyToOne(targetEntity= UserMarket.class, fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    @JoinColumn(name="superKey", referencedColumnName = "seq", nullable = false, insertable = false, updatable = false)
+//    @Where(clause = "category = 'marketProfilePhoto'")
+//    private UserMarket userMarketAttach;
 
-    @ManyToOne(targetEntity= UserMarket.class, fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonBackReference
-    @JoinColumn(referencedColumnName = "seq", name="superKey", nullable = false, insertable = false, updatable = false)
-    @Where(clause = "category = 'marketProfile_Photo'")
-    private UserMarket userMarket;
+//    @ManyToOne(targetEntity= Market.class, fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    @JoinColumn(name="superKey", referencedColumnName = "seq", nullable = false, insertable = false, updatable = false)
+//    @Where(clause = "category = 'marketPhoto'")
+//    private Market marketAttach;
+//
+//    @ManyToOne(targetEntity= Board.class, fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    @JoinColumn(name="superKey", referencedColumnName = "seq", nullable = false, insertable = false, updatable = false)
+//    @Where(clause = "category = 'marketPhoto'")
+//    private Board boardAttach;
 
     @Builder
     public Attach(String filename, String category, Long superKey, String extension, String uuid, String url) {

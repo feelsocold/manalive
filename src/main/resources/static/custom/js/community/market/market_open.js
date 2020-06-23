@@ -106,7 +106,7 @@ function asyncUpload(value){
     for(var i = 0; i < files.length; i++) {
         formData.append("multipartFile", files[i]);
     }
-    formData.append("category", "marketProfile_Photo");
+    formData.append("category", "USER_MARKET");
     console.log(files);
 
     $.ajax({
@@ -160,7 +160,7 @@ $('#openMarket-submitBtn').click(function (e) {
         dataType : 'json',
         success : function(result){
             console.log(result);
-            alert(result.result);
+            //alert(result.result);
 
             if(result.result != null){
                 location.href="/market";

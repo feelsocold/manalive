@@ -24,7 +24,7 @@ function asyncUpload(obj){
         for(var i = 0; i < files.length; i++) {
             formData.append("multipartFile", files[i]);
         }
-        formData.append("category", "marketPhoto");
+        formData.append("category", "MARKET");
         console.log(files);
 
         if(uploadedImgCnt + files.length > 5) {
@@ -89,7 +89,7 @@ function imgDelete(obj) {
     $(obj).closest("li").remove();
 
     var data = { oper : oper ,
-                category : "marketPhoto" };
+                category : "MARKET" };
         $.ajax({
             url: '/s3Delete',
             data: data,
@@ -135,7 +135,7 @@ function updateUpload(obj){
     for(var i = 0; i < files.length; i++) {
         formData.append("multipartFile", files[i]);
     }
-    formData.append("category", "marketPhoto");
+    formData.append("category", "MARKET");
     formData.append("oper", oper);
 
         $.ajax({

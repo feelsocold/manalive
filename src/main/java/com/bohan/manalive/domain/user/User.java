@@ -96,11 +96,11 @@ public class User extends BaseTimeEntity implements Serializable {
         //this.photo = photo;
         return this;
     }
-//    public User update(String phone){
-//        this.phone = phone;
-//        //this.photo = photo;
-//        return this;
-//    }
+
+    public User updatePhone(String phone) {
+        this.phone = phone;
+        return this;
+    }
 
     public User update(String name, String nickname, String phone, String enable, Role role, String photo) {
         this.name = name;

@@ -7,6 +7,7 @@ $.get("/market/list", function ( data ) {
 
 function spreadMarketList( data ) {
     var list = data.marketList;
+    var attachList = data.attachList;
 
     $("#list-wrap").empty();
 
@@ -14,7 +15,7 @@ function spreadMarketList( data ) {
     for(var i = 0; i < list.length; i++) {
         var str = "";
         str += "<div class='item-wrapper' data-oper='"+list[i].seq+"'>";
-        str += "<div class='item-image'><img src='"+list[i].attachList[0].url+"'></div>";
+        str += "<div class='item-image'><img src='"+attachList[i]+"'></div>";
         str += "<div class='item-info'>";
         str += "<span class='item-title'>"+list[i].title+"</span><br>";
         str += "<span class='item-price'>"+numberFormat(list[i].price)+" 원</span><br>";
