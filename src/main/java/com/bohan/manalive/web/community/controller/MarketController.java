@@ -1,5 +1,6 @@
 package com.bohan.manalive.web.community.controller;
 
+import com.bohan.manalive.web.community.service.MarketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/market")
 public class MarketController {
     private final HttpSession httpSession;
+    private final MarketService marketService;
 
     @GetMapping("")
     public String marketIndex() {
@@ -25,17 +27,18 @@ public class MarketController {
     @GetMapping("/sell")
     public String marketSell() {
         if(httpSession.getAttribute("attachList") != null) {
-            httpSession.removeAttribute("attachList");
-        }
+            httpSession.removeAttribute("attachList");}
         return "/community/market/market_sell";
+    }
+    @GetMapping("/manage")
+    public String marketManage() {
+        return "/community/market/market_manage";
     }
 
     @GetMapping("/detail/{seq}")
-    public String marketDetail(@PathVariable Long seq, Model model) {
-//        boardService.increaseReadcount(seq);
-
+    public String marketDetail(@PathVariable Long seq, Model model)throws Exception {
+        marketService.increaseMarketReadCount(seq);
         model.addAttribute("seq", seq);
-
         return "community/market/market_detail";
     }
 

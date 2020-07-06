@@ -4,6 +4,7 @@ var csrfToken = $('meta[name="_csrf"]').attr('content')
 var contextPath = $('#contextPathHolder').attr('data-contextPath') ? $('#contextPathHolder').attr('data-contextPath') : '';
 
 $(document).ready(function() {
+
  $(function(){
      $('#login-form').submit(function(e){
         e.preventDefault();
@@ -14,6 +15,8 @@ $(document).ready(function() {
         //         xhr.setRequestHeader(csrfHeader, csrfToken);
         //     }
         // });
+         sessionStorage.clear();
+         saveThisUrlStorage();
 
         $.ajax({
             type : 'post',
@@ -22,12 +25,24 @@ $(document).ready(function() {
             data : params,
             success : function(response){
                 console.log(response);
-                window.location.href = '/';
+                if(response.result == 'success'){
+                    window.location.href = document.location.href;
+                }
+
             },
             error : function(jqXHR, status, e) {
                 console.error(status + " : " + e);
+                alert("아이디와 비밀번호를 확인해주세요.");
             }
         });
     });
 });
 });
+
+function saveThisUrlStorage() {
+
+    var value = document.location.href;
+    sessionStorage.setItem("prevPage", value);
+    //alert(value);
+    // 데이터를 출력한다.
+}

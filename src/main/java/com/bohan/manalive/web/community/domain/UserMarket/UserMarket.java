@@ -37,7 +37,7 @@ public class UserMarket implements Serializable {
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = true)
+    @Column(insertable = false)
     @ColumnDefault("0")
     private int visitedGuestCnt;
 
@@ -48,6 +48,7 @@ public class UserMarket implements Serializable {
     private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy="userMarket", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("seq DESC")
     private List<Market> marketList = new ArrayList<>();
 
 //    @OneToMany(mappedBy="userMarketAttach", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

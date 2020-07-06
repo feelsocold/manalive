@@ -32,17 +32,21 @@ public class QMarket extends EntityPathBase<Market> {
 
     public final StringPath email = createString("email");
 
+    public final ListPath<MarketWish, QMarketWish> marketWishList = this.<MarketWish, QMarketWish>createList("marketWishList", MarketWish.class, QMarketWish.class, PathInits.DIRECT2);
+
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = createDateTime("modifiedDate", java.time.LocalDateTime.class);
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
+
+    public final StringPath productStatus = createString("productStatus");
 
     public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
 
     public final NumberPath<Integer> readCount = createNumber("readCount", Integer.class);
 
-    public final NumberPath<Long> seq = createNumber("seq", Long.class);
+    public final StringPath saleStatus = createString("saleStatus");
 
-    public final StringPath state = createString("state");
+    public final NumberPath<Long> seq = createNumber("seq", Long.class);
 
     public final StringPath title = createString("title");
 

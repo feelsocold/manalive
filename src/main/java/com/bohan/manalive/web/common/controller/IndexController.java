@@ -7,12 +7,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 @Slf4j
 @RequiredArgsConstructor
@@ -21,11 +24,10 @@ public class IndexController {
     private final HttpSession httpSession;
     Logger logger = LoggerFactory.getLogger(getClass());
     //private final HttpSession httpSession;
-
     private final UserService userService;
 
     @GetMapping("/")
-    public String index(Model model, @LoginUser SessionUser user) {
+    public String index(Model model, @LoginUser SessionUser user, HttpServletRequest request, HttpServletResponse response) {
         logger.info("INDEX()");
 
         //SessionUser user = (SessionUser) httpSession.getAttribute("user");
@@ -48,6 +50,7 @@ public class IndexController {
 //                 return "admin/adminStart";
 //             }
         }
+
         return "index";
     }
 

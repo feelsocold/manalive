@@ -10,7 +10,9 @@ import com.bohan.manalive.web.community.dto.Board.BoardCriteria;
 import com.bohan.manalive.web.community.dto.Board.BoardRequestDto;
 import com.bohan.manalive.web.community.dto.Market.MarketCriteria;
 import com.bohan.manalive.web.community.dto.Market.MarketRequestDto;
+import com.bohan.manalive.web.community.dto.Market.MarketWishRequestDto;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketRequestDto;
+import com.bohan.manalive.web.community.dto.UserMarket.UserMarketResponseDto;
 import com.bohan.manalive.web.community.service.MarketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +20,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +36,7 @@ public class MarketRestController {
     private final AttachService attachService;
     private final AttachSessionService attachSessionService;
     private final MarketService marketService;
+
 
     @PostMapping("/open/duplicatePhoneCheck")
     public String duplicatePhoneCheck(@RequestBody String phone) {
@@ -56,18 +62,12 @@ public class MarketRestController {
 
     @GetMapping("/list")
     public HashMap<String, Object> getMarketList(@ModelAttribute MarketCriteria criteria) throws Exception {
-        log.info(criteria.getCategory() + " !@%&^$(*!^@(*&");
-
         return marketService.getMarketList(criteria);
     }
 
     @PostMapping("/detail/{seq}")
     public HashMap<String, Object> getMarketDetail(@PathVariable("seq") Long seq) throws Exception {
-
-        log.info("REST getMarketDetail() + " + seq);
-
         return marketService.getMarketDetail(seq);
-
     }
 
     @Transactional
@@ -85,9 +85,65 @@ public class MarketRestController {
         if (httpSession.getAttribute("attachList") != null) {
             userService.saveAttach(seq);
         }
-
         return map;
     }
+
+    @Transactional
+    @PostMapping("/wish")
+    public Map<String, String> saveMarketWish(@RequestBody MarketWishRequestDto dto, @LoginUser SessionUser user)throws Exception {
+        dto.setEmail(user.getEmail());
+        Map<String, String> map = new HashMap<>();
+        String result = "";
+        boolean  bool = marketService.checkDuplicatedWish(dto);
+        log.info("위시 중복체크 : " + bool);
+        if(bool) {
+            marketService.deleteMarketWish(dto);
+            result = "DELETE";
+        }else{
+            marketService.saveMarketWish(dto);
+            result = "SAVE";
+        }
+        map.put("result", result);
+        return map;
+    }
+
+    @PostMapping("/wishCheck")
+    public Map<String, Boolean> checkMarketWish(@RequestBody MarketWishRequestDto dto, @LoginUser SessionUser user)throws Exception {
+        dto.setEmail(user.getEmail());
+        log.info("WISHCHECK()");
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("result", marketService.checkDuplicatedWish(dto));
+        return map;
+    }
+
+    @GetMapping("/autoSearching")
+    public String[] marketAutoSearching(@RequestParam("searchValue") String searchValue) throws Exception {
+        List<String> list = new ArrayList<String>();
+        list = marketService.autoSearchMarket(searchValue);
+        log.info("검색 리스트 사이즈 : " + list.size());
+        String[] array = list.toArray(new String[list.size()]);
+        return array;
+        //return marketService.autoSearchMarket(searchValue);
+    }
+
+    @GetMapping("/search/userMarketName")
+    public HashMap<String, Object> searchUserMarketName(@RequestParam("searchValue") String searchValue,
+                                                        @RequestParam(defaultValue = "0") int pageNumber) throws Exception {
+        return marketService.searchUserMarketName(searchValue, pageNumber);
+        //return marketService.autoSearchMarket(searchValue);
+    }
+
+    @GetMapping("/market/manage")
+    public HashMap<String, Object> getUserMarkerInfo(@LoginUser SessionUser user){
+        Map<String, Object> map = new HashMap<>();
+
+
+
+
+        return null;
+    }
+
+
 
 
 }

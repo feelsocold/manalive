@@ -274,7 +274,7 @@ $('#sell-submitBtn').click(function (e) {
                      "category" : document.getElementById("cate-selectbox").value,
                      "price" : document.getElementById("price").value,
                      "quantity" : document.getElementById("quantity").value,
-                     "state" : $("input[name='state']:checked").val(),
+                     "productStatus" : $("input[name='state']:checked").val(),
                      "delivery" : $("input[name='delivery']:checked").val()
         };
 

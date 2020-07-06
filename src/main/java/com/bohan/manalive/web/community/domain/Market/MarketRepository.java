@@ -20,7 +20,9 @@ public interface MarketRepository extends JpaRepository<Market, Long>,
                                          JpaSpecificationExecutor<Market>,
                                          QuerydslPredicateExecutor<Market> {
 
-
+    @Query(" SELECT a.title FROM Market AS a " +
+            " WHERE a.title LIKE CONCAT('%',:searchValue,'%') " )
+    List<String> autoSearchByMarketTitle(@Param("searchValue") String searchValue);
 
 
 

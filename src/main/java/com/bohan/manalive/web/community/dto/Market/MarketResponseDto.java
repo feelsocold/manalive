@@ -18,7 +18,7 @@ public class MarketResponseDto {
     private String title;
     private String content;
     private String category;
-    private String state;
+    private String productStatus;
     private String delivery;
     private int price;
     private int quantity;

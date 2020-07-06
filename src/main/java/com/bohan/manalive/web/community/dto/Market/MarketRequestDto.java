@@ -19,7 +19,7 @@ public class MarketRequestDto {
     private String title;
     private String content;
     private String category;
-    private String state;
+    private String productStatus;
     private String delivery;
     private int price;
     private int quantity;
@@ -32,7 +32,7 @@ public class MarketRequestDto {
                 .title(title)
                 .content(content)
                 .category(category)
-                .state(state)
+                .productStatus(productStatus)
                 .delivery(delivery)
                 .price(price)
                 .quantity(quantity)

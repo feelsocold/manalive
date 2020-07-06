@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    var formObj = $("form");
+    var formObj = $("#register-form");
     $('.reg-btn').on("click", function(e){
         e.preventDefault();
         var operation = $(this).data("oper");

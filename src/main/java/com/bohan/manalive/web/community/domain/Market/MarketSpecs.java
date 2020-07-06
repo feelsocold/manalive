@@ -19,7 +19,7 @@ public class MarketSpecs {
     public enum SearchKey {
         TITLE("title"),
         CONTENT("content"),
-        NICKNAME("nickname"),
+        EMAIL("email"),
         CATEGORY("category");
 
         private final String value;
@@ -44,8 +44,9 @@ public class MarketSpecs {
         List<Predicate> predicate = new ArrayList<>();
         for(SearchKey key : searchKeyword.keySet()) {
             switch (key) {
+                case EMAIL: predicate.add(builder.equal(
+                            root.get(key.value),searchKeyword.get(key) ));
                 case TITLE:
-                case NICKNAME:
                 case CONTENT:
                 case CATEGORY:
 //                    predicate.add(builder.equal(

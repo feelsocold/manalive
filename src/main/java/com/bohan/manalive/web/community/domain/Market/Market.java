@@ -12,6 +12,7 @@ import org.hibernate.annotations.*;
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OrderBy;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 //@EqualsAndHashCode(callSuper = false, exclude = {"user"})
-@ToString(exclude = "attachList, userMarket")
+@ToString(exclude = "attachList, userMarket, wishedMarketProduct")
 @Entity
 public class Market implements Serializable {
 
@@ -40,7 +41,11 @@ public class Market implements Serializable {
     private String category;
 
     @Column(nullable = false)
-    private String state;
+    private String productStatus;
+
+    @Column(insertable = false, columnDefinition = "varchar(50) default 'onSale'")
+//    @ColumnDefault("onSale")
+    private String saleStatus;
 
     @Column(nullable = false)
     private String delivery;
@@ -51,7 +56,7 @@ public class Market implements Serializable {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(nullable = true)
+    @Column(insertable = false)
     @ColumnDefault("0")
     private int readCount;
 
@@ -83,13 +88,17 @@ public class Market implements Serializable {
     //@Where(clause = "category = 'marketPhoto'")
     private UserMarket userMarket;
 
+    @OneToMany(mappedBy="wishedMarketProduct", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MarketWish> marketWishList = new ArrayList<>();
+
+
     @Builder
-    public Market(String email, String title, String content, String category, String state, String delivery, int price, int quantity, LocalDateTime createDate) {
+    public Market(String email, String title, String content, String category, String productStatus, String delivery, int price, int quantity, LocalDateTime createDate) {
         this.email = email;
         this.title = title;
         this.content = content;
         this.category = category;
-        this.state = state;
+        this.productStatus = productStatus;
         this.delivery = delivery;
         this.price = price;
         this.quantity = quantity;
@@ -104,8 +113,8 @@ public class Market implements Serializable {
 //        return this;
 //    }
 
-//    public Market update(int readCount){
-//        this.readCount = readCount;
-//        return this;
-//    }
+    public Market updateReadCount(int readCount){
+        this.readCount = readCount;
+        return this;
+    }
 }
