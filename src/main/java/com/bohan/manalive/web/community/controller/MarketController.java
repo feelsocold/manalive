@@ -30,16 +30,23 @@ public class MarketController {
             httpSession.removeAttribute("attachList");}
         return "/community/market/market_sell";
     }
-    @GetMapping("/manage")
-    public String marketManage() {
-        return "/community/market/market_manage";
-    }
 
     @GetMapping("/detail/{seq}")
     public String marketDetail(@PathVariable Long seq, Model model)throws Exception {
         marketService.increaseMarketReadCount(seq);
         model.addAttribute("seq", seq);
         return "community/market/market_detail";
+    }
+
+    @GetMapping("/userMarket/{seq}")
+    public String goUserMarket(@PathVariable(name = "seq", required = false) Long seq, Model model){
+        if(seq == null){
+            seq = 1L;
+        }
+
+        model.addAttribute("userSeq", seq);
+
+        return "/community/market/userMarket_main";
     }
 
     @GetMapping("/open")

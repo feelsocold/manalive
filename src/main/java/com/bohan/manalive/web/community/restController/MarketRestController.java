@@ -3,6 +3,7 @@ package com.bohan.manalive.web.community.restController;
 import com.bohan.manalive.config.S3Uploader;
 import com.bohan.manalive.config.oauth.LoginUser;
 import com.bohan.manalive.config.oauth.dto.SessionUser;
+import com.bohan.manalive.domain.user.UserRepository;
 import com.bohan.manalive.web.common.service.AttachService;
 import com.bohan.manalive.web.common.service.AttachSessionService;
 import com.bohan.manalive.web.common.service.UserService;
@@ -36,7 +37,7 @@ public class MarketRestController {
     private final AttachService attachService;
     private final AttachSessionService attachSessionService;
     private final MarketService marketService;
-
+    private final UserRepository userRepo;
 
     @PostMapping("/open/duplicatePhoneCheck")
     public String duplicatePhoneCheck(@RequestBody String phone) {
@@ -133,16 +134,20 @@ public class MarketRestController {
         //return marketService.autoSearchMarket(searchValue);
     }
 
-    @GetMapping("/market/manage")
-    public HashMap<String, Object> getUserMarkerInfo(@LoginUser SessionUser user){
+    @PostMapping("/userMarket")
+    public HashMap<String, Object> getUserMarkerInfo(@LoginUser SessionUser user) throws Exception{
+        log.info("getUserMarkerInfo()");
         Map<String, Object> map = new HashMap<>();
+        log.info(user.getEmail());
 
-
-
-
-        return null;
+        return marketService.getUserMarketManageList(user.getEmail());
     }
 
+    @PostMapping("/getUserSeq")
+    public Long getUserSeq(@LoginUser SessionUser user) throws Exception{
+        Long seq = userRepo.findByEmail(user.getEmail()).get().getSeq();
+        return seq;
+    }
 
 
 

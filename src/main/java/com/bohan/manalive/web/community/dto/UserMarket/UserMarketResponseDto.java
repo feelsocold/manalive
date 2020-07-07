@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class UserMarketResponseDto {
 
     private Long seq;
@@ -18,6 +18,7 @@ public class UserMarketResponseDto {
     private String marketPhoto;
     private String phone;
     private int visitedGuestCnt;
+    private LocalDateTime createDate;
 
     private String photoUrl;
 
@@ -26,6 +27,17 @@ public class UserMarketResponseDto {
         this.marketName = marketName;
         this.photoUrl = photoUrl;
     }
+
+    public UserMarketResponseDto(Long seq, String email, String marketName, int visitedGuestCnt, LocalDateTime createDate, String photoUrl){
+        this.seq = seq;
+        this.email = email;
+        this.marketName = marketName;
+        this.visitedGuestCnt = visitedGuestCnt;
+        this.createDate = createDate;
+        this.photoUrl = photoUrl;
+    }
+
+
 
 
 

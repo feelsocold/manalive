@@ -51,7 +51,7 @@ $(document).ready(function() {
 
 });
 function spreadItemInfo(data) {
-    var state = data.state;
+    var productStatus = data.productStatus;
     var delivery = data.delivery;
     var price = data.price;
     $("#item-title").html(data.title);
@@ -63,9 +63,9 @@ function spreadItemInfo(data) {
         $("#wish-btn").after(str);
     }
 
-    if(state == 'used'){
+    if(productStatus == 'used'){
         $("#item-state").html("중고");
-    }else if(state == 'new'){
+    }else if(productStatus == 'new'){
         $("#item-state").html("새상품");
 
     }
@@ -91,7 +91,7 @@ function spreadPhotolist(data) {
 
 function spreadUserMarket(obj) {
     var len = obj.marketList.length;
-
+    $("#alink-userMarket").attr("href", "/market/userMarket/" + obj.seq);
     $("#umarket-photo").attr("src", obj.marketPhoto);
     $("#umarket-name").html(obj.marketName);
 

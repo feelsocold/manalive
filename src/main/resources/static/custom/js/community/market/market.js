@@ -1,6 +1,7 @@
 var searchValue = "";
 var uMarketTotal = 0;
 var uMarketPageNumber = 0;
+var sessionEmail = $("#sessionUser-email").val();
 
 $.get("/market/list", function ( data ) {
     //alert(data);
@@ -124,7 +125,7 @@ function searchUserMarketName(keyword){
         url: '/market/search/userMarketName',
         data: data,
         dataType : 'json',
-        success : function(result){색
+        success : function(result){
             console.log("상점이름 검색 : " + result);
 
              $("#list-wrap").empty();
@@ -404,3 +405,16 @@ $(function(){
     };
 })
 
+function goUserMarket() {
+    $.ajax({
+        type: 'POST',
+        url: '/market/getUserSeq',
+        //data: JSON.stringify(data),
+        dataType : 'json',
+        success : function(result){
+            location.href = "/market/userMarket/" + result;
+        },error: function (jqXHR, textStatus, errorThrown) {
+            alert("error");
+        }
+    });
+}

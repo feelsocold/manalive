@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -171,15 +172,17 @@ public class MarketServiceImpl implements MarketService {
         return map;
     }
 
+
+    @Transactional
     @Override
-    public HashMap<String, Object> getUserMarketMangeList(MarketCriteria criteria) throws Exception {
+    public HashMap<String, Object> getUserMarketManageList(String email) throws Exception {
+        log.info("getUserMarketManageList()");
         HashMap<String, Object> map = new HashMap<>();
+        MarketCriteria criteria = new MarketCriteria();
+        criteria.setCategory("EMAIL");
+        criteria.setKeyword(email);
         map = getMarketList(criteria);
-
-
-
-
-
+        map.put("userMaketInfo", userMarketRepo.getUserMarketInfo(email));
 
 
         return map;

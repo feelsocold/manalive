@@ -43,5 +43,5 @@ public interface MarketService {
     public HashMap<String, Object> searchUserMarketName(String searchValue, int pageNumber) throws Exception;
 
     // 중고마켓 상점관리
-    public HashMap<String, Object> getUserMarketMangeList(MarketCriteria criteria) throws Exception;
+    public HashMap<String, Object> getUserMarketManageList(String email) throws Exception;
 }

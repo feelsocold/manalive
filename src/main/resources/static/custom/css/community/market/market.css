@@ -23,8 +23,8 @@ li {
     border: 1px solid #35C5F0;
     font-size: 17px;
     font-weight: bold;
-    padding-left: 17px;
-    padding-right: 17px;
+    padding-left: 27px;
+    padding-right: 27px;
     padding-top: 2px;
     padding-bottom: 2px;
     /*float : right;*/
@@ -39,15 +39,15 @@ li {
 #goSell-btn:hover{
     opacity: 0.7;
 }
-#goManage-btn {
+#goUsermarket-btn {
     background-color: #35C5F0;
     color: #FFFFFF;
     border-radius: 7px;
     border: 1px solid #35C5F0;
     font-size: 17px;
     font-weight: bold;
-    padding-left: 23px;
-    padding-right: 23px;
+    padding-left: 25px;
+    padding-right: 25px;
     padding-top: 2px;
     padding-bottom: 2px;
 
@@ -58,7 +58,7 @@ li {
     height: 50px;
 
 }
-#goManage-btn:hover{
+#goUsermarket-btn:hover{
     opacity: 0.7;
 }
 

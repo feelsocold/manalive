@@ -13,7 +13,8 @@ public interface AttachRepository extends JpaRepository<Attach, Long>, CrudRepos
 
     @Query(" SELECT new com.bohan.manalive.web.common.dto.AttachDto (a.att_no, a.category, a.superKey, a.filename, a.extension, a.uuid, a.url, a.createDate, a.modifiedDate) " +
             " FROM Attach a " +
-            " WHERE a.superKey = :seq AND a.category = :category")
+            " WHERE a.superKey = :seq AND a.category = :category " +
+            " ORDER BY a.att_no DESC")
     List<AttachDto> getAttachListBySuperKey(@Param("seq") Long seq, @Param("category") String category);
 
 }

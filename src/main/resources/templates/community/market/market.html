@@ -27,7 +27,7 @@
                     <button type="button" id="searchemtpy-btn" onclick="emptysearchinput(this)"><img src='/custom/img/icon/icon-X-empty.png'></button>
                     <button type="button" id='marketsearch-btn' value="검색" onclick="searchMarket()">검색</button></span>
                 <input th:if="${session['user'] != null && not #strings.isEmpty(session['user'].phone)}" type="button" id="goSell-btn" value="판매하기" onclick="location.href='/market/sell'">
-                <input th:if="${session['user'] != null && not #strings.isEmpty(session['user'].phone)}" type="button" id="goManage-btn" value="내 상점관리" onclick="location.href='/market/manage'">
+                <input th:if="${session['user'] != null && not #strings.isEmpty(session['user'].phone)}" type="button" id="goUsermarket-btn" value="내 상점" onclick="goUserMarket()">
                 <input th:if="${(session['user'] != null && #strings.isEmpty(session['user'].phone)) or (session['user'] == null)}" type="button" id="makeMarket-btn" value="내 상점 개설하기" onclick="makeMarket()">
                 <br>
             <div style="margin-top: 25px;">

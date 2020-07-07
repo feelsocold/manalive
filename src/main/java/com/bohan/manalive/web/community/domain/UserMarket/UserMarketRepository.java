@@ -26,11 +26,11 @@ public interface UserMarketRepository extends JpaRepository<UserMarket, Long>,
             " WHERE a.marketName LIKE CONCAT('%',:searchValue,'%') " )
     List<UserMarketResponseDto> searchUserMarket(@Param("searchValue") String searchValue);
 
-    @Query(" SELECT new com.bohan.manalive.web.community.dto.UserMarket.UserMarketResponseDto(a.seq, a.marketName, b.url ) " +
+    @Query(" SELECT new com.bohan.manalive.web.community.dto.UserMarket.UserMarketResponseDto(a.seq, a.email, a.marketName, a.visitedGuestCnt, a.createDate, b.url ) " +
             " FROM UserMarket AS a LEFT OUTER JOIN Attach AS b" +
             "  ON a.seq = b.superKey AND b.category = 'USER_MARKET'" +
             " WHERE a.email = :email" )
-    UserMarketResponseDto getUserMarkerInfo(@Param("email") String email);
+    UserMarketResponseDto getUserMarketInfo(@Param("email") String email);
 
 
 }
