@@ -18,6 +18,7 @@ public class UserMarketRequestDto {
 
     private String email;
     private String marketName;
+    private String introduction;
     private String marketPhoto;
     private String phone;
     private int visitedGuestCnt;
@@ -27,6 +28,7 @@ public class UserMarketRequestDto {
     public UserMarket toEntity() {
         return UserMarket.builder()
                 .email(email)
+                .introduction(introduction)
                 .marketName(marketName)
                 .marketPhoto(marketPhoto)
                 .phone(phone)

@@ -53,7 +53,6 @@ function spreadPaging( pageMaker ){
         }else{
             str2 += "<li class='page-item'><a class='page-link' href='"+ i +"'>" + i + "</a></li>";
         }
-
     }
     if(pageMaker.next){
         str2 += "<li class='page-item'><a class='page-link' href='#'>Next</a></li>";
@@ -217,7 +216,7 @@ $(".category-list").on('click','ul',function(e){
     });
 
 });
-
+// 상품 디테일 이동
 $(document).on('click','.item-wrapper',function(e){
     var seq = $(this).data("oper");
     location.href = "/market/detail/" + seq;
@@ -408,7 +407,7 @@ $(function(){
 function goUserMarket() {
     $.ajax({
         type: 'POST',
-        url: '/market/getUserSeq',
+        url: '/market/getUserMarketSeq',
         //data: JSON.stringify(data),
         dataType : 'json',
         success : function(result){

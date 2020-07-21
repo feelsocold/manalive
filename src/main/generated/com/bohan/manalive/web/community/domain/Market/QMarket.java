@@ -32,6 +32,8 @@ public class QMarket extends EntityPathBase<Market> {
 
     public final StringPath email = createString("email");
 
+    public final ListPath<MarketInquiry, QMarketInquiry> marketInquiryList = this.<MarketInquiry, QMarketInquiry>createList("marketInquiryList", MarketInquiry.class, QMarketInquiry.class, PathInits.DIRECT2);
+
     public final ListPath<MarketWish, QMarketWish> marketWishList = this.<MarketWish, QMarketWish>createList("marketWishList", MarketWish.class, QMarketWish.class, PathInits.DIRECT2);
 
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = createDateTime("modifiedDate", java.time.LocalDateTime.class);

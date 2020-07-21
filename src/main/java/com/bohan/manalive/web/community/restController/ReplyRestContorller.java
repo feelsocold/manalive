@@ -36,7 +36,7 @@ public class ReplyRestContorller {
 
     @DeleteMapping("/reply/board/delete/{r_seq}")
     public void deleteBoardReply(@PathVariable Long r_seq){
-        log.info(r_seq + "!!!!!");
+        log.info(r_seq + " DELETED");
         replyService.deleteBoardReply(r_seq);
     }
 

@@ -1,6 +1,7 @@
 package com.bohan.manalive.web.community.domain.UserMarket;
 
 import com.bohan.manalive.web.common.domain.attach.Attach;
+import com.bohan.manalive.web.community.domain.Board.BoardLike;
 import com.bohan.manalive.web.community.domain.Market.Market;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -32,6 +33,9 @@ public class UserMarket implements Serializable {
     private String marketName;
 
     @Column(nullable = false)
+    private String introduction;
+
+    @Column(nullable = false)
     private String marketPhoto;
 
     @Column(nullable = false)
@@ -51,13 +55,17 @@ public class UserMarket implements Serializable {
     @OrderBy("seq DESC")
     private List<Market> marketList = new ArrayList<>();
 
-//    @OneToMany(mappedBy="userMarketAttach", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @Where(clause = "category = 'marketProfile_Photo'")
-//    private List<Attach> attachList2 ;
+    @OneToMany(mappedBy="followingUserMarket", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("seq DESC ")
+    private List<UserMarketFollow> userMarketFollowList = new ArrayList<>();
+
+//    @OneToMany(mappedBy="likeBoard", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<BoardLike> boardLikeList = new ArrayList<>();
 
     @Builder
-    public UserMarket(String email, String marketName, String marketPhoto, String phone, LocalDateTime createDate) {
+    public UserMarket(String email, String marketName, String introduction, String marketPhoto, String phone, LocalDateTime createDate) {
         this.email = email;
+        this.introduction = introduction;
         this.marketName = marketName;
         this.marketPhoto = marketPhoto;
         this.phone = phone;

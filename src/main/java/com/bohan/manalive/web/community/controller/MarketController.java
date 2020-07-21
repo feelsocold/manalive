@@ -41,16 +41,16 @@ public class MarketController {
     @GetMapping("/userMarket/{seq}")
     public String goUserMarket(@PathVariable(name = "seq", required = false) Long seq, Model model){
         if(seq == null){
-            seq = 1L;
+            seq = 0L;
         }
-
         model.addAttribute("userSeq", seq);
-
         return "/community/market/userMarket_main";
     }
 
     @GetMapping("/open")
     public String marketOpen() {
+        if(httpSession.getAttribute("attachList") != null) {
+            httpSession.removeAttribute("attachList");}
         return "/community/market/market_open";
     }
 

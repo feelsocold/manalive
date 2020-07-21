@@ -16,8 +16,8 @@
     <th:block th:include="layout/header"></th:block>
     <input type="hidden" th:value="${seq}" id="seq">
     <main id="main">
-        <div class="main-container">
-            <div class="market-wrap" style="border: 0px solid">
+        <div class="main-container" style="border: 0px solid; padding-bottom: 100px;">
+            <div class="market-wrap" >
                 <div>
                     <h2 style="float: left; font-weight: bold; cursor: pointer" onclick="location.href='/market'">중고마켓</h2>
                 </div><br>
@@ -29,8 +29,43 @@
                     <div id="mainphoto-area">
                         <img id="main-photo" src="" alt="사진없음">
                     </div>
-                    <div>
+                    <hr style="width: 84%; color: red; display: inline-block; margin-left: 16%; margin-top: 30px;">
+                    <div id='productcontent-wrap'>
+                        <label id="productcontent-title">상품정보</label><br>
                         <textarea id="product-content" readonly></textarea>
+                    </div>
+                    <hr style="width: 84%; color: red; display: inline-block; margin-left: 16%; margin-top: 0px;">
+                    <div id='inquiry-wrap'>
+                            <label id="inquirywrap-title">상품문의</label><br>
+                            <div id="inquiry-boxwrap">
+                                <div id="inquiry-textareawrap">
+                                    <textarea placeholder='상품문의 입력' maxlength="100" onkeypress="if( event.keyCode==13 ){saveInquiry();}"
+                                              onkeyup="keydownInquiry(this)" id="inquiry-content"></textarea>
+                                </div>
+                                <div>
+                                    <span style="float: left; color: #888888; font-size: 13px; margin-left: 15px; margin-top: 10px">
+                                        <label id="inquiry-textCnt">0</label>/100
+                                    </span>
+                                    <button id="inquiry-btn" onclick="saveInquiry()">등록</button>
+                                </div>
+                            </div>
+                            <!--상품문의 content-->
+                            <div id="inquirycontent-wrap">
+<!--                                <div의 class='each-inquiry'>-->
+<!--                                    <div class='inquiry-marketphotowrap'>-->
+<!--                                        <img src='https://cdn.imweb.me/thumbnail/20190227/5c76285bb2c18.png'>-->
+<!--                                    </div>-->
+<!--                                    <div class='inquiry-textwrap'>-->
+<!--                                        <div class='eachinquiry-marketnameanddate'>-->
+<!--                                            <span class='eachinquiry-marketname'>농담곰상점</span>-->
+<!--                                            <span class='eachinquiry-regdate'>1시간 전</span>-->
+<!--                                        </div>-->
+<!--                                        <textarea class="eachinquiry-content" readonly>어쩌고 저쩌고어쩌고 저쩌고어쩌고 저쩌고어쩌고 저쩌고어쩌고 저쩌고어쩌고 저쩌고</textarea>-->
+<!--                                        <button class='inquiry-delbtn' value='1'>삭제하기</button>-->
+<!--                                    </div>-->
+
+<!--                                </div>-->
+                            </div>
                     </div>
                 </div>
 
@@ -39,7 +74,6 @@
                     <div id="item-priceWrap">
                         <label id="item-price"></label>
                         <button id="wish-btn" onclick="saveOrdeleteWish(this)">찜하기</button>
-
                     </div>
                     <hr>
                     <div id="item-info">
@@ -91,7 +125,6 @@
 
 
                     </div>
-<!--                    <hr>-->
 
                 </div>
             </div>

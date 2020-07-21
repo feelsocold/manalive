@@ -235,19 +235,23 @@ $(document).on('click','#morereply-btn',function(e){
 $(document).on('click','.delete-reply a',function(e) {
     e.preventDefault();
     var r_seq = $(this).attr("href");
-    $(this).closest('.reply-onerow').remove();
+    var obj = $(this);
+
         $.ajax({
             type: 'DELETE',
             url: '/reply/board/delete/'+ r_seq,
             success : function(result){
                 console.log("삭제완료");
+                var replycnt = $("#replycnt-span").html();
+                $("#replycnt-span").html(Number(replycnt) - 1);
+
                 replyDelayCnt++;
             },error: function (jqXHR, textStatus, errorThrown) {
                 alert("error");
             },beforeSend:function(){
 
             },complete:function(){
-                //alert("complete");
+                obj.closest('.reply-onerow').remove();
             }
         });
 });

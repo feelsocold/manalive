@@ -3,7 +3,7 @@ ul{
 }
 .market-wrap{
     margin-top: 45px;
-    margin-bottom: 30px;
+    margin-bottom: 900px;
     font-size: 50px;
     display: inline-block;
     width: 60%;
@@ -349,7 +349,7 @@ ul{
 }
 #umarket-photo{
     border: none;
-    border-radius: 30%;
+    border-radius: 50%;
     width: 70px;
     height: 70px;
     float: left;
@@ -377,12 +377,12 @@ ul{
 }
 
 #product-content{
-    float: right;
-    width: 81%;
-    margin-top: 4%;
-    margin-right: 1.5%;
+    /*float: right;*/
+    width: 100%;
+    /*margin-top: 4%;*/
+    font-size: 14px;
     border-radius: 3px;
-    border: 1px solid #e5e5e5;
+    border: 0px solid #e5e5e5;
     padding: 3%;
     resize: none;
     line-height: 25px;
@@ -453,5 +453,176 @@ ul{
     height: 30px;
     padding-left: 3%;
     margin-right: 7px;
+}
+#productcontent-wrap, #inquiry-wrap{
+    /*margin-top: 10px;*/
+    display: inline-block;
+    width: 77%;
+    text-align: left;
+    border: red solid 0px;
+    margin-left: 10%;
+}
+#productcontent-title, #inquirywrap-title{
+    font-size: 19px;
+    font-weight: lighter;
+}
+#inquiry-wrap{
+    /*border: 1px solid #e5e5e5;*/
+    margin-bottom: 300px;
+}
+#inquiry-textareawrap{
+    display: inline-block;
+    border: 0px solid hotpink;
+    border-bottom: 1px solid #e5e5e5;
+    width: 100%;
+    height: 80px;
 
+    padding-top : 15px;
+    padding-bottom : 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+#inquiry-content{
+    margin-top: 10px;
+    border: 0px solid greenyellow;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    font-size: 13px;
+}
+#inquiry-boxwrap{
+    border: 1px solid #e5e5e5;
+    display: inline-block;
+    width: 106%;
+    margin-left: 1%;
+    margin-top: 10px;
+}
+
+#inquiry-btn{
+    background-color: #35C5F0;
+    color: white;
+    border-radius: 2px;
+    border: 1px solid #35C5F0;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    width: 40px;
+    float: right;
+    height: 30px;
+}
+#inquirycontent-wrap{
+    /*border: #e83e8c 2px solid;*/
+    /*border-bottom: 1px solid #e5e5e5;*/
+    display: inline-block;
+    width: 106%;
+    /*height: 100px;*/
+    height: auto;
+    margin-left: 1%;
+    margin-top: 20px;
+    vertical-align: middle;
+    padding-bottom: 20px;
+
+}
+.each-inquiry{
+    border-bottom: 1px solid #e5e5e5;
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 10px;
+    padding-top: 5px;
+}
+.each-inquiry .inquiry-marketphotowrap{
+    float: left;
+    width: 20%;
+    height: 100%;
+    border: 0px solid darkgreen;
+    text-align: center;
+    display: inline-block;
+    margin-top: 12px;
+}
+.each-inquiry .inquiry-marketphotowrap img{
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+}
+.each-inquiry .inquiry-textwrap{
+    float: left;
+    width: 80%;
+    height: 100%;
+    border: sandybrown solid 0px;
+    padding: 2%;
+    display: inline-block;
+
+
+}
+.eachinquiry-marketname{
+    color: #888888;
+    float: left;
+}
+.eachinquiry-regdate {
+    color: #cccccc;
+    float: right;
+    font-size: 12px;
+}
+
+.eachinquiry-content{
+    padding-top: 5px;
+    border: 0px solid greenyellow;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+#moreinquiry-btn {
+    width:100%;
+    display: inline-block;
+    margin-left: 4%;
+    color: #888888;
+    background: none;
+    border: none;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+#moreinquiry-btn img {
+    width: 25px;
+    height: 25px;
+    margin-bottom: 3px;
+}
+.inquiry-delbtn, .inquiry-answerbtn{
+    font-size: 12px;
+    color: #35C5F0;
+    border: none;
+    background: none;
+    margin-left: -3px;
+}
+
+.inquiryanswer-regBtn{
+    background-color: #35C5F0;
+    color: white;
+    border-radius: 2px;
+    border: 1px solid #35C5F0;
+    font-size: 13px;
+    font-weight: bold;
+
+
+    float: right;
+    height: 30px;
+}
+.answer-wrap{
+    display: inline-block;
+    border: #e83e8c 0px solid;
+    width: 100%;
+}
+.answer-textarea{
+    resize: none;
+    width: 100%;
+    height: 80px;
+    border: #e5e5e5 1px solid;
+    border-radius: 3px;
+    font-size: 13px;
+    padding: 15px;
 }

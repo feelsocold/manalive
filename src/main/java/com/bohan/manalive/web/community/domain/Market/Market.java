@@ -91,6 +91,8 @@ public class Market implements Serializable {
     @OneToMany(mappedBy="wishedMarketProduct", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MarketWish> marketWishList = new ArrayList<>();
 
+    @OneToMany(mappedBy="inquiredMarket", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MarketInquiry> marketInquiryList = new ArrayList<>();
 
     @Builder
     public Market(String email, String title, String content, String category, String productStatus, String delivery, int price, int quantity, LocalDateTime createDate) {

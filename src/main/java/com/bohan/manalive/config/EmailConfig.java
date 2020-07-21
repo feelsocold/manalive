@@ -1,16 +1,17 @@
 package com.bohan.manalive.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Properties;
 
 @Component
-@PropertySource("classpath:mail.properties")
+//@PropertySource("classpath:mail.properties")
+@PropertySource("file:src/main/resources/mail.properties")
 public class EmailConfig {
 
     Properties pt = new Properties();

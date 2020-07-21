@@ -52,7 +52,12 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void deleteBoardReply(Long b_seq) {
-        replyRepository.deleteById(b_seq);
+    public void deleteBoardReply(Long r_seq) {
+        log.info("왜 삭제가 안되니?");
+        log.info(r_seq + "@");
+
+        Integer cnt =  replyRepository.deleteByR_seq(r_seq);
+        log.info(cnt + "@@");
+
     }
 }

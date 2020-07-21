@@ -29,7 +29,8 @@ button:hover{
 #info-wrap{
     /*display: none;*/
     text-align: center;
-    margin-top: 7%;
+    margin-top: 30px;
+    display: inline-block;
 
 }
 #info-wrap table {
@@ -147,6 +148,19 @@ button:hover{
     padding-left: 10px;
     padding-right: 10px;
     text-align: center;
+    margin-top: 15px;
+}
+#market-introduction {
+    margin-top: 18px;
+    font-size: 13px;
+    width: 95%;
+    height: 130px;
+    padding: 10px;
+    border: 1px solid rgb(219, 219, 219);
+    border-radius: 5px;
+    resize: none;
+    margin-left: 2px;
+    line-height: 20px;
 }
 
 #profileImg-btn {

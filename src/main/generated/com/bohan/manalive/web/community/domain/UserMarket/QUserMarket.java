@@ -24,6 +24,8 @@ public class QUserMarket extends EntityPathBase<UserMarket> {
 
     public final StringPath email = createString("email");
 
+    public final StringPath introduction = createString("introduction");
+
     public final ListPath<com.bohan.manalive.web.community.domain.Market.Market, com.bohan.manalive.web.community.domain.Market.QMarket> marketList = this.<com.bohan.manalive.web.community.domain.Market.Market, com.bohan.manalive.web.community.domain.Market.QMarket>createList("marketList", com.bohan.manalive.web.community.domain.Market.Market.class, com.bohan.manalive.web.community.domain.Market.QMarket.class, PathInits.DIRECT2);
 
     public final StringPath marketName = createString("marketName");
@@ -35,6 +37,8 @@ public class QUserMarket extends EntityPathBase<UserMarket> {
     public final StringPath phone = createString("phone");
 
     public final NumberPath<Long> seq = createNumber("seq", Long.class);
+
+    public final ListPath<UserMarketFollow, QUserMarketFollow> userMarketFollowList = this.<UserMarketFollow, QUserMarketFollow>createList("userMarketFollowList", UserMarketFollow.class, QUserMarketFollow.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> visitedGuestCnt = createNumber("visitedGuestCnt", Integer.class);
 

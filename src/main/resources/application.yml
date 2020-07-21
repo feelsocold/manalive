@@ -46,12 +46,16 @@ spring:
 
 cloud:
   aws:
+    credentials:
+      accessKey: AKIAVCL2DB6LDIRA7QUP
+      secretKey: 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
     s3:
       bucket: manalive-attach
     region:
       static: ap-northeast-2
     stack:
       auto: false
+
 
 
 

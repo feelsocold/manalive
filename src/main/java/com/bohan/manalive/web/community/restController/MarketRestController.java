@@ -7,11 +7,12 @@ import com.bohan.manalive.domain.user.UserRepository;
 import com.bohan.manalive.web.common.service.AttachService;
 import com.bohan.manalive.web.common.service.AttachSessionService;
 import com.bohan.manalive.web.common.service.UserService;
+import com.bohan.manalive.web.community.domain.UserMarket.UserMarket;
+import com.bohan.manalive.web.community.domain.UserMarket.UserMarketRepository;
 import com.bohan.manalive.web.community.dto.Board.BoardCriteria;
 import com.bohan.manalive.web.community.dto.Board.BoardRequestDto;
-import com.bohan.manalive.web.community.dto.Market.MarketCriteria;
-import com.bohan.manalive.web.community.dto.Market.MarketRequestDto;
-import com.bohan.manalive.web.community.dto.Market.MarketWishRequestDto;
+import com.bohan.manalive.web.community.dto.Market.*;
+import com.bohan.manalive.web.community.dto.UserMarket.UserMarketFollowRequestDto;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketRequestDto;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketResponseDto;
 import com.bohan.manalive.web.community.service.MarketService;
@@ -38,6 +39,7 @@ public class MarketRestController {
     private final AttachSessionService attachSessionService;
     private final MarketService marketService;
     private final UserRepository userRepo;
+    private final UserMarketRepository userMarketRepo;
 
     @PostMapping("/open/duplicatePhoneCheck")
     public String duplicatePhoneCheck(@RequestBody String phone) {
@@ -67,8 +69,8 @@ public class MarketRestController {
     }
 
     @PostMapping("/detail/{seq}")
-    public HashMap<String, Object> getMarketDetail(@PathVariable("seq") Long seq) throws Exception {
-        return marketService.getMarketDetail(seq);
+    public HashMap<String, Object> getMarketDetail(@PathVariable("seq") Long seq, @LoginUser SessionUser user) throws Exception {
+        return marketService.getMarketDetail(seq, user);
     }
 
     @Transactional
@@ -95,8 +97,7 @@ public class MarketRestController {
         dto.setEmail(user.getEmail());
         Map<String, String> map = new HashMap<>();
         String result = "";
-        boolean  bool = marketService.checkDuplicatedWish(dto);
-        log.info("위시 중복체크 : " + bool);
+        boolean bool = marketService.checkDuplicatedWish(dto);
         if(bool) {
             marketService.deleteMarketWish(dto);
             result = "DELETE";
@@ -135,20 +136,80 @@ public class MarketRestController {
     }
 
     @PostMapping("/userMarket")
-    public HashMap<String, Object> getUserMarkerInfo(@LoginUser SessionUser user) throws Exception{
+    public HashMap<String, Object> getUserMarkerInfo(@RequestParam("seq") Long seq) throws Exception{
         log.info("getUserMarkerInfo()");
+        log.info(seq + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         Map<String, Object> map = new HashMap<>();
-        log.info(user.getEmail());
-
-        return marketService.getUserMarketManageList(user.getEmail());
+        return marketService.getUserMarket(seq);
     }
 
-    @PostMapping("/getUserSeq")
+    @PostMapping("/getUserMarketSeq")
     public Long getUserSeq(@LoginUser SessionUser user) throws Exception{
-        Long seq = userRepo.findByEmail(user.getEmail()).get().getSeq();
-        return seq;
+        List<UserMarket> list = userMarketRepo.findByEmail(user.getEmail());
+        return list.get(0).getSeq();
+    }
+
+    @Transactional
+    @PostMapping("/follow/{userMarketSeq}")
+    public Boolean followUserMarket(@PathVariable("userMarketSeq") Long userMarketSeq, @LoginUser SessionUser user) throws Exception{
+        UserMarketFollowRequestDto dto = new UserMarketFollowRequestDto();
+        dto.setEmail(user.getEmail());
+        dto.setUserMarketSeq(userMarketSeq);
+        boolean duplication = marketService.checkDuplicatedFollow(dto);
+        if(duplication){
+            return marketService.unfollowUserMarket(dto);
+        }else{  //팔로우
+            return marketService.followUserMarket(dto);
+        }
     }
 
 
+    @PostMapping("/follower/{userMarketSeq}")
+    public Map<String, Object> getUserMarketFollowerList(@PathVariable("userMarketSeq") Long userMarketSeq, @RequestParam(defaultValue = "0") int pageNumber) throws Exception{
+        return marketService.getUserMarketFollowerList(userMarketSeq, pageNumber);
+    }
 
+    @Transactional
+    @PostMapping("/following/{userMarketSeq}")
+    public Map<String, Object> getUserMarketFollowingList(@PathVariable("userMarketSeq") Long userMarketSeq, @RequestParam(defaultValue = "0") int pageNumber) throws Exception{
+        return marketService.getUserMarketFollowingList(userMarketSeq, pageNumber);
+    }
+
+    @PostMapping("/checkUserMarketFollow")
+    public Boolean checkUserMarketFollow(@RequestParam Long userMarketSeq, @LoginUser SessionUser user)throws Exception {
+        UserMarketFollowRequestDto dto = new UserMarketFollowRequestDto();
+        dto.setEmail(user.getEmail());
+        dto.setUserMarketSeq(userMarketSeq);
+        return marketService.checkDuplicatedFollow(dto);
+    }
+
+    @PostMapping("/checkHavingUserMarket")
+    public Boolean checkHavingUserMarket(@LoginUser SessionUser user)throws Exception {
+        List<UserMarket> list = userMarketRepo.findByEmail(user.getEmail());
+        return list.size()>0 ? true : false;
+    }
+
+    @PostMapping("/saveMarketInquiry")
+    public boolean saveMarketInquiry(@RequestBody MarketInquiryRequestDto dto,
+                                     @LoginUser SessionUser user) throws Exception{
+        return marketService.saveMarketInquiry(dto, user);
+    }
+
+    @PostMapping("/inquiry/list/{marketProductSeq}/{pageNumber}/{delayCnt}")
+    public List<MarketInquiryResponseDto> getInquiryList(@PathVariable(name = "marketProductSeq") Long seq,
+                                                         @PathVariable(name = "pageNumber") int inquiryPageNumber,
+                                                         @PathVariable(name = "delayCnt") int delayCnt
+                                                         )throws Exception{
+        return marketService.getMarketInquiryList(seq, inquiryPageNumber, delayCnt);
+    }
+
+    @PostMapping("inquiry/delete/{seq}")
+    public void deleteInquiry(@PathVariable(name = "seq") Long inquirySeq)throws Exception{
+        marketService.deleteMarketInquiry(inquirySeq);
+    }
+
+    @PostMapping("/saveMarketInquiryAnswer")
+    public boolean saveMarketInquiryAnswer(@RequestBody MarketInquiryAnswerRequestDto dto) throws Exception{
+        return marketService.saveMarketInquiryAnswer(dto);
+    }
 }

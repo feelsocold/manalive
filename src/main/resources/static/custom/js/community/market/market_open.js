@@ -29,7 +29,7 @@ $(document).ready(function() {
                                 "<input type='button' id='sms-sendBtn' value='인증번호 전송하기 '>" +
                                 "<input type='number' id='authentic-number' placeholder='인증번호를 입력해주세요.'>" +
                                 "<input type='button' id='authentic-confirmBtn' value='확인'></div>");
-                            $("#info-wrap").css({'margin-top': '30px'});
+                            // $("#info-wrap").css({'margin-top': '30px'});
 
                         }else {
                             return false;
@@ -77,6 +77,7 @@ $(document).ready(function() {
             $("#sms-sendBtn").val("인증완료");
             $("#sms-sendBtn").css({'color': '#4742DB'});
             $('[name="name"]').attr('disabled', false);
+            $('[name="introduction"]').attr('disabled', false);
             $("#profileImg-btn").attr('disabled', false);
             $("#profile-img").css({'background': 'none'});
             $('[name="name"]').focus();
@@ -144,6 +145,7 @@ $('#openMarket-submitBtn').click(function (e) {
 
     var data = { "phone" : document.getElementById("input-phone").value,
         "marketName" : document.getElementById("market-name").value,
+        "introduction" : document.getElementById("market-introduction").value,
         "marketPhoto" : document.getElementById("market-photo").value
     };
 
