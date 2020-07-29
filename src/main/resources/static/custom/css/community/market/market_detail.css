@@ -626,3 +626,38 @@ ul{
     font-size: 13px;
     padding: 15px;
 }
+.selleranswer-wrap{
+    margin-left: 10%;
+    width: 87%;
+    border: #e83e8c 0px solid;
+
+}
+.selleranswer-textarea{
+    border: none;
+    font-size: 13px;
+    resize: none;
+    border: 0px solid #e5e5e5;
+    border-radius: 2px;
+    width: 75%;
+    height: auto;
+    margin-left: 25%;
+    margin-top: 10px;
+
+}
+.selleranswer-marketname{
+    color: #35C5F0;
+    margin-left: 15px;
+    font-size: 15px;
+
+}
+.selleranswer-regdate{
+    color: #cccccc;
+    font-size: 12px;
+    margin-top: 10px;
+}
+.selleranswer-photo{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-left: 10px;
+}

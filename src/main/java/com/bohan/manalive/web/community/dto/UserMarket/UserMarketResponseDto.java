@@ -25,6 +25,8 @@ public class UserMarketResponseDto {
     private Long followerCnt;
     private Long productCnt;
 
+    private Long um_seq;
+
     public UserMarketResponseDto(Long seq, String marketName, String photoUrl){
         this.seq = seq;
         this.marketName = marketName;
@@ -48,6 +50,13 @@ public class UserMarketResponseDto {
         this.createDate = createDate;
         this.photoUrl = photoUrl;
         this.followerCnt = followerCnt;
+    }
+
+    public UserMarketResponseDto(Long um_seq, String marketName, String introduction, String photoUrl ){
+        this.um_seq = um_seq;
+        this.marketName = marketName;
+        this.introduction = introduction;
+        this.photoUrl = photoUrl;
     }
 
 

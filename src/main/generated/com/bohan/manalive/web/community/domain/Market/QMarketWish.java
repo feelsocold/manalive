@@ -24,11 +24,11 @@ public class QMarketWish extends EntityPathBase<MarketWish> {
 
     public final DateTimePath<java.time.LocalDateTime> createDate = createDateTime("createDate", java.time.LocalDateTime.class);
 
-    public final StringPath email = createString("email");
-
     public final NumberPath<Long> marketSeq = createNumber("marketSeq", Long.class);
 
     public final NumberPath<Long> seq = createNumber("seq", Long.class);
+
+    public final NumberPath<Long> userMarketSeq = createNumber("userMarketSeq", Long.class);
 
     public final QMarket wishedMarketProduct;
 

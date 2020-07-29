@@ -4,6 +4,7 @@ var sessionEmail = $("#sessionUser-email").val();
 var userMarketEmail = "";
 var userMarketSeq = 0;
 var followerPageNumber = 0;
+var sessionUserMarketSeq;
 
 $(document).ready(function() {
     var data = { "seq" : seq };
@@ -16,17 +17,19 @@ $(document).ready(function() {
             spreadUserMarketInfo(result);
             spreadMarketList(result);
             spreadPaging(result.pageMaker);
-            if(sessionVal != "") {
-                checkUserMarketFollow();
+            if(sessionVal != "") { checkUserMarketFollow();}
+            //sessionUserMarketSeq = result.sessionUserMarketSeq;
+            if(result.sessionUserMarketSeq == userMarketSeq){
+                $(".usermarket-nav ul").append("<li class='wish-navbtn'><a href='#'>찜</a></li>");
             }
+
         },error: function (jqXHR, textStatus, errorThrown) {
             alert("error");
         },beforeSend:function(){
-
-        },complete:function(){
         }
     });
 });
+
 function checkUserMarketFollow(){
 
     var data = { "userMarketSeq" : userMarketSeq};
@@ -135,7 +138,25 @@ function spreadUserMarketInfo(data) {
         $("#usermarket-manageBtn").show();
     }
 }
-
+function spreadWishList( data ) {
+    var list = data.marketList;
+    var attachList = data.attachList;
+    $("#list-wrap").empty();
+    // LIST 뿌리기
+    for(var i = 0; i < list.length; i++) {
+        var str = "";
+        str += "<div class='item-wrapper' data-oper='"+list[i].seq+"'>";
+        str += "<div class='item-image'><img src='"+attachList[i]+"'></div>";
+        str += "<div class='item-info'>";
+        str += "<span class='item-title'>"+list[i].title+"</span><br>";
+        str += "<span class='item-price'>"+numberFormat(list[i].price)+" 원</span><br>";
+        str += "<span class='item-regdate'>"+timeForToday(list[i].createDate)+"</span><hr>";
+        str += "<span class='item-readcnt'>조회 <label>"+ list[i].readCount+"</label></span>";
+        str += "<span class='item-wishcnt'>&nbsp;&sdot;&nbsp;찜 <label>"+list[i].marketWishList.length+"</label></span>";
+        str += "</div>";
+        $("#list-wrap").append(str);
+    }
+}
 function timeForTodayForCreateDate(value) {
     const today = new Date();
     const timeValue = new Date(value);
@@ -240,12 +261,36 @@ $(document).on('click','.productlist-navBtn a ',function(e){
     $(this).closest("li").css("border-bottom", "4px solid #35C5F0");
     $(this).css("color", "#35C5F0");
 });
+// [찜] 클릭
+$(document).on('click','.wish-navbtn a ',function(e){
+    e.preventDefault();
+
+    $.ajax({
+        type: 'POST',
+        url: '/market/userMarket/wish/' + userMarketSeq,
+        success: function (result) {
+            console.log(result);
+            alert(result.length);
+
+            $("#followlist-content").empty();
+            $(".usermarket-nav ul li").css({"border": "none"});
+            $(".usermarket-nav ul li a").css("color", "black");
+            $(".wish-navbtn a").css("border-bottom", "4px solid #35C5F0");
+            $(this).css("color", "#35C5F0");
+            $(".content-wrap").hide();
+            // spreadFollowerFollowingList(result, "follower");
+        }, error: function (jqXHR, textStatus, errorThrown) {
+            alert("error");
+        }
+    });
+});
+
 // [팔로워] 클릭
 $(document).on('click','.follower-btn a ',function(e){
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url: '/market/follower/' + userMarketSeq,
+            url: '/market/userMarket/follower/' + userMarketSeq,
             dataType: 'json',
             success: function (result) {
                 console.log(result);
@@ -267,7 +312,7 @@ $(document).on('click','.following-btn a ',function(e){
 
     $.ajax({
         type: 'POST',
-        url: '/market/following/' + userMarketSeq,
+        url: '/market/userMarket/following/' + userMarketSeq,
         dataType: 'json',
         success: function (result) {
             console.log(result);

@@ -11,10 +11,10 @@ import java.util.List;
 
 public interface AttachRepository extends JpaRepository<Attach, Long>, CrudRepository<Attach, Long> {
 
-    @Query(" SELECT new com.bohan.manalive.web.common.dto.AttachDto (a.att_no, a.category, a.superKey, a.filename, a.extension, a.uuid, a.url, a.createDate, a.modifiedDate) " +
+    @Query(" SELECT new com.bohan.manalive.web.common.dto.AttachDto (a.attNo, a.category, a.superKey, a.filename, a.extension, a.uuid, a.url, a.createDate, a.modifiedDate) " +
             " FROM Attach a " +
             " WHERE a.superKey = :seq AND a.category = :category " +
-            " ORDER BY a.att_no DESC")
+            " ORDER BY a.attNo ASC")
     List<AttachDto> getAttachListBySuperKey(@Param("seq") Long seq, @Param("category") String category);
 
 }

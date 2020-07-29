@@ -27,7 +27,7 @@ public class Attach extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long att_no;
+    private Long attNo;
 
     @Column(nullable = false)
     private String category;

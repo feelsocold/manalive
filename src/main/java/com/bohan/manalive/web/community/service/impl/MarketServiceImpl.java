@@ -39,6 +39,7 @@ public class MarketServiceImpl implements MarketService {
     private final UserMarketFollowRepository userMarketFollowRepo;
     private final MarketInquiryRepository marketInquiryRepo;
     private final MarketInquiryAnswerRepository marketInquiryAnswerRepo;
+    private final MarketWishRepository getMarketWishRepo;
 
     LocalDateTime currentDateTime = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -102,15 +103,18 @@ public class MarketServiceImpl implements MarketService {
     public HashMap<String, Object> getMarketDetail(Long seq, @LoginUser SessionUser user) throws Exception {
 
 
-
         HashMap<String, Object> map = new HashMap<>();
         Market market = marketRepo.findById(seq).get();
         List<AttachDto> attachList = attachService.getAttachList(seq, "MARKET");
 
         map.put("attachList", attachList);
         map.put("userMarketDto", market.getUserMarket());
+
+        //map.put("userMarketDto", userMarketRepo.getUserMarketInfoBySeq(seq));
+
+
         map.put("marketDto", market);
-        map.put("inquiryList", getMarketInquiryList(seq, 0, 0) );
+        map.put("inquiryMap", getMarketInquiryList(seq, 0, 0) );
 
         if(user != null){
             map.put("sessionUserMarketSeq", userMarketRepo.getUserMarketSeq(user.getEmail()));
@@ -127,6 +131,15 @@ public class MarketServiceImpl implements MarketService {
     }
 
     @Override
+    public List<MarketResponseDto> getOtherProductlist(Long seq) throws Exception {
+
+
+
+
+        return null;
+    }
+
+    @Override
     public Long openMarket(UserMarketRequestDto dto) throws Exception {
         return userMarketRepo.save(dto.toEntity()).getSeq();
     }
@@ -140,15 +153,22 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     public boolean checkDuplicatedWish(MarketWishRequestDto dto) throws Exception {
-        List<MarketWish> list = marketWishRepo.findByEmailAndMarketSeq(dto.getEmail(), dto.getMarketSeq());
-        log.info("중복 리스트 사이즈: " + list.size());
+        //List<MarketWish> list = marketWishRepo.findByEmailAndMarketSeq(dto.getEmail(), dto.getMarketSeq());
+        List<MarketWish> list = marketWishRepo.findByUserMarketSeqAndMarketSeq(dto.getUserMarketSeq(), dto.getMarketSeq());
         return list.size()>0 ? true : false;
     }
 
     @Override
     public boolean deleteMarketWish(MarketWishRequestDto dto) throws Exception {
-        Long cnt = marketWishRepo.deleteByEmailAndMarketSeq(dto.getEmail(), dto.getMarketSeq());
+        Long cnt = marketWishRepo.deleteByUserMarketSeqAndMarketSeq(dto.getUserMarketSeq(), dto.getMarketSeq());
         return cnt>1 ? true : false;
+    }
+
+    @Override
+    public List<MarketWishResponseDto> getUserMarketWishList(Long userMarketSeq) throws Exception {
+
+
+        return getMarketWishRepo.getMarketWishList(userMarketSeq);
     }
 
     @Override
@@ -169,14 +189,21 @@ public class MarketServiceImpl implements MarketService {
     }
 
     @Override
-    public boolean saveMarketInquiryAnswer(MarketInquiryAnswerRequestDto dto) throws Exception {
+    public MarketInquiryAnswer saveMarketInquiryAnswer(MarketInquiryAnswerRequestDto dto) throws Exception {
         dto.setCreateDate(currentDateTime);
-        Long seq = marketInquiryAnswerRepo.save(dto.toEntity()).getSeq();
-        return seq>0 ? true : false;
+        return marketInquiryAnswerRepo.save(dto.toEntity());
     }
 
     @Override
-    public List<MarketInquiryResponseDto> getMarketInquiryList(Long marketSeq, int pageNumber, int delayCnt) throws Exception {
+    public List<MarketInquiryAnswer> getMarketInquiryAnswerList(Long marketInquirySeq) throws Exception {
+        return marketInquiryAnswerRepo.findByMarketInquirySeq(marketInquirySeq);
+    }
+
+    @Override
+    public HashMap<String, Object> getMarketInquiryList(Long marketSeq, int pageNumber, int delayCnt) throws Exception {
+        HashMap<String, Object> map = new HashMap<>();
+        List<MarketInquiryAnswer> answerList = new ArrayList<>();
+
         List<MarketInquiryResponseDto> list = marketInquiryRepo.getMarketInquiryList(marketSeq);
         int mount = 5;
         int start = (pageNumber * mount)-delayCnt;
@@ -187,7 +214,17 @@ public class MarketServiceImpl implements MarketService {
         Pageable paging = PageRequest.of(pageNumber, mount, Sort.Direction.DESC, "seq");
         Page<MarketInquiryResponseDto> pageInfo = new PageImpl<>(list.subList(start, end), paging, list.size());
         List<MarketInquiryResponseDto> pagingList = pageInfo.getContent();
-        return pagingList;
+        for(MarketInquiryResponseDto dto : pagingList){
+            List<MarketInquiryAnswer> answerList2 = marketInquiryAnswerRepo.findByMarketInquirySeq(dto.getInquirySeq());
+            if(answerList2.size() != 0){
+                answerList.add(answerList2.get(0));
+            }
+        }
+
+        map.put("marketInquiryList", pagingList);
+        map.put("marketInquiryAnswerList", answerList);
+
+        return map;
     }
 
 
@@ -224,16 +261,21 @@ public class MarketServiceImpl implements MarketService {
     }
     @Transactional
     @Override
-    public HashMap<String, Object> getUserMarket(Long seq) throws Exception {
+    public HashMap<String, Object> getUserMarket(Long seq, @LoginUser SessionUser user) throws Exception {
         HashMap<String, Object> map = new HashMap<>();
-        log.info("여기여기여기여기여기여기여기여기여기여기여기여기");
+
         String email = userMarketRepo.findById(seq).get().getEmail();
         log.info(email + "@@@@@@@@@@@@@@@@@");
         MarketCriteria criteria = new MarketCriteria();
         criteria.setCategory("EMAIL");
         criteria.setKeyword(email);
         map = getMarketList(criteria);
+
         map.put("userMarketInfo", userMarketRepo.getUserMarketInfo(email));
+
+        if(user != null){
+            map.put("sessionUserMarketSeq", userMarketRepo.getUserMarketSeq(user.getEmail()));
+        }
         return map;
     }
 

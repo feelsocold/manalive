@@ -6,6 +6,7 @@ import com.bohan.manalive.web.community.domain.Board.BoardLike;
 import com.bohan.manalive.web.community.domain.Board.BoardReply;
 import com.bohan.manalive.web.community.domain.UserMarket.UserMarket;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.*;
 
@@ -69,6 +70,9 @@ public class Market implements Serializable {
     @Column(nullable = false, insertable=true, updatable=false)
     private String email;
 
+    @Column(insertable = false, columnDefinition = "tinyint(1) default 0")
+    private boolean isSoldout;
+
     //@JsonIgnore
 //    @ManyToOne(targetEntity=User.class, fetch=FetchType.LAZY, cascade = CascadeType.DETACH)
 //    @OnDelete(action = OnDeleteAction.NO_ACTION)
@@ -91,6 +95,7 @@ public class Market implements Serializable {
     @OneToMany(mappedBy="wishedMarketProduct", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MarketWish> marketWishList = new ArrayList<>();
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy="inquiredMarket", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MarketInquiry> marketInquiryList = new ArrayList<>();
 

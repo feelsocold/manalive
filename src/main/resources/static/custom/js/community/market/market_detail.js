@@ -1,5 +1,5 @@
 var replyPageNumber = 0;
-var seq = $("#seq").val();
+var m_seq = $("#seq").val();
 var sessionVal = $("#sessionUser").val();
 var sessionEmail = $("#sessionUser-email").val();
 var sellingMarketSeq;
@@ -11,19 +11,21 @@ var inquiryListSize = 0;
 
 $(document).ready(function() {
     //var data = { "seq" : seq };
+    autosize($("textArea"));
 
     $.ajax({
         type: 'POST',
-        url: '/market/detail/' + seq,
+        url: '/market/detail/' + m_seq,
         success : function(result){
             console.log(result);
-            sellingMarketSeq = result.marketDto.seq;
+            sellingMarketSeq = result.userMarketDto.seq;
             inquiryListSize = result.marketDto.marketInquiryList.length;
             sessionUserMarketSeq = result.sessionUserMarketSeq;
             spreadItemInfo(result.marketDto);
             spreadPhotolist(result.attachList);
-            spreadMarketInquiryList(result.inquiryList);
             spreadUserMarket(result.userMarketDto);
+            spreadMarketInquiryList(result.inquiryMap);
+            spreadOtherProduct(result.userMarketDto.marketList);
         },error: function (jqXHR, textStatus, errorThrown) {
             alert("error");
         },beforeSend:function(){
@@ -33,7 +35,7 @@ $(document).ready(function() {
     });
 
     if(sessionVal != "") {
-        var data = { "marketSeq" : seq};
+        var data = { "marketSeq" : m_seq};
         $.ajax({
             type: 'POST',
             url: '/market/wishCheck',
@@ -45,15 +47,35 @@ $(document).ready(function() {
                     $("#wish-btn").css({'background-color':'#35C5F0', color:'white' });
                     $("#wish-btn").html("찜 ✔");
                 }
+
+                if(sessionUserMarketSeq == undefined) {
+                    $("#inquiry-content").attr("placeholder", "상점개설 후 이용해주세요!");
+                    $("#inquiry-content").attr('readonly','readonly');
+                    $("#inquiry-btn").hide();
+                }
             },error: function (jqXHR, textStatus, errorThrown) {
                 alert("error");
             }
         });
+    }else{
+        $("#inquiry-content").attr("placeholder", "로그인 후 이용해주세요!");
+        $("#inquiry-content").attr('readonly','readonly');
+        $("#inquiry-btn").hide();
+        // $("#inquiry-btn").prop('disabled', true);
+        // $("#inquiry-btn").css({"background-color": "#D5D5D5"}, {"border": "1px solid red"});
+
     }
-
-
-
 });
+
+// $("#inquiry-content").focus(function(){
+//     if(sessionVal == "") {
+//         alert("로그인 후 이용해주세요");
+//         $(this).focusout();
+//     }
+//     //$("span").css("display", "inline").fadeOut(2000);
+// });
+
+
 function spreadItemInfo(data) {
     var productStatus = data.productStatus;
     var delivery = data.delivery;
@@ -85,6 +107,7 @@ function spreadItemInfo(data) {
 }
 
 function spreadPhotolist(data) {
+
     for(var i=0; i < data.length; i++) {
         $("#photolist-area ul").append("<li><img src='"+ data[i].url+"' onmouseover='changeMainPhoto(this)'></li>");
         if(i == 0){
@@ -93,23 +116,31 @@ function spreadPhotolist(data) {
     }
 }
 
-function spreadUserMarket(obj) {
-    var len = obj.marketList.length;
-    $("#alink-userMarket").attr("href", "/market/userMarket/" + obj.seq);
 
+function spreadUserMarket(obj) {
+    $("#alink-userMarket").attr("href", "/market/userMarket/" + obj.seq);
     $("#umarket-photo").attr("src", obj.marketPhoto);
     $("#umarket-name").html(obj.marketName);
+
+    // if(obj.marketList.length > 0){
+    //     spreadOtherProduct(obj);
+    // }
+}
+
+function spreadOtherProduct(obj){
+    //var len = obj.marketList.length;
+
+    var len = obj.length;
 
     if(len == 1){
         $("#otherItmes-table").remove();
     }else{
         var end = (len>5)?5:len;
         for(var i=0; i < end; i++) {
-            var other_seq = obj.marketList[i].seq;
-            if(seq != other_seq){
-                console.log(other_seq);
+            var other_seq = obj[i].seq;
+            if(m_seq != other_seq){
                 getMainPhoto(other_seq);
-                 end++;
+                end++;
             }
         }
     }
@@ -118,29 +149,46 @@ function spreadUserMarket(obj) {
         $("#other-product").append("<div class='other-eachProduct'><button id='other-moreBtn'>더보기</button></div>");
     }
 }
+
 // 상품 문의 리스트 뿌리기
 function spreadMarketInquiryList(data) {
-    console.log(data);
 
-    for(var i=0; i < data.length; i++) {
+    var inquirylist = data.marketInquiryList;
+    var answerlist = data.marketInquiryAnswerList;
+    //  console.log(answerlist);
+
+    for(var i=0; i < inquirylist.length; i++) {
         var str = "";
         str += "<div class='each-inquiry'><div class='inquiry-marketphotowrap'>";
-        str += "<img src='" + data[i].userMarketPhoto + "'></div>";
+        str += "<img class='inquiryusermaket-photo' src='" + inquirylist[i].userMarketPhoto + "'></div>";
         str += "<div class='inquiry-textwrap'><div class='eachinquiry-marketnameanddate'>";
-        str += "<span class='eachinquiry-marketname'>" + data[i].userMarketName +"</span>" ;
-        str += "<span class='eachinquiry-regdate'>" + timeForToday(data[i].createDate) +"</span></div>" ;
-        str += "<textarea class='eachinquiry-content' readonly>" + data[i].content + "</textarea>";
+        str += "<span class='eachinquiry-marketname'>" + inquirylist[i].userMarketName +"</span>" ;
+        str += "<span class='eachinquiry-regdate'>" + timeForToday(inquirylist[i].createDate) +"</span></div>" ;
+        str += "<textarea class='eachinquiry-content' readonly>" + inquirylist[i].content + "</textarea>";
 
-        if(sessionUserMarketSeq == data[i].userMarketSeq){
-            str += "<button class='inquiry-delbtn' value='"+data[i].inquirySeq+"'>삭제하기</button>";
+        if(sessionUserMarketSeq == inquirylist[i].userMarketSeq){
+            str += "<button class='inquiry-delbtn' value='"+inquirylist[i].inquirySeq+"'>삭제하기</button>";
         }
+        //alert("mirage");
 
-        if(sessionUserMarketSeq == sellingMarketSeq){
-            str += "<button class='inquiry-answerbtn' value='"+data[i].inquirySeq+"'>답변하기</button>";
+        var futari = "";
+        for(var j=0; j < answerlist.length; j++) {
+            if(inquirylist[i].inquirySeq == answerlist[j].marketInquirySeq ){
+                futari = spreadInquiryAnswer(answerlist[j]);
+                break;
+            }
         }
-
-        str += "</div></div>";
-        $("#inquirycontent-wrap").append(str);
+        // alert(sessionUserMarketSeq);
+        // alert(sellingMarketSeq);
+        if(futari == ''){
+            if(sessionUserMarketSeq == sellingMarketSeq){
+                str += "<button class='inquiry-answerbtn' value='"+inquirylist[i].inquirySeq+"'>답변하기</button>";
+            }
+        }
+        // $("#inquirycontent-wrap").append(str);
+        // $("#inquirycontent-wrap").append(futari);
+        str += "</div>";
+        $("#inquirycontent-wrap").append(str + futari + "</div>")
     }
 
     // alert(sessionUserMarketSeq);
@@ -150,35 +198,33 @@ function spreadMarketInquiryList(data) {
         $("#inquirycontent-wrap").append(str);
     }
 }
+
 function changeMainPhoto(obj) {
     var url = $(obj).attr("src");
     $("#main-photo").attr('src', url);
 }
+
 function numberFormat( value ) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
 function getMainPhoto(seq) {
     var data = { "seq" : seq,
-        "category" :  "MARKET"
-    };
+        "category" :  "MARKET" };
     var str = "";
-    var arr = "";
-    arr = arr + seq + ",";
         $.ajax({
             type: 'POST',
             url: '/attach/getMainPhoto',
             data: data,
+            async : false,
             success : function(result){
                 str += ("<div class='other-eachProduct'><a href='"+seq+"'><img src='"+ result+"'></div></a>");
                 //$("#other-product").append("<div class='other-eachProduct'><img src='"+ result+"'></div>");
             },error: function (jqXHR, textStatus, errorThrown) {
                 alert("error");
             },beforeSend:function(){
-
             },complete:function(){
-
                 $("#other-product").append(str);
-                console.log(arr);
 
             }
         });
@@ -192,47 +238,51 @@ $(document).on('click','.other-eachProduct a',function(e){
 
 // 찜하기 or 찜해제
 function saveOrdeleteWish(obj){
-    var data = { "marketSeq" : seq};
+    var data = { "marketSeq" : m_seq};
     if(sessionVal != "") {
-        $.ajax({
-            type: 'POST',
-            url: '/market/wish',
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                if (data.result == 'SAVE') {
-                    $("#wish-btn").css({'background-color': '#35C5F0', color: 'white'});
-                    $("#wish-btn").html("찜  ✔");
-                } else if (data.result == 'DELETE') {
-                    $("#wish-btn").css({'background-color': 'white', color: '#35C5F0'});
-                    $("#wish-btn").html("찜하기");
+        if(sessionUserMarketSeq != undefined) {
+            $.ajax({
+                type: 'POST',
+                url: '/market/wish/save',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.result == 'SAVE') {
+                        $("#wish-btn").css({'background-color': '#35C5F0', color: 'white'});
+                        $("#wish-btn").html("찜  ✔");
+                    } else if (data.result == 'DELETE') {
+                        $("#wish-btn").css({'background-color': 'white', color: '#35C5F0'});
+                        $("#wish-btn").html("찜하기");
+                    }
+                }, error: function (jqXHR, textStatus, errorThrown) {
+                    alert("error");
+                }, beforeSend: function () {
+                    $(obj).attr('disabled', true);
+                }, complete: function () {
+                    $(obj).attr('disabled', false);
                 }
-            }, error: function (jqXHR, textStatus, errorThrown) {
-                alert("error");
-            }, beforeSend: function () {
-                $(obj).attr('disabled', true);
-            }, complete: function () {
-                $(obj).attr('disabled', false);
-            }
-        });
+            });
+        }else{
+            alert("상점개설 후 이용해주세요!");f
+        }
     }else{
         $('#Login-Btn').click();
     }
 }
-// 상풍문의 글자수 체크
+
+// 상품문의 글자수 체크
 function keydownInquiry(obj) {
     var value = $(obj).val();
     if(value.length < 102) {
         $("#inquiry-textCnt").html(value.length); }
 }
+
 // 상품문의 등록
 function saveInquiry() {
-
     $("#inquirycontent-wrap").empty();
     var data = { "content" : $("#inquiry-content").val(),
-                "marketProductSeq" : seq};
-
+                "marketProductSeq" : m_seq};
     if(sessionVal != "") {
         $.ajax({
             type: 'POST',
@@ -260,10 +310,9 @@ function saveInquiry() {
 }
 
 function getInquiryList() {
-
         $.ajax({
             type: 'POST',
-            url: '/market/inquiry/list/' + seq + "/" + inquiryPageNumber + "/" + inquiryDelayCnt,
+            url: '/market/inquiry/list/' + m_seq + "/" + inquiryPageNumber + "/" + inquiryDelayCnt,
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
@@ -273,6 +322,7 @@ function getInquiryList() {
             }
         });
 }
+
 // 상품문의 더보기 클릭
 $(document).on('click','#moreinquiry-btn',function(e) {
     $(this).remove();
@@ -290,15 +340,10 @@ $(document).on('click','.inquiry-delbtn',function(e){
         url: '/market/inquiry/delete/' + inquirySeq,
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
-        success: function (data) {
-
-        }, error: function (jqXHR, textStatus, errorThrown) {
-            alert("!error!");
-        },complete:function(){
+        complete:function(){
             obj.closest('.each-inquiry').remove();
         }
     });
-
 });
 
 $(document).on('click','.inquiry-answerbtn',function(e){
@@ -306,10 +351,25 @@ $(document).on('click','.inquiry-answerbtn',function(e){
 
     $('.answer-wrap').remove();
     $('.inquiry-answerbtn').show();
-    $(this).after("<div class='answer-wrap'><textarea class='answer-textarea'></textarea><button class='inquiryanswer-regBtn' value="+inquirySeq+">답변 등록</button></div>");
+    $(this).after("<div class='answer-wrap'><br><textarea class='answer-textarea' placeholder='친절하고 상세하게 답변을 달아주세요.'></textarea><button class='inquiryanswer-regBtn' value="+inquirySeq+">답변 등록</button></div>");
     $(this).hide();
 
 });
+
+function spreadInquiryAnswer(data) {
+    var src = $("#umarket-photo").attr('src');
+    var marketname = $("#umarket-name").html();
+    var str = "";
+
+    str += "<div class='selleranswer-wrap' style='display: inline-block'>";
+    str += "<img src='/custom/img/icon/icon-arrow-rightdown.png' style='width: 25px; height: 25px;'>&nbsp;<img class='selleranswer-photo' src='"+src+"'>";
+    str += "<span class='selleranswer-marketname'>"+marketname+"</span>";
+    str += "<span class = 'selleranswer-regdate' style='float: right;'>"+timeForToday(data.createDate)+"</span><br>";
+    str += "<textarea class='selleranswer-textarea'>"+data.content+"</textarea>";
+    str += "</div>";
+
+    return str;
+}
 
 $(document).on('click','.inquiryanswer-regBtn',function(e){
     var obj = $(this);
@@ -317,8 +377,6 @@ $(document).on('click','.inquiryanswer-regBtn',function(e){
     var content = obj.siblings('.answer-textarea');
     var data = { "inquirySeq" : inquirySeq,
                 "content" : content.val() };
-
-
 
     if(content != "") {
         $.ajax({
@@ -328,29 +386,34 @@ $(document).on('click','.inquiryanswer-regBtn',function(e){
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                console.log(data);
+                //console.log(data);
+                content.remove();
+
+                var futari = spreadInquiryAnswer(data);
+
+                autosize($(".selleranswer-textarea"));
+                autosize($("textArea"));
+                $(".selleranswer-textarea").attr('readonly','readonly');
+                //obj.closest('.answer-wrap').before(str);
+                obj.closest('.each-inquiry').append(futari);
+
+                //obj.closest('.inquiry-textwrap').remove();
+                //obj.closest('.inquiry-textwrap').previousSibling.firstChild.appendChild(abc);
+                //('.inquiryusermaket-photo').append(abc);
+
+                // content.css("border", "none");
+
+                obj.remove();
+
             }, error: function (jqXHR, textStatus, errorThrown) {
                 alert("error~~");
             },complete:function(){
-                var src = $("#umarket-photo").attr('src');
-                var marketname = $("#umarket-name").html();
-                var str = "";
-                str += "<div style='display: inline-block'><img src='"+src+"' style='width: 45px; height: 45px; border-radius: 50%'>&nbsp;";
-                str += "<span>"+marketname+"</span>"
-                str += "</div>";
-                obj.closest('.answer-wrap').before(str);
-                content.attr('readonly','readonly');
-                content.css("border", "none");
-                obj.remove();
+              //  obj.closest('.each-inquiry').append("<br><img src='/custom/img/icon/icon-arrow-rightdown.png' style='width: 35px; height: 35px; display: inline-block;'>&nbsp;");
             }
         });
     }else{
         alert("답변을 입력해주세요.");
     }
-
-
-
-
 });
 
 

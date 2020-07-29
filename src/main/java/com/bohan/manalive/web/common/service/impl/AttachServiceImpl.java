@@ -34,7 +34,7 @@ public class AttachServiceImpl implements AttachService {
 
     @Override
     public Long saveAttach(AttachDto requestDto) throws Exception {
-        return attachRepository.save(requestDto.toEntity()).getAtt_no();
+        return attachRepository.save(requestDto.toEntity()).getAttNo();
     }
 
     @Override

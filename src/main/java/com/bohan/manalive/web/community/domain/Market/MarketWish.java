@@ -28,7 +28,10 @@ public class MarketWish implements Serializable {
     private Long marketSeq;
 
     @Column(nullable = false, insertable=true, updatable=false)
-    private String email;
+    private Long userMarketSeq;
+
+//    @Column(nullable = false, insertable=true, updatable=false)
+//    private String email;
 
     @Column(nullable = false)
     private LocalDateTime createDate;
@@ -39,9 +42,9 @@ public class MarketWish implements Serializable {
     private Market wishedMarketProduct;
 
     @Builder
-    public MarketWish(Long marketSeq, String email, LocalDateTime createDate) {
-        this.email = email;
+    public MarketWish(Long marketSeq, Long userMarketSeq, LocalDateTime createDate) {
         this.marketSeq = marketSeq;
+        this.userMarketSeq = userMarketSeq;
         this.createDate = createDate;
     }
 

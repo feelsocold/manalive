@@ -21,7 +21,7 @@ public class QAttach extends EntityPathBase<Attach> {
 
     public final com.bohan.manalive.config.oauth.dto.QBaseTimeEntity _super = new com.bohan.manalive.config.oauth.dto.QBaseTimeEntity(this);
 
-    public final NumberPath<Long> att_no = createNumber("att_no", Long.class);
+    public final NumberPath<Long> attNo = createNumber("attNo", Long.class);
 
     public final StringPath category = createString("category");
 

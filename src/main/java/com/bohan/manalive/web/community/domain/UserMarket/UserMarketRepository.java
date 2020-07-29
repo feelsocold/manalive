@@ -38,6 +38,8 @@ public interface UserMarketRepository extends JpaRepository<UserMarket, Long>,
             " GROUP BY b.url ")
     UserMarketResponseDto getUserMarketInfo(@Param("email") String email);
 
+
+
     @Query(" SELECT new com.bohan.manalive.web.community.dto.UserMarket.UserMarketResponseDto(" +
             " a.followerMarketSeq, c.marketName, " +
             " ( SELECT d.url FROM Attach AS d WHERE d.superKey = a.followerMarketSeq AND d.category = 'USER_MARKET' ), " +

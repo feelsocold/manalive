@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AttachResponseDto implements Serializable {
 
-    private Long att_no;
+    private Long attNo;
     private LocalDateTime createDate;
     private LocalDateTime modifiedDate;
     private String category;
@@ -24,12 +24,12 @@ public class AttachResponseDto implements Serializable {
     private String uuid;
 
     public AttachResponseDto(Long att_no, String url) {
-        this.att_no = att_no;
+        this.attNo = att_no;
         this.url = url;
     }
 
     public AttachResponseDto(Long att_no, String category, Long superKey, String filename, String extension, String uuid, String url, LocalDateTime createDate, LocalDateTime modifiedDate){
-        this.att_no = att_no;
+        this.attNo = att_no;
         this.category = category;
         this.superKey = superKey;
         this.filename = filename;
@@ -42,7 +42,7 @@ public class AttachResponseDto implements Serializable {
 
     public AttachResponseDto(Attach entity){
 
-        this.att_no = entity.getAtt_no();
+        this.attNo = entity.getAttNo();
         this.createDate = entity.getCreateDate();
         this.modifiedDate = entity.getModifiedDate();
         this.category = entity.getCategory();

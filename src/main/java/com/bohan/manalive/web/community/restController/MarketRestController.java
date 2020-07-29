@@ -7,6 +7,7 @@ import com.bohan.manalive.domain.user.UserRepository;
 import com.bohan.manalive.web.common.service.AttachService;
 import com.bohan.manalive.web.common.service.AttachSessionService;
 import com.bohan.manalive.web.common.service.UserService;
+import com.bohan.manalive.web.community.domain.Market.MarketInquiryAnswer;
 import com.bohan.manalive.web.community.domain.UserMarket.UserMarket;
 import com.bohan.manalive.web.community.domain.UserMarket.UserMarketRepository;
 import com.bohan.manalive.web.community.dto.Board.BoardCriteria;
@@ -92,9 +93,10 @@ public class MarketRestController {
     }
 
     @Transactional
-    @PostMapping("/wish")
+    @PostMapping("/wish/save")
     public Map<String, String> saveMarketWish(@RequestBody MarketWishRequestDto dto, @LoginUser SessionUser user)throws Exception {
-        dto.setEmail(user.getEmail());
+        dto.setUserMarketSeq(userMarketRepo.getUserMarketSeq(user.getEmail()));
+
         Map<String, String> map = new HashMap<>();
         String result = "";
         boolean bool = marketService.checkDuplicatedWish(dto);
@@ -111,7 +113,8 @@ public class MarketRestController {
 
     @PostMapping("/wishCheck")
     public Map<String, Boolean> checkMarketWish(@RequestBody MarketWishRequestDto dto, @LoginUser SessionUser user)throws Exception {
-        dto.setEmail(user.getEmail());
+        //dto.setEmail(user.getEmail());
+        dto.setUserMarketSeq(userMarketRepo.getUserMarketSeq(user.getEmail()));
         log.info("WISHCHECK()");
         Map<String, Boolean> map = new HashMap<>();
         map.put("result", marketService.checkDuplicatedWish(dto));
@@ -136,11 +139,11 @@ public class MarketRestController {
     }
 
     @PostMapping("/userMarket")
-    public HashMap<String, Object> getUserMarkerInfo(@RequestParam("seq") Long seq) throws Exception{
+    public HashMap<String, Object> getUserMarkerInfo(@RequestParam("seq") Long seq, @LoginUser SessionUser user) throws Exception{
         log.info("getUserMarkerInfo()");
         log.info(seq + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         Map<String, Object> map = new HashMap<>();
-        return marketService.getUserMarket(seq);
+        return marketService.getUserMarket(seq, user);
     }
 
     @PostMapping("/getUserMarketSeq")
@@ -163,14 +166,23 @@ public class MarketRestController {
         }
     }
 
+    @PostMapping("/userMarket/wish/{userMarketSeq}")
+    public List<MarketWishResponseDto> getUserMarketWishList(@PathVariable("userMarketSeq") Long userMarketSeq, @RequestParam(defaultValue = "0") int pageNumber) throws Exception{
+        log.info("getUserMarketWishList() + " + userMarketSeq);
 
-    @PostMapping("/follower/{userMarketSeq}")
+        List<MarketWishResponseDto> list = marketService.getUserMarketWishList(userMarketSeq);
+        log.info(list.size() + "!!");
+        //return marketService.getUserMarketWishList(userMarketSeq);
+        return list;
+    }
+
+    @PostMapping("/userMarket/follower/{userMarketSeq}")
     public Map<String, Object> getUserMarketFollowerList(@PathVariable("userMarketSeq") Long userMarketSeq, @RequestParam(defaultValue = "0") int pageNumber) throws Exception{
         return marketService.getUserMarketFollowerList(userMarketSeq, pageNumber);
     }
 
     @Transactional
-    @PostMapping("/following/{userMarketSeq}")
+    @PostMapping("/userMarket/following/{userMarketSeq}")
     public Map<String, Object> getUserMarketFollowingList(@PathVariable("userMarketSeq") Long userMarketSeq, @RequestParam(defaultValue = "0") int pageNumber) throws Exception{
         return marketService.getUserMarketFollowingList(userMarketSeq, pageNumber);
     }
@@ -196,7 +208,7 @@ public class MarketRestController {
     }
 
     @PostMapping("/inquiry/list/{marketProductSeq}/{pageNumber}/{delayCnt}")
-    public List<MarketInquiryResponseDto> getInquiryList(@PathVariable(name = "marketProductSeq") Long seq,
+    public Map<String, Object> getInquiryList(@PathVariable(name = "marketProductSeq") Long seq,
                                                          @PathVariable(name = "pageNumber") int inquiryPageNumber,
                                                          @PathVariable(name = "delayCnt") int delayCnt
                                                          )throws Exception{
@@ -209,7 +221,12 @@ public class MarketRestController {
     }
 
     @PostMapping("/saveMarketInquiryAnswer")
-    public boolean saveMarketInquiryAnswer(@RequestBody MarketInquiryAnswerRequestDto dto) throws Exception{
+    public MarketInquiryAnswer saveMarketInquiryAnswer(@RequestBody MarketInquiryAnswerRequestDto dto) throws Exception{
         return marketService.saveMarketInquiryAnswer(dto);
+    }
+
+    @PostMapping("/inquiry/answer/{marketInquirySeq}")
+    public List<MarketInquiryAnswer> getMarketInquiryAnswer(@PathVariable(name="marketInquirySeq") Long marketInquirySeq) throws Exception{
+        return marketService.getMarketInquiryAnswerList(marketInquirySeq);
     }
 }

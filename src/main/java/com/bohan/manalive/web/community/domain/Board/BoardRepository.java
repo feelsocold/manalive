@@ -25,7 +25,7 @@ public interface BoardRepository extends JpaRepository<Board, Long>,
             " WHERE a.seq = :seq " )
      BoardResponseDto getBoardDetail(@Param("seq") Long seq);
 
-     @Query( " SELECT new com.bohan.manalive.web.common.dto.AttachResponseDto(b.att_no, b.url)" +
+     @Query( " SELECT new com.bohan.manalive.web.common.dto.AttachResponseDto(b.attNo, b.url)" +
              " FROM Board AS a INNER JOIN Attach b " +
              "  ON a.seq = b.superKey AND b.category = 'BOARD'" +
              " WHERE a.seq = :seq ")

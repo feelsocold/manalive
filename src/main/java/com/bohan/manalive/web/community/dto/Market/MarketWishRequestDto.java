@@ -16,12 +16,13 @@ public class MarketWishRequestDto implements Serializable {
 
     LocalDateTime currentDateTime = LocalDateTime.now();
     private Long marketSeq;
-    private String email;
+    //private String email;
+    private Long userMarketSeq;
 
     public MarketWish toEntity() {
         return MarketWish.builder()
-                .email(email)
                 .marketSeq(marketSeq)
+                .userMarketSeq(userMarketSeq)
                 .createDate(currentDateTime)
                 .build();
     }
