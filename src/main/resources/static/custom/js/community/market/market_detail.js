@@ -21,11 +21,13 @@ $(document).ready(function() {
             sellingMarketSeq = result.userMarketDto.seq;
             inquiryListSize = result.marketDto.marketInquiryList.length;
             sessionUserMarketSeq = result.sessionUserMarketSeq;
+
             spreadItemInfo(result.marketDto);
             spreadPhotolist(result.attachList);
             spreadUserMarket(result.userMarketDto);
             spreadMarketInquiryList(result.inquiryMap);
             spreadOtherProduct(result.userMarketDto.marketList);
+            checkSessionUser();
         },error: function (jqXHR, textStatus, errorThrown) {
             alert("error");
         },beforeSend:function(){
@@ -33,7 +35,8 @@ $(document).ready(function() {
         },complete:function(){
         }
     });
-
+});
+function checkSessionUser() {
     if(sessionVal != "") {
         var data = { "marketSeq" : m_seq};
         $.ajax({
@@ -47,16 +50,16 @@ $(document).ready(function() {
                     $("#wish-btn").css({'background-color':'#35C5F0', color:'white' });
                     $("#wish-btn").html("찜 ✔");
                 }
-
-                if(sessionUserMarketSeq == undefined) {
-                    $("#inquiry-content").attr("placeholder", "상점개설 후 이용해주세요!");
-                    $("#inquiry-content").attr('readonly','readonly');
-                    $("#inquiry-btn").hide();
-                }
             },error: function (jqXHR, textStatus, errorThrown) {
                 alert("error");
             }
         });
+
+        if(sessionUserMarketSeq == undefined) {
+            $("#inquiry-content").attr("placeholder", "상점개설 후 이용해주세요!");
+            $("#inquiry-content").attr('readonly','readonly');
+            $("#inquiry-btn").hide();
+        }
     }else{
         $("#inquiry-content").attr("placeholder", "로그인 후 이용해주세요!");
         $("#inquiry-content").attr('readonly','readonly');
@@ -65,8 +68,7 @@ $(document).ready(function() {
         // $("#inquiry-btn").css({"background-color": "#D5D5D5"}, {"border": "1px solid red"});
 
     }
-});
-
+}
 // $("#inquiry-content").focus(function(){
 //     if(sessionVal == "") {
 //         alert("로그인 후 이용해주세요");
@@ -80,9 +82,17 @@ function spreadItemInfo(data) {
     var productStatus = data.productStatus;
     var delivery = data.delivery;
     var price = data.price;
+    var soldout = data.soldout;
+
     $("#item-title").html(data.title);
     $("#item-cate").html(data.category);
-    $("#item-price").html(numberFormat(price + "원"));
+
+    if(soldout == false){
+        $("#item-price").html(numberFormat(price + "원"));
+    }else{
+        $("#item-price").html("판매완료");
+        $("#wish-btn").remove();
+    }
 
     if(data.email == sessionEmail){
         var str = "<div class='update-div'><button id='modify-btn'>수정</button><button id='delete-btn'>삭제</button></div>";

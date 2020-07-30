@@ -1,5 +1,7 @@
 package com.bohan.manalive.web.community.controller;
 
+import com.bohan.manalive.config.oauth.LoginUser;
+import com.bohan.manalive.config.oauth.dto.SessionUser;
 import com.bohan.manalive.web.community.service.MarketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,5 +55,13 @@ public class MarketController {
             httpSession.removeAttribute("attachList");}
         return "/community/market/market_open";
     }
+
+    @GetMapping("/manage/userMarket")
+    public String manageUserMarket(@LoginUser SessionUser user){
+        log.info("manageUserMarket()");
+        log.info(user.getEmail() + "!!");
+        return "/community/market/userMarket_manage";
+    }
+
 
 }

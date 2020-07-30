@@ -19,6 +19,8 @@ public class MarketWishResponseDto implements Serializable {
     private String marketProductTitle;
     private LocalDateTime marketCreateDate;
     private Boolean marketProductIsSold;
+    private int marketProductPrice;
+    private int marketReadCount;
     private String marketMainPhoto;
 
 //    private MarketWishResponseDto(Long wishSeq, Long marketSeq, String marketProductTitle, LocalDateTime marketCreateDate, Boolean marketProductIsSold, String marketMainPhoto){

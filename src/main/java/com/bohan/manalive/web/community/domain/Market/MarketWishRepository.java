@@ -21,7 +21,7 @@ public interface MarketWishRepository extends JpaRepository<MarketWish, Long>,
 
 
     @Query(" SELECT new com.bohan.manalive.web.community.dto.Market.MarketWishResponseDto(" +
-            " a.seq, a.marketSeq, b.title, a.createDate, b.isSoldout,   " +
+            " a.seq, a.marketSeq, b.title, a.createDate, b.isSoldout, b.price, b.readCount, " +
             "   ( SELECT url " +
             "       FROM Attach " +
             "       WHERE attNo = ( SELECT MIN(attNo)" +

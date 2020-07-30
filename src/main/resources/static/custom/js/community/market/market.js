@@ -21,11 +21,19 @@ function spreadMarketList( data ) {
         // LIST 뿌리기
         for(var i = 0; i < list.length; i++) {
             var str = "";
-            str += "<div class='item-wrapper' data-oper='"+list[i].seq+"'>";
-            str += "<div class='item-image'><img src='"+attachList[i]+"'></div>";
+            str += "<div class='item-wrapper' data-oper='"+list[i].seq +"'";
+            if(list[i].soldout == true) {
+                str += " style='opacity: 0.6;'";
+            }
+            str += ">";
+            str += "<div class='item-image'><img style='' src='"+attachList[i]+"'  ></div>";
             str += "<div class='item-info'>";
             str += "<span class='item-title'>"+list[i].title+"</span><br>";
-            str += "<span class='item-price'>"+numberFormat(list[i].price)+" 원</span><br>";
+            if(list[i].soldout == false){
+                str += "<span class='item-price'>"+numberFormat(list[i].price)+" 원</span><br>";
+            }else if(list[i].soldout == true){
+                str += "<span class='item-price'>판매완료</span><br>";
+            }
             str += "<span class='item-regdate'>"+timeForToday(list[i].createDate)+"</span><hr>";
             str += "<span class='item-readcnt'>조회 <label>"+ list[i].readCount+"</label></span>";
             str += "<span class='item-wishcnt'>&nbsp;&sdot;&nbsp;찜 <label>"+list[i].marketWishList.length+"</label></span>";

@@ -61,7 +61,12 @@ function spreadMarketList( data ) {
         str += "<div class='item-image'><img src='"+attachList[i]+"'></div>";
         str += "<div class='item-info'>";
         str += "<span class='item-title'>"+list[i].title+"</span><br>";
-        str += "<span class='item-price'>"+numberFormat(list[i].price)+" 원</span><br>";
+        if(list[i].soldout == false){
+            str += "<span class='item-price'>"+numberFormat(list[i].price)+"원</span><br>";
+        }else{
+            str += "<span class='item-price'>판매완료</span><br>";
+        }
+
         str += "<span class='item-regdate'>"+timeForToday(list[i].createDate)+"</span><hr>";
         str += "<span class='item-readcnt'>조회 <label>"+ list[i].readCount+"</label></span>";
         str += "<span class='item-wishcnt'>&nbsp;&sdot;&nbsp;찜 <label>"+list[i].marketWishList.length+"</label></span>";
@@ -138,25 +143,7 @@ function spreadUserMarketInfo(data) {
         $("#usermarket-manageBtn").show();
     }
 }
-function spreadWishList( data ) {
-    var list = data.marketList;
-    var attachList = data.attachList;
-    $("#list-wrap").empty();
-    // LIST 뿌리기
-    for(var i = 0; i < list.length; i++) {
-        var str = "";
-        str += "<div class='item-wrapper' data-oper='"+list[i].seq+"'>";
-        str += "<div class='item-image'><img src='"+attachList[i]+"'></div>";
-        str += "<div class='item-info'>";
-        str += "<span class='item-title'>"+list[i].title+"</span><br>";
-        str += "<span class='item-price'>"+numberFormat(list[i].price)+" 원</span><br>";
-        str += "<span class='item-regdate'>"+timeForToday(list[i].createDate)+"</span><hr>";
-        str += "<span class='item-readcnt'>조회 <label>"+ list[i].readCount+"</label></span>";
-        str += "<span class='item-wishcnt'>&nbsp;&sdot;&nbsp;찜 <label>"+list[i].marketWishList.length+"</label></span>";
-        str += "</div>";
-        $("#list-wrap").append(str);
-    }
-}
+
 function timeForTodayForCreateDate(value) {
     const today = new Date();
     const timeValue = new Date(value);
@@ -264,26 +251,48 @@ $(document).on('click','.productlist-navBtn a ',function(e){
 // [찜] 클릭
 $(document).on('click','.wish-navbtn a ',function(e){
     e.preventDefault();
-
+    //$(".usermarket-nav ul").append("<li class='wish-navbtn'><a href='#'>찜</a></li>");
     $.ajax({
         type: 'POST',
         url: '/market/userMarket/wish/' + userMarketSeq,
         success: function (result) {
             console.log(result);
-            alert(result.length);
-
             $("#followlist-content").empty();
             $(".usermarket-nav ul li").css({"border": "none"});
             $(".usermarket-nav ul li a").css("color", "black");
-            $(".wish-navbtn a").css("border-bottom", "4px solid #35C5F0");
+            $(".wish-navbtn a").closest("li").css("border-bottom", "4px solid #35C5F0");
             $(this).css("color", "#35C5F0");
             $(".content-wrap").hide();
-            // spreadFollowerFollowingList(result, "follower");
+            spreadWishList(result);
         }, error: function (jqXHR, textStatus, errorThrown) {
             alert("error");
         }
     });
 });
+
+function spreadWishList( list ) {
+    $("#wished-wrap").empty();
+    $("#wished-wrap").show();
+
+    // LIST 뿌리기
+    for(var i = 0; i < list.length; i++) {
+        var str = "";
+        str += "<div class='item-wrapper' data-oper='"+list[i].wishSeq+"'>";
+        str += "<div class='item-image'><img src='"+list[i].marketMainPhoto+"'></div>";
+        str += "<div class='item-info'>";
+        str += "<span class='item-title'>"+list[i].marketProductTitle+"</span><br>";
+        if(list[i].marketProductIsSold == false){
+            str += "<span class='item-price'>"+numberFormat(list[i].marketProductPrice)+" 원</span><br>";
+        }else{
+            str += "<span class='item-price' style='color:#35C5F0;'>판매완료</span><br>";
+        }
+        str += "<span class='item-regdate'>"+timeForToday(list[i].marketCreateDate)+ " 찜했음</span><br>";
+        //str += "<span class='item-readcnt'>조회 <label>"+ list[i].readCount+"</label></span>";
+        // str += "<span class='item-wishcnt'>&nbsp;&sdot;&nbsp;찜 <label>"+list[i].marketWishList.length+"</label></span>";
+        str += "</div>";
+        $("#wished-wrap").append(str);
+    }
+}
 
 // [팔로워] 클릭
 $(document).on('click','.follower-btn a ',function(e){
@@ -330,23 +339,28 @@ $(document).on('click','.following-btn a ',function(e){
 });
 function spreadFollowerFollowingList(data, str){
     var list;
-    if(str == 'follower'){
-        list = data.followerList;
-    }else if(str == 'following') {
-        list = data.followingList;
+
+    if(data != null){
+        if(str == 'follower'){
+            list = data.followerList;
+        }else if(str == 'following') {
+            list = data.followingList;
+        }
+        if(list != null){
+            for(var i = 0; i < list.length; i++) {
+                var str = "";
+                str += "<div class='follow-wrapper' data-oper='"+list[i].seq+"'>";
+                str += "<div class='follower-image'><img src='"+list[i].photoUrl+"'></div>";
+                str += "<div class='follower-info'>";
+                str += "<span class='follower-marketname'>"+list[i].marketName+"</span><br>";
+                str += "<span class='info-smallfont'>상품&nbsp;<label class='f-itemcnt'>"+list[i].productCnt+"</label>&nbsp;&nbsp;<label style='font-size: 10px;'>&#124;</label>&nbsp;&nbsp;</span>" +
+                    "<span class='info-smallfont'>팔로워&nbsp;<label class='f-followercnt'>"+list[i].followerCnt+"</label></span>"
+                str += "</div>";
+                $("#followlist-content").append(str);
+            }
+            $("#follow-wrap").show();
+        }
     }
-    for(var i = 0; i < list.length; i++) {
-        var str = "";
-        str += "<div class='follow-wrapper' data-oper='"+list[i].seq+"'>";
-        str += "<div class='follower-image'><img src='"+list[i].photoUrl+"'></div>";
-        str += "<div class='follower-info'>";
-        str += "<span class='follower-marketname'>"+list[i].marketName+"</span><br>";
-        str += "<span class='info-smallfont'>상품&nbsp;<label class='f-itemcnt'>"+list[i].productCnt+"</label>&nbsp;&nbsp;<label style='font-size: 10px;'>&#124;</label>&nbsp;&nbsp;</span>" +
-            "<span class='info-smallfont'>팔로워&nbsp;<label class='f-followercnt'>"+list[i].followerCnt+"</label></span>"
-        str += "</div>";
-        $("#followlist-content").append(str);
-    }
-    $("#follow-wrap").show();
 }
 // 유저상점으로 이동
 $(document).on('click','.follow-wrapper',function(e){

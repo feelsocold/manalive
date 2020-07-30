@@ -44,10 +44,6 @@ public class Market implements Serializable {
     @Column(nullable = false)
     private String productStatus;
 
-    @Column(insertable = false, columnDefinition = "varchar(50) default 'onSale'")
-//    @ColumnDefault("onSale")
-    private String saleStatus;
-
     @Column(nullable = false)
     private String delivery;
 

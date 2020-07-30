@@ -48,8 +48,6 @@ public class QMarket extends EntityPathBase<Market> {
 
     public final NumberPath<Integer> readCount = createNumber("readCount", Integer.class);
 
-    public final StringPath saleStatus = createString("saleStatus");
-
     public final NumberPath<Long> seq = createNumber("seq", Long.class);
 
     public final StringPath title = createString("title");
