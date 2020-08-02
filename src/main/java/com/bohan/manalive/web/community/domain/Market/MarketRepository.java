@@ -4,6 +4,7 @@ import com.bohan.manalive.web.common.dto.AttachResponseDto;
 import com.bohan.manalive.web.community.domain.Board.Board;
 import com.bohan.manalive.web.community.dto.Board.BoardResponseDto;
 import com.bohan.manalive.web.community.dto.Market.MarketResponseDto;
+import com.bohan.manalive.web.community.dto.UserMarket.UserMarketManageResponseDto;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,11 +28,17 @@ public interface MarketRepository extends JpaRepository<Market, Long>,
     List<String> autoSearchByMarketTitle(@Param("searchValue") String searchValue);
 
 
-//    @Query(" SELECT new com.bohan.manalive.web.community.dto.Market.MarketResponseDto(a.seq, a.title, b.url ) " +
-//            " FROM Market AS a " +
-//            " LEFT OUTER JOIN Attach AS b" +
-//            "  ON a.seq = b.superKey AND b.category = 'MARKET'" +
-//            " WHERE a.seq = :seq " )
-//    MarketResponseDto getMarketInfoBySeq(@Param("seq") Long seq);
+    @Query(" SELECT new com.bohan.manalive.web.community.dto.UserMarket.UserMarketManageResponseDto" +
+            " (a.seq, a.title, a.isSoldout, a.price, a.createDate, a.modifiedDate," +
+            "   ( SELECT COUNT(seq) FROM MarketWish WHERE marketSeq = a.seq), " +
+            "   ( SELECT COUNT(seq) FROM MarketInquiry WHERE marketProductSeq = a.seq), " +
+            "   ( SELECT url FROM Attach" +
+            "      WHERE attNo = ( SELECT MIN(attNo)" +
+            "                       FROM Attach " +
+            "                       WHERE superKey = a.seq AND category = 'MARKET') )   " +
+            " ) " +
+            " FROM Market AS a " +
+            " WHERE a.email = :email " )
+    List<UserMarketManageResponseDto> getUserMarketMangeMarketList(@Param("email") String email);
 
 }

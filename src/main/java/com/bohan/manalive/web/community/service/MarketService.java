@@ -27,14 +27,15 @@ public interface MarketService {
     public HashMap<String, Object> getMarketDetail(Long seq, @LoginUser SessionUser user) throws Exception;
     // 중고마켓 디테일 조회수++
     public void increaseMarketReadCount(Long seq) throws Exception;
-    // 중고마켓 디테일 다른 판매상품 리스트
-    public List<MarketResponseDto> getOtherProductlist(Long seq) throws Exception;
+
 
 // 유저상점
     // 중고마켓 유저상점 만들기
     public Long openMarket(UserMarketRequestDto dto) throws Exception;
-    // 중고마켓 유저상점관리
+    // 중고마켓 유저상점 메인페이지
     public HashMap<String, Object> getUserMarket(Long seq, @LoginUser SessionUser user) throws Exception;
+    // 중고마켓 유저상점 내상점관리 페이지
+    public HashMap<String, Object> getUserMarketManage(@LoginUser SessionUser user, int pageNumber) throws Exception;
 
 // 종고마켓 찜
     // 중고마켓 찜하기

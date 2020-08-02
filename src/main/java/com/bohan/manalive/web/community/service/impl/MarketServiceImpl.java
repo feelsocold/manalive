@@ -11,6 +11,7 @@ import com.bohan.manalive.web.community.domain.UserMarket.UserMarketFollowReposi
 import com.bohan.manalive.web.community.domain.UserMarket.UserMarketRepository;
 import com.bohan.manalive.web.community.dto.Market.*;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketFollowRequestDto;
+import com.bohan.manalive.web.community.dto.UserMarket.UserMarketManageResponseDto;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketRequestDto;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketResponseDto;
 import com.bohan.manalive.web.community.service.MarketService;
@@ -90,8 +91,6 @@ public class MarketServiceImpl implements MarketService {
         HashMap<String, Object> map = new HashMap<>();
         //map.put("userDetail", detailList);
 
-
-
         map.put("attachList", attachList);
         map.put("marketList", marketList);
         map.put("pageMaker", new MarketPageDto(criteria, (int)(long)total ));
@@ -128,15 +127,6 @@ public class MarketServiceImpl implements MarketService {
         int bfCnt = market.getReadCount();
         marketRepo.findById(seq)
                 .map(entity -> entity.updateReadCount(bfCnt+1));
-    }
-
-    @Override
-    public List<MarketResponseDto> getOtherProductlist(Long seq) throws Exception {
-
-
-
-
-        return null;
     }
 
     @Override
@@ -278,6 +268,31 @@ public class MarketServiceImpl implements MarketService {
         }
         return map;
     }
+
+    @Override
+    public HashMap<String, Object> getUserMarketManage(SessionUser user, int pageNumber) throws Exception {
+
+        HashMap<String, Object> map = new HashMap<>();
+        //List<MarketInquiryAnswer> answerList = new ArrayList<>();
+
+        List<UserMarketManageResponseDto> list = marketRepo.getUserMarketMangeMarketList(user.getEmail());
+
+        int mount = 10;
+        int start = (pageNumber * mount);
+        int end = (pageNumber+1) * mount;
+        if( list.size() - ((pageNumber+1)*mount) < 0 || list.size() < mount) {
+            end = list.size();
+        };
+
+        Pageable paging = PageRequest.of(pageNumber, mount, Sort.Direction.DESC, "seq");
+        Page<UserMarketManageResponseDto> pageInfo = new PageImpl<>(list.subList(start, end), paging, list.size());
+        List<UserMarketManageResponseDto> pagingList = pageInfo.getContent();
+
+        map.put("manageProductList", pagingList);
+
+        return map;
+    }
+
 
     @Override
     public boolean checkDuplicatedFollow(UserMarketFollowRequestDto dto) throws Exception {

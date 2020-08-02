@@ -20,7 +20,4 @@ public class MarketInquiryAnswerResponseDto implements Serializable {
     private String content;
     private LocalDateTime createDate;
 
-
-
-
 }

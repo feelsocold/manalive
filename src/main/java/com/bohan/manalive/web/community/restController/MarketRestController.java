@@ -14,6 +14,7 @@ import com.bohan.manalive.web.community.dto.Board.BoardCriteria;
 import com.bohan.manalive.web.community.dto.Board.BoardRequestDto;
 import com.bohan.manalive.web.community.dto.Market.*;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketFollowRequestDto;
+import com.bohan.manalive.web.community.dto.UserMarket.UserMarketManageResponseDto;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketRequestDto;
 import com.bohan.manalive.web.community.dto.UserMarket.UserMarketResponseDto;
 import com.bohan.manalive.web.community.service.MarketService;
@@ -167,7 +168,7 @@ public class MarketRestController {
     }
 
     @PostMapping("/userMarket/wish/{userMarketSeq}")
-    public List<MarketWishResponseDto> getUserMarketWishList(@PathVariable("userMarketSeq") Long userMarketSeq, @RequestParam(defaultValue = "0") int pageNumber) throws Exception{
+    public List<MarketWishResponseDto> getUserMarketWishList(@PathVariable("userMarketSeq") Long userMarketSeq) throws Exception{
         log.info("getUserMarketWishList() + " + userMarketSeq);
 
         List<MarketWishResponseDto> list = marketService.getUserMarketWishList(userMarketSeq);
@@ -215,7 +216,7 @@ public class MarketRestController {
         return marketService.getMarketInquiryList(seq, inquiryPageNumber, delayCnt);
     }
 
-    @PostMapping("inquiry/delete/{seq}")
+    @PostMapping("/inquiry/delete/{seq}")
     public void deleteInquiry(@PathVariable(name = "seq") Long inquirySeq)throws Exception{
         marketService.deleteMarketInquiry(inquirySeq);
     }
@@ -228,5 +229,13 @@ public class MarketRestController {
     @PostMapping("/inquiry/answer/{marketInquirySeq}")
     public List<MarketInquiryAnswer> getMarketInquiryAnswer(@PathVariable(name="marketInquirySeq") Long marketInquirySeq) throws Exception{
         return marketService.getMarketInquiryAnswerList(marketInquirySeq);
+    }
+
+    @PostMapping("/manage/UserMarket")
+    public Map<String, Object> getUserMarketManageList(@LoginUser SessionUser user, @RequestParam(defaultValue = "0", name = "pageNumber") int pageNumber) throws Exception {
+        log.info("getUserMarketManageList()");
+        log.info("USER MARKET PAGENUMBER : " + pageNumber);
+
+        return marketService.getUserMarketManage(user, pageNumber);
     }
 }
